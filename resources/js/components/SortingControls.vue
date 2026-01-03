@@ -5,6 +5,9 @@ import {
     generateBars,
     bubbleSort,
     selectionSort,
+    insertionSort,
+    mergeSort,
+    quickSort,
     isPaused,
     isSorting
 } from '@/composables/useSortingController'
@@ -21,7 +24,18 @@ const runSort = () => {
     const path = page.url;
     if (path.includes('selection-sort')) {
         selectionSort();
-    } else {
+
+    }
+    else if (path.includes('insertion-sort')) {
+        insertionSort();
+    }
+    else if (path.includes('merge-sort')) {
+        mergeSort();
+    }
+    else if (path.includes('quick-sort')) {
+        quickSort();
+    }
+    else {
         bubbleSort();
     }
 };

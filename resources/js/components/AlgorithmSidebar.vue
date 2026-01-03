@@ -4,6 +4,9 @@ import { Link, usePage } from '@inertiajs/vue3'
 const algorithms = [
     { name: 'Bubble Sort', href: '/visualize/bubble-sort' },
     { name: 'Selection Sort', href: '/visualize/selection-sort' },
+    { name: 'Insertion Sort', href: '/visualize/insertion-sort' },
+    { name: 'Merge Sort', href: '/visualize/merge-sort' },
+    { name: 'Quick Sort', href: '/visualize/quick-sort' },
 ]
 
 const page = usePage()

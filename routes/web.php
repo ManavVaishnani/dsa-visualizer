@@ -32,6 +32,30 @@ Route::prefix('visualize')->group(function () {
             ]
         ]);
     });
+    Route::get('/insertion-sort', function () {
+        return Inertia::render('visualize/InsertionSort', [
+            'breadcrumbs' => [
+                ['title' => 'Algorithms', 'href' => '/'],
+                ['title' => 'Insertion Sort']
+            ]
+        ]);
+    });
+    Route::get('/merge-sort', function () {
+        return Inertia::render('visualize/MergeSort', [
+            'breadcrumbs' => [
+                ['title' => 'Algorithms', 'href' => '/'],
+                ['title' => 'Merge Sort']
+            ]
+        ]);
+    });
+    Route::get('/quick-sort', function () {
+        return Inertia::render('visualize/QuickSort', [
+            'breadcrumbs' => [
+                ['title' => 'Algorithms', 'href' => '/'],
+                ['title' => 'Quick Sort']
+            ]
+        ]);
+    });
 });
 
 require __DIR__.'/settings.php';

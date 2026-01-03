@@ -15,13 +15,18 @@ const getColor = (index: number) => {
 </script>
 
 <template>
-    <div class="h-full flex items-end justify-center gap-1">
+<div class="h-full w-full overflow-x-auto">
+    <div class="h-full flex items-end justify-center gap-1 min-w-fit px-4">
         <div
             v-for="(value, index) in bars"
             :key="index"
-            class="w-3 rounded transition-all duration-150"
+            class="rounded transition-all duration-150 flex-shrink-0"
             :class="getColor(index)"
-            :style="{ height: value + '%' }"
+            :style="{
+                height: value + '%',
+                width: Math.max(2, 12 - Math.floor(bars.length / 20)) + 'px'
+            }"
         />
     </div>
+</div>
 </template>
