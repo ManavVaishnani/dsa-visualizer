@@ -1,32 +1,33 @@
 <script setup lang="ts">
 import {
-    bars,
     active,
+    bars,
+    sorted,
     swapping,
-    sorted
-} from '@/composables/useSortingController'
+} from '@/composables/useSortingController';
 
 const getColor = (index: number) => {
-    if (sorted.value.includes(index)) return 'bg-green-500'
-    if (swapping.value.includes(index)) return 'bg-red-500'
-    if (active.value.includes(index)) return 'bg-yellow-400'
-    return 'bg-blue-500'
-}
+    if (sorted.value.includes(index)) return 'bg-[#10b981]';
+    if (swapping.value.includes(index)) return 'bg-[#ef4444]';
+    if (active.value.includes(index)) return 'bg-[#f59e0b]';
+    return 'bg-[#3b82f6]';
+};
 </script>
 
 <template>
-<div class="h-full w-full overflow-x-auto">
-    <div class="h-full flex items-end justify-center gap-1 min-w-fit px-4">
-        <div
-            v-for="(value, index) in bars"
-            :key="index"
-            class="rounded transition-all duration-150 flex-shrink-0"
-            :class="getColor(index)"
-            :style="{
-                height: value + '%',
-                width: Math.max(2, 12 - Math.floor(bars.length / 20)) + 'px'
-            }"
-        />
+    <div class="h-full w-full overflow-x-auto">
+        <div class="flex h-full min-w-fit items-end justify-center gap-1 px-4">
+            <div
+                v-for="(value, index) in bars"
+                :key="index"
+                class="flex-shrink-0 rounded transition-all duration-150"
+                :class="getColor(index)"
+                :style="{
+                    height: value + '%',
+                    width:
+                        Math.max(2, 12 - Math.floor(bars.length / 20)) + 'px',
+                }"
+            />
+        </div>
     </div>
-</div>
 </template>

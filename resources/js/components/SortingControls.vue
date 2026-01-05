@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import {
     barCount,
-    speed,
-    generateBars,
     bubbleSort,
-    selectionSort,
+    generateBars,
     insertionSort,
+    isPaused,
+    isSorting,
     mergeSort,
     quickSort,
-    isPaused,
-    isSorting
-} from '@/composables/useSortingController'
+    selectionSort,
+    speed,
+} from '@/composables/useSortingController';
 
 const pause = () => {
-    isPaused.value = !isPaused.value
-}
+    isPaused.value = !isPaused.value;
+};
 
 import { usePage } from '@inertiajs/vue3';
 
@@ -24,72 +24,71 @@ const runSort = () => {
     const path = page.url;
     if (path.includes('selection-sort')) {
         selectionSort();
-
-    }
-    else if (path.includes('insertion-sort')) {
+    } else if (path.includes('insertion-sort')) {
         insertionSort();
-    }
-    else if (path.includes('merge-sort')) {
+    } else if (path.includes('merge-sort')) {
         mergeSort();
-    }
-    else if (path.includes('quick-sort')) {
+    } else if (path.includes('quick-sort')) {
         quickSort();
-    }
-    else {
+    } else {
         bubbleSort();
     }
 };
 </script>
 
 <template>
-    <header class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex justify-between items-center">
+    <header
+        class="flex items-center justify-between border-b border-[#334155] bg-[#0f172a] px-6 py-3"
+    >
         <!-- Sliders -->
-        <div class="flex gap-6 items-center">
+        <div class="flex items-center gap-6">
             <div>
-                <label class="text-xs text-gray-400">Bars: {{ barCount }}</label>
+                <label class="text-xs text-[#94a3b8]"
+                    >Bars: {{ barCount }}</label
+                >
                 <input
                     type="range"
                     min="10"
                     max="100"
                     v-model="barCount"
-                    class="w-32 accent-blue-500"
+                    class="w-32 accent-[#3b82f6]"
                 />
             </div>
 
             <div>
-                <label class="text-xs text-gray-400">Speed</label>
+                <label class="text-xs text-[#94a3b8]">Speed</label>
                 <input
                     type="range"
                     min="1"
                     max="100"
                     v-model="speed"
-                    class="w-32 accent-green-500"
+                    class="w-32 accent-[#3b82f6]"
                 />
             </div>
         </div>
 
         <!-- Controls -->
         <button
-            class="px-4 py-2 rounded text-sm font-medium transition bg-blue-600 hover:bg-blue-700"
+            class="rounded bg-[#3b82f6] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#2563eb]"
             @click="generateBars"
         >
             Generate
         </button>
         <button
-            class="px-4 py-2 rounded text-sm font-medium transition bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="rounded bg-[#10b981] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#059669] disabled:cursor-not-allowed disabled:opacity-50"
             @click="runSort"
             :disabled="isSorting"
         >
             Start
         </button>
         <button
-            class="px-4 py-2 rounded text-sm font-medium transition bg-yellow-500 hover:bg-yellow-600"
+            class="rounded bg-[#f59e0b] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#d97706]"
             @click="pause"
         >
             {{ isPaused ? 'Resume' : 'Pause' }}
         </button>
         <button
-            class="px-4 py-2 rounded text-sm font-medium transition bg-red-600 hover:bg-red-700"
+            class="rounded bg-[#ef4444] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#dc2626]"
             @click="generateBars"
         >
             Reset

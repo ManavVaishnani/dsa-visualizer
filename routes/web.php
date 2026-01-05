@@ -6,7 +6,7 @@ use Laravel\Fortify\Features;
 use App\Http\Controllers\Algorithm\BubbleSortController;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Algorithms', [
         'canRegister' => Features::enabled(Features::registration()),
     ]);
 })->name('home');
