@@ -11,10 +11,6 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::prefix('visualize')->group(function () {
     Route::get('/bubble-sort', function () {
         return Inertia::render('visualize/BubbleSort', [
@@ -53,6 +49,14 @@ Route::prefix('visualize')->group(function () {
             'breadcrumbs' => [
                 ['title' => 'Algorithms', 'href' => '/'],
                 ['title' => 'Quick Sort']
+            ]
+        ]);
+    });
+    Route::get('/bfs', function () {
+        return Inertia::render('visualize/BFS', [
+            'breadcrumbs' => [
+                ['title' => 'Algorithms', 'href' => '/'],
+                ['title' => 'BFS']
             ]
         ]);
     });

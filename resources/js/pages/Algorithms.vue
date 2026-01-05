@@ -27,6 +27,11 @@ const algorithms = [
         href: '/visualize/quick-sort',
         img: '/quick-sort.png',
     },
+    {
+        title: 'BFS',
+        href: '/visualize/bfs',
+        img: '/bfs.png',
+    },
 ];
 </script>
 
