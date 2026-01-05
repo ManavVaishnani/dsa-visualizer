@@ -32,6 +32,11 @@ const algorithms = [
         href: '/visualize/bfs',
         img: '/bfs.png',
     },
+    {
+        title: 'DFS',
+        href: '/visualize/dfs',
+        img: '/dfs.png',
+    },
 ];
 </script>
 

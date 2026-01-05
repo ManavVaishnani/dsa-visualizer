@@ -6,17 +6,28 @@ import {
     nodes,
     resetGraph,
     runBFS,
+    runDFS,
     selectedStartNode,
     speed,
 } from '@/composables/useGraphController';
 
+interface Props {
+    algorithm: 'bfs' | 'dfs'
+}
+
+const props = defineProps<Props>()
+
+const startTraversal = () => {
+    if (props.algorithm === 'bfs') {
+        runBFS()
+    } else {
+        runDFS()
+    }
+}
+
 const pause = () => {
     isPaused.value = !isPaused.value;
 };
-
-const startBFS = () => {
-    runBFS()
-}
 
 </script>
 
@@ -25,8 +36,8 @@ const startBFS = () => {
         class="flex items-center justify-between border-b border-[#334155] bg-[#0f172a] px-6 py-3"
     >
         <!-- Speed Control -->
-        <div class="flex items-center gap-6">
-            <div>
+        <div class="flex items-center gap-6" >
+            <div class="grid">
                 <label class="text-xs text-[#94a3b8]">Speed</label>
                 <input
                     type="range"
@@ -47,14 +58,15 @@ const startBFS = () => {
             >
                 Generate Graph
             </button>
-           <button
+            <button
                 class="rounded bg-[#10b981] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#059669]
                     disabled:cursor-not-allowed disabled:opacity-50"
-                @click="startBFS"
+                @click="startTraversal"
                 :disabled="isTraversing || nodes.length === 0 || selectedStartNode === null"
             >
-                Start BFS
+                Start {{ props.algorithm.toUpperCase() }}
             </button>
+
             <button
                 class="rounded bg-[#f59e0b] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#d97706] disabled:cursor-not-allowed disabled:opacity-50"
                 @click="pause"

@@ -27,13 +27,13 @@ onMounted(() => generateGraph());
 </script>
 
 <template>
-    <Head title="BFS Visualization" />
+    <Head title="DFS Visualization" />
 
     <div class="flex h-screen bg-[#0f172a] text-[#f1f5f9]">
         <!-- Main Area -->
         <div class="flex flex-1 flex-col overflow-hidden">
             <!-- Top Controls -->
-            <GraphControls :algorithm="'bfs'" />
+            <GraphControls :algorithm="'dfs'" />
 
             <!-- Breadcrumbs -->
             <div

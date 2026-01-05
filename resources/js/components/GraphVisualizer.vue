@@ -8,6 +8,9 @@ import {
     visitedNodes,
     selectedStartNode,
     isTraversing,
+    dfsCallStack,
+    dfsVisitedCount,
+    dfsEdgeCount,
 } from '@/composables/useGraphController'
 
 
@@ -98,12 +101,40 @@ const getEdgeColor = (from: number, to: number) => {
             </div>
         </div>
 
+        <!-- DFS Call Stack -->
+        <div
+            v-if="dfsCallStack.length > 0"
+            class="absolute right-4 bottom-4 w-48 rounded-lg bg-[#1e293b] p-4 shadow-lg"
+        >
+            <div class="mb-2 text-sm font-semibold text-[#f1f5f9]">
+                DFS Call Stack
+            </div>
+
+            <div class="flex flex-col-reverse gap-2">
+                <div
+                    v-for="nodeId in dfsCallStack"
+                    :key="nodeId"
+                    class="flex items-center justify-center rounded bg-[#8b5cf6] px-3 py-1 text-sm font-bold text-white transition-all"
+                    :class="{
+                        'ring-2 ring-white': nodeId === dfsCallStack[dfsCallStack.length - 1],
+                    }"
+                >
+                    {{ nodes[nodeId]?.label }}
+                </div>
+            </div>
+
+            <div class="mt-2 text-center text-xs text-[#94a3b8]">
+                Top of Stack ↑
+            </div>
+        </div>
+
+
         <!-- Selected Start Node -->
         <div
             v-if="selectedStartNode === null"
             class="absolute top-4 left-1/2 -translate-x-1/2 rounded bg-[#1e293b] px-4 py-2 text-sm text-[#94a3b8]"
         >
-            Click a node to select the BFS start node
+            Click a node to select the start node
         </div>
 
         <!-- Legend -->
@@ -130,5 +161,40 @@ const getEdgeColor = (from: number, to: number) => {
                 </div>
             </div>
         </div>
+
+        <!-- DFS Time Complexity Panel -->
+        <div
+            v-if="dfsVisitedCount > 0"
+            class="absolute left-4 bottom-4 w-56 rounded-lg bg-[#1e293b] p-4 text-sm shadow-lg"
+        >
+            <div class="mb-2 font-semibold text-[#f1f5f9]">
+                DFS Time Complexity
+            </div>
+
+            <div class="space-y-1 text-[#94a3b8]">
+                <div>
+                    Visited Nodes:
+                    <span class="font-bold text-white">
+                        {{ dfsVisitedCount }} / {{ nodes.length }}
+                    </span>
+                </div>
+
+                <div>
+                    Edges Explored:
+                    <span class="font-bold text-white">
+                        {{ dfsEdgeCount }} / {{ edges.length }}
+                    </span>
+                </div>
+
+                <div class="pt-2 text-[#22c55e] font-semibold">
+                    Current Cost: O({{ dfsVisitedCount }} + {{ dfsEdgeCount }})
+                </div>
+
+                <div class="text-xs pt-1 text-[#94a3b8]">
+                    Final Complexity: O(V + E)
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>

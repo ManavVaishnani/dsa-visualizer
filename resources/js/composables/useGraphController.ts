@@ -23,6 +23,10 @@ export const speed = ref(50)
 export const isTraversing = ref(false)
 export const isPaused = ref(false)
 export const selectedStartNode = ref<number | null>(null)
+export const dfsCallStack = ref<number[]>([])
+export const dfsVisitedCount = ref(0)
+export const dfsEdgeCount = ref(0)
+
 
 
 const sleep = (ms: number) =>
@@ -81,6 +85,10 @@ export const generateGraph = () => {
     queue.value = []
     currentEdge.value = null
     selectedStartNode.value = null
+    dfsCallStack.value = []
+    dfsVisitedCount.value = 0
+    dfsEdgeCount.value = 0
+
 }
 
 
@@ -152,6 +160,86 @@ export const runBFS = async (start?: number) => {
     isTraversing.value = false
 }
 
+// DFS Algorithm
+export const runDFS = async (start?: number) => {
+    dfsVisitedCount.value = 0
+    dfsEdgeCount.value = 0
+
+    const startNode = start ?? selectedStartNode.value
+
+    if (
+        startNode === null ||
+        isTraversing.value ||
+        nodes.value.length === 0
+    ) return
+
+    isTraversing.value = true
+    isPaused.value = false
+
+    visitedNodes.value = []
+    currentNode.value = null
+    currentEdge.value = null
+    queue.value = []
+    dfsCallStack.value = []
+
+    // Build adjacency list
+    const adjList: Record<number, number[]> = {}
+    nodes.value.forEach(node => {
+        adjList[node.id] = []
+    })
+    edges.value.forEach(edge => {
+        adjList[edge.from].push(edge.to)
+        adjList[edge.to].push(edge.from)
+    })
+
+    const visited = new Set<number>()
+
+    const exploredEdges = new Set<string>()
+
+    const dfs = async (node: number) => {
+        while (isPaused.value) await sleep(100)
+
+        dfsCallStack.value.push(node)
+
+        visited.add(node)
+        dfsVisitedCount.value++
+        currentNode.value = node
+
+        await sleep(1000 - speed.value * 9)
+
+        visitedNodes.value.push(node)
+        currentNode.value = null
+
+        for (const neighbor of adjList[node]) {
+            while (isPaused.value) await sleep(100)
+
+            const edgeKey = [node, neighbor].sort().join('-')
+
+            if (!visited.has(neighbor)) {
+                if (!exploredEdges.has(edgeKey)) {
+                    exploredEdges.add(edgeKey)
+                    dfsEdgeCount.value++
+                }
+
+                currentEdge.value = { from: node, to: neighbor }
+                await sleep(500 - speed.value * 4)
+                currentEdge.value = null
+
+                await dfs(neighbor)
+            }
+        }
+
+        dfsCallStack.value.pop()
+    }
+
+    await dfs(startNode)
+
+    dfsCallStack.value = []
+    currentNode.value = null
+    currentEdge.value = null
+    isTraversing.value = false
+}
+
 
 
 export const resetGraph = () => {
@@ -162,4 +250,7 @@ export const resetGraph = () => {
     queue.value = []
     currentEdge.value = null
     selectedStartNode.value = null
+    dfsCallStack.value = []
+    dfsVisitedCount.value = 0
+    dfsEdgeCount.value = 0
 }

@@ -60,6 +60,14 @@ Route::prefix('visualize')->group(function () {
             ]
         ]);
     });
+    Route::get('/dfs', function () {
+        return Inertia::render('visualize/DFS', [
+            'breadcrumbs' => [
+                ['title' => 'Algorithms', 'href' => '/'],
+                ['title' => 'DFS']
+            ]
+        ]);
+    });
 });
 
 require __DIR__.'/settings.php';
