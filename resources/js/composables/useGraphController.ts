@@ -29,6 +29,22 @@ export const dfsCallStack = ref<number[]>([])
 export const visitedCount = ref(0)
 export const edgeExploredCount = ref(0)
 
+export interface Step {
+    visitedNodes: number[]
+    currentNode: number | null
+    queue: number[]
+    currentEdge: { from: number; to: number } | null
+    dfsCallStack: number[]
+    visitedCount: number
+    edgeExploredCount: number
+    description?: string
+}
+
+export const steps = ref<Step[]>([])
+export const stepIndex = ref(-1)
+export const isPlaying = ref(false)
+let playTimer: ReturnType<typeof setInterval> | null = null
+
 export const graphType = ref<GraphType>('undirected')
 
 const sleep = (ms: number) =>
@@ -111,6 +127,70 @@ const buildAdjacencyList = () => {
     return adjList
 }
 
+const snapshot = (opts: Partial<Step> = {}): Step => ({
+    visitedNodes: [...visitedNodes.value],
+    currentNode: currentNode.value,
+    queue: [...queue.value],
+    currentEdge: currentEdge.value ? { ...currentEdge.value } : null,
+    dfsCallStack: [...dfsCallStack.value],
+    visitedCount: visitedCount.value,
+    edgeExploredCount: edgeExploredCount.value,
+    ...opts,
+})
+
+const applyStep = (index: number) => {
+    const s = steps.value[index]
+    if (!s) return
+
+    visitedNodes.value = [...s.visitedNodes]
+    currentNode.value = s.currentNode
+    queue.value = [...s.queue]
+    currentEdge.value = s.currentEdge ? { ...s.currentEdge } : null
+    dfsCallStack.value = [...s.dfsCallStack]
+    visitedCount.value = s.visitedCount
+    edgeExploredCount.value = s.edgeExploredCount
+    stepIndex.value = index
+}
+
+export const nextStep = () => {
+    if (stepIndex.value < steps.value.length - 1) {
+        applyStep(stepIndex.value + 1)
+    }
+}
+
+export const previousStep = () => {
+    if (stepIndex.value > 0) {
+        applyStep(stepIndex.value - 1)
+    }
+}
+
+export const gotoStep = (index: number) => {
+    if (index >= 0 && index < steps.value.length) applyStep(index)
+}
+
+export const playSteps = () => {
+    if (isPlaying.value || steps.value.length === 0) return
+    isPlaying.value = true
+    const delay = Math.max(50, 1000 - speed.value * 9)
+    playTimer = setInterval(() => {
+        if (stepIndex.value < steps.value.length - 1) nextStep()
+        else stopPlaying()
+    }, delay)
+}
+
+export const stopPlaying = () => {
+    if (playTimer) clearInterval(playTimer)
+    playTimer = null
+    isPlaying.value = false
+}
+
+export const resetSteps = () => {
+    stopPlaying()
+    steps.value = []
+    stepIndex.value = -1
+    resetGraph()
+}
+
 // BFS Algorithm
 export const runBFS = async (start?: number) => {
     visitedCount.value = 0
@@ -183,6 +263,113 @@ export const runBFS = async (start?: number) => {
     currentNode.value = null
     queue.value = []
     isTraversing.value = false
+}
+
+export const generateBFSSteps = (start?: number): Step[] => {
+    const startNode = start ?? selectedStartNode.value
+    if (startNode === null || nodes.value.length === 0) return []
+
+    const adjList = buildAdjacencyList()
+
+    const localVisited: number[] = []
+    let localCurrent: number | null = null
+    const localQueue: number[] = []
+    let localEdge: { from: number; to: number } | null = null
+    const localDfsStack: number[] = []
+    let localVisitedCount = 0
+    let localEdgeCount = 0
+
+    const visited = new Set<number>([startNode])
+    const exploredEdges = new Set<string>()
+
+    const stepList: Step[] = []
+
+    // initial state
+    localQueue.push(startNode)
+    stepList.push({
+        visitedNodes: [...localVisited],
+        currentNode: localCurrent,
+        queue: [...localQueue],
+        currentEdge: localEdge,
+        dfsCallStack: [...localDfsStack],
+        visitedCount: localVisitedCount,
+        edgeExploredCount: localEdgeCount,
+        description: 'start',
+    })
+
+    while (localQueue.length > 0) {
+        const node = localQueue.shift()!
+        localCurrent = node
+        stepList.push(snapshot({
+            visitedNodes: [...localVisited],
+            currentNode: localCurrent,
+            queue: [...localQueue],
+            currentEdge: localEdge,
+            dfsCallStack: [...localDfsStack],
+            visitedCount: localVisitedCount,
+            edgeExploredCount: localEdgeCount,
+            description: `visiting ${node}`,
+        }))
+
+        // mark visited
+        localVisited.push(node)
+        localVisitedCount++
+        stepList.push(snapshot({
+            visitedNodes: [...localVisited],
+            currentNode: null,
+            queue: [...localQueue],
+            currentEdge: localEdge,
+            dfsCallStack: [...localDfsStack],
+            visitedCount: localVisitedCount,
+            edgeExploredCount: localEdgeCount,
+            description: `visited ${node}`,
+        }))
+
+        for (const neighbor of adjList[node]) {
+            const edgeKey =
+                graphType.value === 'directed'
+                    ? `${node}->${neighbor}`
+                    : [node, neighbor].sort().join('-')
+
+            if (!visited.has(neighbor)) {
+                if (!exploredEdges.has(edgeKey)) {
+                    exploredEdges.add(edgeKey)
+                    localEdgeCount++
+                }
+
+                localEdge = { from: node, to: neighbor }
+                stepList.push(snapshot({
+                    visitedNodes: [...localVisited],
+                    currentNode: localCurrent,
+                    queue: [...localQueue],
+                    currentEdge: localEdge,
+                    dfsCallStack: [...localDfsStack],
+                    visitedCount: localVisitedCount,
+                    edgeExploredCount: localEdgeCount,
+                    description: `explore ${node}->${neighbor}`,
+                }))
+
+                visited.add(neighbor)
+                localQueue.push(neighbor)
+
+                stepList.push(snapshot({
+                    visitedNodes: [...localVisited],
+                    currentNode: localCurrent,
+                    queue: [...localQueue],
+                    currentEdge: null,
+                    dfsCallStack: [...localDfsStack],
+                    visitedCount: localVisitedCount,
+                    edgeExploredCount: localEdgeCount,
+                    description: `enqueue ${neighbor}`,
+                }))
+
+                localEdge = null
+            }
+        }
+    }
+
+    stepList.push(snapshot({ description: 'finished' }))
+    return stepList
 }
 
 // DFS Algorithm
@@ -260,6 +447,117 @@ export const runDFS = async (start?: number) => {
     currentNode.value = null
     currentEdge.value = null
     isTraversing.value = false
+}
+
+export const generateDFSSteps = (start?: number): Step[] => {
+    const startNode = start ?? selectedStartNode.value
+    if (startNode === null || nodes.value.length === 0) return []
+
+    const adjList = buildAdjacencyList()
+
+    const localVisited: number[] = []
+    let localCurrent: number | null = null
+    const localQueue: number[] = []
+    let localEdge: { from: number; to: number } | null = null
+    const localDfsStack: number[] = []
+    let localVisitedCount = 0
+    let localEdgeCount = 0
+
+    const visited = new Set<number>()
+    const exploredEdges = new Set<string>()
+
+    const stepList: Step[] = []
+
+    const dfs = (node: number) => {
+        localDfsStack.push(node)
+        localCurrent = node
+        visited.add(node)
+        localVisitedCount++
+        stepList.push(snapshot({
+            visitedNodes: [...localVisited],
+            currentNode: localCurrent,
+            queue: [...localQueue],
+            currentEdge: localEdge,
+            dfsCallStack: [...localDfsStack],
+            visitedCount: localVisitedCount,
+            edgeExploredCount: localEdgeCount,
+            description: `enter ${node}`,
+        }))
+
+        localVisited.push(node)
+        stepList.push(snapshot({
+            visitedNodes: [...localVisited],
+            currentNode: null,
+            queue: [...localQueue],
+            currentEdge: localEdge,
+            dfsCallStack: [...localDfsStack],
+            visitedCount: localVisitedCount,
+            edgeExploredCount: localEdgeCount,
+            description: `visited ${node}`,
+        }))
+
+        for (const neighbor of adjList[node]) {
+            const edgeKey =
+                graphType.value === 'directed'
+                    ? `${node}->${neighbor}`
+                    : [node, neighbor].sort().join('-')
+
+            if (!visited.has(neighbor)) {
+                if (!exploredEdges.has(edgeKey)) {
+                    exploredEdges.add(edgeKey)
+                    localEdgeCount++
+                }
+
+                localEdge = { from: node, to: neighbor }
+                stepList.push(snapshot({
+                    visitedNodes: [...localVisited],
+                    currentNode: localCurrent,
+                    queue: [...localQueue],
+                    currentEdge: localEdge,
+                    dfsCallStack: [...localDfsStack],
+                    visitedCount: localVisitedCount,
+                    edgeExploredCount: localEdgeCount,
+                    description: `explore ${node}->${neighbor}`,
+                }))
+
+                localEdge = null
+                dfs(neighbor)
+            }
+        }
+
+        localDfsStack.pop()
+        stepList.push(snapshot({
+            visitedNodes: [...localVisited],
+            currentNode: null,
+            queue: [...localQueue],
+            currentEdge: null,
+            dfsCallStack: [...localDfsStack],
+            visitedCount: localVisitedCount,
+            edgeExploredCount: localEdgeCount,
+            description: `backtrack ${node}`,
+        }))
+    }
+
+    // initial
+    stepList.push(snapshot({ description: 'start' }))
+    dfs(startNode)
+    stepList.push(snapshot({ description: 'finished' }))
+
+    return stepList
+}
+
+export const prepareBFSSteps = (start?: number, autoPlay = false) => {
+    stopPlaying()
+    steps.value = generateBFSSteps(start)
+    stepIndex.value = -1
+    if (autoPlay) playSteps()
+}
+
+export const prepareDFSSteps = (start?: number, autoPlay = false) => {
+    stopPlaying()
+    steps.value = generateDFSSteps(start)
+    stepIndex.value = -1
+    if (autoPlay) playSteps()
 }
 
 

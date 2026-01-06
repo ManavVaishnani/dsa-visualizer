@@ -1,35 +1,45 @@
 <script setup lang="ts">
 import {
     generateGraph,
+    graphType,
     isPaused,
     isTraversing,
+    nextStep,
     nodes,
+    prepareBFSSteps,
+    prepareDFSSteps,
+    previousStep,
     resetGraph,
     runBFS,
     runDFS,
     selectedStartNode,
     speed,
-    graphType,
+    stepIndex,
+    steps,
 } from '@/composables/useGraphController';
 
 interface Props {
-    algorithm: 'bfs' | 'dfs'
+    algorithm: 'bfs' | 'dfs';
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
 const startTraversal = () => {
     if (props.algorithm === 'bfs') {
-        runBFS()
+        runBFS();
     } else {
-        runDFS()
+        runDFS();
     }
-}
+};
+
+const prepareSteps = () => {
+    if (props.algorithm === 'bfs') prepareBFSSteps();
+    else prepareDFSSteps();
+};
 
 const pause = () => {
     isPaused.value = !isPaused.value;
 };
-
 </script>
 
 <template>
@@ -67,10 +77,13 @@ const pause = () => {
                 Generate Graph
             </button>
             <button
-                class="rounded bg-[#10b981] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#059669]
-                    disabled:cursor-not-allowed disabled:opacity-50"
+                class="rounded bg-[#10b981] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#059669] disabled:cursor-not-allowed disabled:opacity-50"
                 @click="startTraversal"
-                :disabled="isTraversing || nodes.length === 0 || selectedStartNode === null"
+                :disabled="
+                    isTraversing ||
+                    nodes.length === 0 ||
+                    selectedStartNode === null
+                "
             >
                 Start {{ props.algorithm.toUpperCase() }}
             </button>
@@ -89,6 +102,42 @@ const pause = () => {
             >
                 Reset
             </button>
+
+            <!-- Step controls -->
+            <button
+                class="rounded bg-[#64748b] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#475569] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                @click="prepareSteps"
+                :disabled="
+                    isTraversing ||
+                    nodes.length === 0 ||
+                    selectedStartNode === null
+                "
+            >
+                Prepare Steps
+            </button>
+
+            <div class="flex items-center gap-2">
+                <button
+                    class="rounded bg-[#0ea5e9] px-3 py-1 text-sm text-white disabled:opacity-50 cursor-pointer"
+                    @click="previousStep"
+                    :disabled="steps.length === 0 || stepIndex <= 0"
+                >
+                    &laquo; Prev
+                </button>
+                <button
+                    class="rounded bg-[#0ea5e9] px-3 py-1 text-sm text-white disabled:opacity-50 cursor-pointer"
+                    @click="nextStep"
+                    :disabled="
+                        steps.length === 0 || stepIndex >= steps.length - 1
+                    "
+                >
+                    Next &raquo;
+                </button>
+                <!-- Play button removed -->
+                <div class="text-xs text-[#94a3b8]">
+                    {{ stepIndex + 1 }} / {{ steps.length }}
+                </div>
+            </div>
         </div>
     </header>
 </template>
