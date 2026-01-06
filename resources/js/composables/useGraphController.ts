@@ -24,9 +24,8 @@ export const isTraversing = ref(false)
 export const isPaused = ref(false)
 export const selectedStartNode = ref<number | null>(null)
 export const dfsCallStack = ref<number[]>([])
-export const dfsVisitedCount = ref(0)
-export const dfsEdgeCount = ref(0)
-
+export const visitedCount = ref(0)
+export const edgeExploredCount = ref(0)
 
 
 const sleep = (ms: number) =>
@@ -86,14 +85,17 @@ export const generateGraph = () => {
     currentEdge.value = null
     selectedStartNode.value = null
     dfsCallStack.value = []
-    dfsVisitedCount.value = 0
-    dfsEdgeCount.value = 0
+    visitedCount.value = 0
+    edgeExploredCount.value = 0
 
 }
 
 
 // BFS Algorithm
 export const runBFS = async (start?: number) => {
+    visitedCount.value = 0
+    edgeExploredCount.value = 0
+
     const startNode = start ?? selectedStartNode.value
 
     if (
@@ -121,14 +123,13 @@ export const runBFS = async (start?: number) => {
         adjList[edge.to].push(edge.from) // Undirected graph
     })
 
-    // Initialize BFS
-    queue.value = [startNode]
     const visited = new Set<number>([startNode])
+    const exploredEdges = new Set<string>()
+
+    queue.value = [startNode]
 
     while (queue.value.length > 0) {
-        while (isPaused.value) {
-            await sleep(100)
-        }
+        while (isPaused.value) await sleep(100)
 
         const node = queue.value.shift()!
         currentNode.value = node
@@ -136,19 +137,26 @@ export const runBFS = async (start?: number) => {
         await sleep(1000 - speed.value * 9)
 
         visitedNodes.value.push(node)
+        visitedCount.value++
         currentNode.value = null
 
         for (const neighbor of adjList[node]) {
-            while (isPaused.value) {
-                await sleep(100)
-            }
+            while (isPaused.value) await sleep(100)
+
+            const edgeKey = [node, neighbor].sort().join('-')
 
             if (!visited.has(neighbor)) {
+
+                if (!exploredEdges.has(edgeKey)) {
+                    exploredEdges.add(edgeKey)
+                    edgeExploredCount.value++
+                }
+
                 currentEdge.value = { from: node, to: neighbor }
                 await sleep(500 - speed.value * 4)
 
-                queue.value.push(neighbor)
                 visited.add(neighbor)
+                queue.value.push(neighbor)
 
                 currentEdge.value = null
             }
@@ -162,8 +170,8 @@ export const runBFS = async (start?: number) => {
 
 // DFS Algorithm
 export const runDFS = async (start?: number) => {
-    dfsVisitedCount.value = 0
-    dfsEdgeCount.value = 0
+    visitedCount.value = 0
+    edgeExploredCount.value = 0
 
     const startNode = start ?? selectedStartNode.value
 
@@ -202,7 +210,7 @@ export const runDFS = async (start?: number) => {
         dfsCallStack.value.push(node)
 
         visited.add(node)
-        dfsVisitedCount.value++
+        visitedCount.value++
         currentNode.value = node
 
         await sleep(1000 - speed.value * 9)
@@ -218,7 +226,7 @@ export const runDFS = async (start?: number) => {
             if (!visited.has(neighbor)) {
                 if (!exploredEdges.has(edgeKey)) {
                     exploredEdges.add(edgeKey)
-                    dfsEdgeCount.value++
+                    edgeExploredCount.value++
                 }
 
                 currentEdge.value = { from: node, to: neighbor }
@@ -251,6 +259,6 @@ export const resetGraph = () => {
     currentEdge.value = null
     selectedStartNode.value = null
     dfsCallStack.value = []
-    dfsVisitedCount.value = 0
-    dfsEdgeCount.value = 0
+    visitedCount.value = 0
+    edgeExploredCount.value = 0
 }

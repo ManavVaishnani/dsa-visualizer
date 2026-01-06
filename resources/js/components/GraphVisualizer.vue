@@ -9,8 +9,8 @@ import {
     selectedStartNode,
     isTraversing,
     dfsCallStack,
-    dfsVisitedCount,
-    dfsEdgeCount,
+    visitedCount,
+    edgeExploredCount,
 } from '@/composables/useGraphController'
 
 
@@ -164,30 +164,30 @@ const getEdgeColor = (from: number, to: number) => {
 
         <!-- DFS Time Complexity Panel -->
         <div
-            v-if="dfsVisitedCount > 0"
+            v-if="visitedCount > 0"
             class="absolute left-4 bottom-4 w-56 rounded-lg bg-[#1e293b] p-4 text-sm shadow-lg"
         >
             <div class="mb-2 font-semibold text-[#f1f5f9]">
-                DFS Time Complexity
+                Time Complexity
             </div>
 
             <div class="space-y-1 text-[#94a3b8]">
                 <div>
                     Visited Nodes:
                     <span class="font-bold text-white">
-                        {{ dfsVisitedCount }} / {{ nodes.length }}
+                        {{ visitedCount }} / {{ nodes.length }}
                     </span>
                 </div>
 
                 <div>
                     Edges Explored:
                     <span class="font-bold text-white">
-                        {{ dfsEdgeCount }} / {{ edges.length }}
+                        {{ edgeExploredCount }} / {{ edges.length }}
                     </span>
                 </div>
 
                 <div class="pt-2 text-[#22c55e] font-semibold">
-                    Current Cost: O({{ dfsVisitedCount }} + {{ dfsEdgeCount }})
+                    Current Cost: O({{ visitedCount }} + {{ edgeExploredCount }})
                 </div>
 
                 <div class="text-xs pt-1 text-[#94a3b8]">
