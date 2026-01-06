@@ -2,26 +2,25 @@
 import {
     currentEdge,
     currentNode,
+    dfsCallStack,
+    edgeExploredCount,
     edges,
+    graphType,
+    isTraversing,
     nodes,
     queue,
-    visitedNodes,
     selectedStartNode,
-    isTraversing,
-    dfsCallStack,
     visitedCount,
-    edgeExploredCount,
-} from '@/composables/useGraphController'
-
+    visitedNodes,
+} from '@/composables/useGraphController';
 
 const getNodeColor = (nodeId: number) => {
-    if (currentNode.value === nodeId) return '#f59e0b'
-    if (visitedNodes.value.includes(nodeId)) return '#10b981'
-    if (queue.value.includes(nodeId)) return '#6366f1'
-    if (selectedStartNode.value === nodeId) return '#22c55e'
-    return '#3b82f6'
-}
-
+    if (currentNode.value === nodeId) return '#f59e0b';
+    if (visitedNodes.value.includes(nodeId)) return '#10b981';
+    if (queue.value.includes(nodeId)) return '#6366f1';
+    if (selectedStartNode.value === nodeId) return '#22c55e';
+    return '#3b82f6';
+};
 
 const isEdgeActive = (from: number, to: number) => {
     if (!currentEdge.value) return false;
@@ -38,32 +37,114 @@ const getEdgeColor = (from: number, to: number) => {
     }
     return '#475569'; // Gray - default
 };
+
+// Calculate the edge endpoint position (shortened to stop at node radius)
+const calculateEdgeEndpoint = (
+    fromX: number,
+    fromY: number,
+    toX: number,
+    toY: number,
+    nodeRadius = 30,
+) => {
+    const dx = toX - fromX;
+    const dy = toY - fromY;
+    const angle = Math.atan2(dy, dx);
+    return {
+        x: toX - nodeRadius * Math.cos(angle),
+        y: toY - nodeRadius * Math.sin(angle),
+    };
+};
 </script>
 
 <template>
     <div class="relative h-full w-full bg-[#0f172a]">
         <svg class="h-full w-full" viewBox="0 0 800 600">
+            <!-- Define arrow markers for directed edges -->
+            <defs>
+                <marker
+                    id="arrowhead-gray"
+                    markerWidth="10"
+                    markerHeight="10"
+                    refX="9"
+                    refY="3"
+                    orient="auto"
+                    markerUnits="strokeWidth"
+                >
+                    <polygon points="0 0, 10 3, 0 6" fill="#475569" />
+                </marker>
+                <marker
+                    id="arrowhead-green"
+                    markerWidth="10"
+                    markerHeight="10"
+                    refX="9"
+                    refY="3"
+                    orient="auto"
+                    markerUnits="strokeWidth"
+                >
+                    <polygon points="0 0, 10 3, 0 6" fill="#10b981" />
+                </marker>
+                <marker
+                    id="arrowhead-orange"
+                    markerWidth="10"
+                    markerHeight="10"
+                    refX="9"
+                    refY="3"
+                    orient="auto"
+                    markerUnits="strokeWidth"
+                >
+                    <polygon points="0 0, 10 3, 0 6" fill="#f59e0b" />
+                </marker>
+            </defs>
+
             <!-- Draw edges first (so they appear behind nodes) -->
             <line
                 v-for="(edge, index) in edges"
                 :key="'edge-' + index"
                 :x1="nodes[edge.from]?.x"
                 :y1="nodes[edge.from]?.y"
-                :x2="nodes[edge.to]?.x"
-                :y2="nodes[edge.to]?.y"
+                :x2="
+                    calculateEdgeEndpoint(
+                        nodes[edge.from]?.x,
+                        nodes[edge.from]?.y,
+                        nodes[edge.to]?.x,
+                        nodes[edge.to]?.y,
+                    ).x
+                "
+                :y2="
+                    calculateEdgeEndpoint(
+                        nodes[edge.from]?.x,
+                        nodes[edge.from]?.y,
+                        nodes[edge.to]?.x,
+                        nodes[edge.to]?.y,
+                    ).y
+                "
                 :stroke="getEdgeColor(edge.from, edge.to)"
                 :stroke-width="isEdgeActive(edge.from, edge.to) ? 4 : 2"
+                :marker-end="
+                    graphType === 'directed'
+                        ? isEdgeActive(edge.from, edge.to)
+                            ? 'url(#arrowhead-orange)'
+                            : visitedNodes.includes(edge.from) &&
+                                visitedNodes.includes(edge.to)
+                              ? 'url(#arrowhead-green)'
+                              : 'url(#arrowhead-gray)'
+                        : undefined
+                "
                 class="transition-all duration-300"
             />
 
             <!-- Draw nodes -->
-            <g v-for="node in nodes" :key="node.id" class="transition-all duration-500">
+            <g
+                v-for="node in nodes"
+                :key="node.id"
+                class="transition-all duration-500"
+            >
                 <circle
                     :cx="node.x"
                     :cy="node.y"
                     :r="30"
                     :fill="getNodeColor(node.id)"
-                    class="cursor-pointer transition-all duration-300"
+                    class="cursor-pointer transition-all duration-300 opacity-80"
                     :class="{
                         'ring-4 ring-[#22c55e]': selectedStartNode === node.id,
                         'animate-pulse': currentNode === node.id,
@@ -116,7 +197,8 @@ const getEdgeColor = (from: number, to: number) => {
                     :key="nodeId"
                     class="flex items-center justify-center rounded bg-[#8b5cf6] px-3 py-1 text-sm font-bold text-white transition-all"
                     :class="{
-                        'ring-2 ring-white': nodeId === dfsCallStack[dfsCallStack.length - 1],
+                        'ring-2 ring-white':
+                            nodeId === dfsCallStack[dfsCallStack.length - 1],
                     }"
                 >
                     {{ nodes[nodeId]?.label }}
@@ -127,7 +209,6 @@ const getEdgeColor = (from: number, to: number) => {
                 Top of Stack ↑
             </div>
         </div>
-
 
         <!-- Selected Start Node -->
         <div
@@ -165,11 +246,9 @@ const getEdgeColor = (from: number, to: number) => {
         <!-- DFS Time Complexity Panel -->
         <div
             v-if="visitedCount > 0"
-            class="absolute left-4 bottom-4 w-56 rounded-lg bg-[#1e293b] p-4 text-sm shadow-lg"
+            class="absolute bottom-4 left-4 w-56 rounded-lg bg-[#1e293b] p-4 text-sm shadow-lg"
         >
-            <div class="mb-2 font-semibold text-[#f1f5f9]">
-                Time Complexity
-            </div>
+            <div class="mb-2 font-semibold text-[#f1f5f9]">Time Complexity</div>
 
             <div class="space-y-1 text-[#94a3b8]">
                 <div>
@@ -186,15 +265,15 @@ const getEdgeColor = (from: number, to: number) => {
                     </span>
                 </div>
 
-                <div class="pt-2 text-[#22c55e] font-semibold">
-                    Current Cost: O({{ visitedCount }} + {{ edgeExploredCount }})
+                <div class="pt-2 font-semibold text-[#22c55e]">
+                    Current Cost: O({{ visitedCount }} +
+                    {{ edgeExploredCount }})
                 </div>
 
-                <div class="text-xs pt-1 text-[#94a3b8]">
+                <div class="pt-1 text-xs text-[#94a3b8]">
                     Final Complexity: O(V + E)
                 </div>
             </div>
         </div>
-
     </div>
 </template>

@@ -9,6 +9,7 @@ import {
     runDFS,
     selectedStartNode,
     speed,
+    graphType,
 } from '@/composables/useGraphController';
 
 interface Props {
@@ -51,6 +52,13 @@ const pause = () => {
 
         <!-- Controls -->
         <div class="flex gap-3">
+            <select
+                v-model="graphType"
+                class="rounded bg-[#1e293b] px-3 py-1 text-sm text-white"
+            >
+                <option value="undirected">Undirected</option>
+                <option value="directed">Directed</option>
+            </select>
             <button
                 class="rounded bg-[#3b82f6] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:opacity-50"
                 @click="generateGraph"

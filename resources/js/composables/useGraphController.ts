@@ -12,6 +12,8 @@ export interface Edge {
     to: number
 }
 
+export type GraphType = 'directed' | 'undirected'
+
 export const nodes = ref<Node[]>([])
 export const edges = ref<Edge[]>([])
 export const visitedNodes = ref<number[]>([])
@@ -27,6 +29,7 @@ export const dfsCallStack = ref<number[]>([])
 export const visitedCount = ref(0)
 export const edgeExploredCount = ref(0)
 
+export const graphType = ref<GraphType>('undirected')
 
 const sleep = (ms: number) =>
     new Promise(resolve => setTimeout(resolve, ms))
@@ -90,6 +93,23 @@ export const generateGraph = () => {
 
 }
 
+const buildAdjacencyList = () => {
+    const adjList: Record<number, number[]> = {}
+
+    nodes.value.forEach(node => {
+        adjList[node.id] = []
+    })
+
+    edges.value.forEach(edge => {
+        adjList[edge.from].push(edge.to)
+
+        if (graphType.value === 'undirected') {
+            adjList[edge.to].push(edge.from)
+        }
+    })
+
+    return adjList
+}
 
 // BFS Algorithm
 export const runBFS = async (start?: number) => {
@@ -114,14 +134,7 @@ export const runBFS = async (start?: number) => {
     currentEdge.value = null
 
     // Build adjacency list
-    const adjList: Record<number, number[]> = {}
-    nodes.value.forEach(node => {
-        adjList[node.id] = []
-    })
-    edges.value.forEach(edge => {
-        adjList[edge.from].push(edge.to)
-        adjList[edge.to].push(edge.from) // Undirected graph
-    })
+    const adjList = buildAdjacencyList()
 
     const visited = new Set<number>([startNode])
     const exploredEdges = new Set<string>()
@@ -143,7 +156,11 @@ export const runBFS = async (start?: number) => {
         for (const neighbor of adjList[node]) {
             while (isPaused.value) await sleep(100)
 
-            const edgeKey = [node, neighbor].sort().join('-')
+            const edgeKey =
+                graphType.value === 'directed'
+                    ? `${node}->${neighbor}`
+                    : [node, neighbor].sort().join('-')
+
 
             if (!visited.has(neighbor)) {
 
@@ -191,14 +208,7 @@ export const runDFS = async (start?: number) => {
     dfsCallStack.value = []
 
     // Build adjacency list
-    const adjList: Record<number, number[]> = {}
-    nodes.value.forEach(node => {
-        adjList[node.id] = []
-    })
-    edges.value.forEach(edge => {
-        adjList[edge.from].push(edge.to)
-        adjList[edge.to].push(edge.from)
-    })
+    const adjList = buildAdjacencyList()
 
     const visited = new Set<number>()
 
@@ -221,7 +231,11 @@ export const runDFS = async (start?: number) => {
         for (const neighbor of adjList[node]) {
             while (isPaused.value) await sleep(100)
 
-            const edgeKey = [node, neighbor].sort().join('-')
+            const edgeKey =
+                graphType.value === 'directed'
+                    ? `${node}->${neighbor}`
+                    : [node, neighbor].sort().join('-')
+
 
             if (!visited.has(neighbor)) {
                 if (!exploredEdges.has(edgeKey)) {

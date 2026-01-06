@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AlgorithmSidebar from '@/components/AlgorithmSidebar.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import SortingControls from '@/components/SortingControls.vue';
 import type { BreadcrumbItemType } from '@/types';
@@ -21,8 +20,6 @@ const transformedBreadcrumbs = computed(() => {
 
 <template>
     <div class="flex h-screen bg-[#0f172a] text-[#f1f5f9]">
-        <!-- Sidebar -->
-        <!-- <AlgorithmSidebar /> -->
 
         <!-- Main Area -->
         <div class="flex flex-1 flex-col overflow-hidden">
