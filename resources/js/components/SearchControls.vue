@@ -51,12 +51,14 @@ const handleGenerate = () => {
 
 <template>
     <header
-        class="flex items-center justify-between border-b border-[#334155] bg-[#0f172a] px-6 py-3"
+        class="flex flex-col gap-4 border-b border-[#334155] bg-[#0f172a] px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 md:py-3"
     >
         <!-- Sliders and Inputs -->
-        <div class="flex items-center gap-6">
+        <div
+            class="flex flex-wrap items-center justify-center gap-4 md:justify-start md:gap-6"
+        >
             <!-- Data Structure Selector -->
-            <div>
+            <div class="flex flex-col">
                 <label class="text-xs text-[#94a3b8]">Data Structure</label>
                 <select
                     v-model="dataStructure"
@@ -68,33 +70,34 @@ const handleGenerate = () => {
                 </select>
             </div>
 
-
             <!-- Target Value -->
-            <div class="grid">
+            <div class="flex flex-col">
                 <label class="text-xs text-[#94a3b8]">Target</label>
                 <input
-                type="number"
-                v-model.number="target"
-                class="mt-1 w-24 rounded border-[#334155] bg-[#1e293b] px-2 py-1 text-sm text-[#f1f5f9]"
-                :disabled="isSearching"
+                    type="number"
+                    v-model.number="target"
+                    class="mt-1 w-20 rounded border-[#334155] bg-[#1e293b] px-2 py-1 text-sm text-[#f1f5f9] md:w-24"
+                    :disabled="isSearching"
                 />
             </div>
 
             <!-- Array Size -->
-            <div class="grid">
-                <label class="text-xs text-[#94a3b8]">Size: {{ arraySize }}</label>
+            <div class="flex flex-col">
+                <label class="text-xs text-[#94a3b8]"
+                    >Size: {{ arraySize }}</label
+                >
                 <input
                     type="range"
                     min="5"
                     max="20"
                     v-model.number="arraySize"
-                    class="w-32 accent-[#3b82f6]"
+                    class="w-24 accent-[#3b82f6] md:w-32"
                     :disabled="isSearching"
                 />
             </div>
 
             <!-- Speed -->
-            <div class="grid">
+            <div class="flex flex-col">
                 <label class="text-xs text-[#94a3b8]">Speed</label>
                 <input
                     type="range"
@@ -102,22 +105,22 @@ const handleGenerate = () => {
                     max="1500"
                     step="100"
                     v-model.number="speed"
-                    class="w-32 accent-[#3b82f6]"
+                    class="w-24 accent-[#3b82f6] md:w-32"
                 />
             </div>
         </div>
 
         <!-- Control Buttons -->
-        <div class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3">
             <button
-                class="rounded bg-[#3b82f6] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#2563eb]"
+                class="rounded bg-[#3b82f6] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#2563eb] md:px-4 md:py-2"
                 @click="handleGenerate"
                 :disabled="isSearching"
             >
                 Generate
             </button>
             <button
-                class="rounded bg-[#10b981] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#059669] disabled:cursor-not-allowed disabled:opacity-50"
+                class="rounded bg-[#10b981] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#059669] disabled:cursor-not-allowed disabled:opacity-50 md:px-4 md:py-2"
                 @click="runSearch"
                 :disabled="
                     isSearching || target === null || numbers.length === 0
@@ -126,14 +129,14 @@ const handleGenerate = () => {
                 Start
             </button>
             <button
-                class="rounded bg-[#f59e0b] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#d97706] disabled:cursor-not-allowed disabled:opacity-50"
+                class="rounded bg-[#f59e0b] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#d97706] disabled:cursor-not-allowed disabled:opacity-50 md:px-4 md:py-2"
                 @click="togglePause"
                 :disabled="!isSearching"
             >
                 {{ isPaused ? 'Resume' : 'Pause' }}
             </button>
             <button
-                class="rounded bg-[#ef4444] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#dc2626]"
+                class="rounded bg-[#ef4444] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#dc2626] md:px-4 md:py-2"
                 @click="resetState"
             >
                 Reset

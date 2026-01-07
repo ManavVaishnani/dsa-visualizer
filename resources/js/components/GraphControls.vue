@@ -44,11 +44,11 @@ const pause = () => {
 
 <template>
     <header
-        class="flex items-center justify-between border-b border-[#334155] bg-[#0f172a] px-6 py-3"
+        class="flex flex-col gap-4 border-b border-[#334155] bg-[#0f172a] px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 md:py-3"
     >
         <!-- Speed Control -->
-        <div class="flex items-center gap-6" >
-            <div class="grid">
+        <div class="flex items-center justify-center gap-6 md:justify-start">
+            <div class="flex flex-col">
                 <label class="text-xs text-[#94a3b8]">Speed</label>
                 <input
                     type="range"
@@ -61,23 +61,23 @@ const pause = () => {
         </div>
 
         <!-- Controls -->
-        <div class="flex gap-3">
+        <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3">
             <select
                 v-model="graphType"
-                class="rounded bg-[#1e293b] px-3 py-1 text-sm text-white"
+                class="rounded bg-[#1e293b] px-2 py-1.5 text-xs text-white md:px-3 md:py-1 md:text-sm"
             >
                 <option value="undirected">Undirected</option>
                 <option value="directed">Directed</option>
             </select>
             <button
-                class="rounded bg-[#3b82f6] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:opacity-50"
+                class="rounded bg-[#3b82f6] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:opacity-50 md:px-4 md:py-2 md:text-sm"
                 @click="generateGraph"
                 :disabled="isTraversing"
             >
-                Generate Graph
+                Generate
             </button>
             <button
-                class="rounded bg-[#10b981] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#059669] disabled:cursor-not-allowed disabled:opacity-50"
+                class="rounded bg-[#10b981] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-[#059669] disabled:cursor-not-allowed disabled:opacity-50 md:px-4 md:py-2 md:text-sm"
                 @click="startTraversal"
                 :disabled="
                     isTraversing ||
@@ -89,14 +89,14 @@ const pause = () => {
             </button>
 
             <button
-                class="rounded bg-[#f59e0b] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#d97706] disabled:cursor-not-allowed disabled:opacity-50"
+                class="rounded bg-[#f59e0b] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-[#d97706] disabled:cursor-not-allowed disabled:opacity-50 md:px-4 md:py-2 md:text-sm"
                 @click="pause"
                 :disabled="!isTraversing"
             >
                 {{ isPaused ? 'Resume' : 'Pause' }}
             </button>
             <button
-                class="rounded bg-[#ef4444] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+                class="rounded bg-[#ef4444] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50 md:px-4 md:py-2 md:text-sm"
                 @click="resetGraph"
                 :disabled="isTraversing"
             >
@@ -105,7 +105,7 @@ const pause = () => {
 
             <!-- Step controls -->
             <button
-                class="rounded bg-[#64748b] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#475569] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                class="cursor-pointer rounded bg-[#64748b] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-[#475569] disabled:cursor-not-allowed disabled:opacity-50 md:px-4 md:py-2 md:text-sm"
                 @click="prepareSteps"
                 :disabled="
                     isTraversing ||
@@ -116,16 +116,16 @@ const pause = () => {
                 Prepare Steps
             </button>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1 md:gap-2">
                 <button
-                    class="rounded bg-[#0ea5e9] px-3 py-1 text-sm text-white disabled:opacity-50 cursor-pointer"
+                    class="cursor-pointer rounded bg-[#0ea5e9] px-2 py-1 text-xs text-white disabled:opacity-50 md:px-3 md:text-sm"
                     @click="previousStep"
                     :disabled="steps.length === 0 || stepIndex <= 0"
                 >
                     &laquo; Prev
                 </button>
                 <button
-                    class="rounded bg-[#0ea5e9] px-3 py-1 text-sm text-white disabled:opacity-50 cursor-pointer"
+                    class="cursor-pointer rounded bg-[#0ea5e9] px-2 py-1 text-xs text-white disabled:opacity-50 md:px-3 md:text-sm"
                     @click="nextStep"
                     :disabled="
                         steps.length === 0 || stepIndex >= steps.length - 1
@@ -133,9 +133,8 @@ const pause = () => {
                 >
                     Next &raquo;
                 </button>
-                <!-- Play button removed -->
-                <div class="text-xs text-[#94a3b8]">
-                    {{ stepIndex + 1 }} / {{ steps.length }}
+                <div class="text-[10px] text-[#94a3b8] md:text-xs">
+                    {{ stepIndex + 1 }}/{{ steps.length }}
                 </div>
             </div>
         </div>

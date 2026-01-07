@@ -2,78 +2,73 @@
 // import { computed } from 'vue'
 
 interface Props {
-    numbers: number[]
-    target: number | null
-    currentIndex: number | null
-    low: number | null
-    high: number | null
-    mid: number | null
-    foundIndex: number | null
+    numbers: number[];
+    target: number | null;
+    currentIndex: number | null;
+    low: number | null;
+    high: number | null;
+    mid: number | null;
+    foundIndex: number | null;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
 const isOutOfRange = (index: number) => {
-    if (props.low === null || props.high === null) return false
-    return index < props.low || index > props.high
-}
+    if (props.low === null || props.high === null) return false;
+    return index < props.low || index > props.high;
+};
 
 const isActive = (index: number) => {
-    return (
-        index === props.currentIndex ||
-        index === props.mid
-    )
-}
+    return index === props.currentIndex || index === props.mid;
+};
 
 const isFound = (index: number) => {
-    return props.foundIndex === index
-}
+    return props.foundIndex === index;
+};
 
 const boxClass = (index: number) => {
-    if (isFound(index))
-        return 'bg-green-500 text-white scale-110'
+    if (isFound(index)) return 'bg-green-500 text-white scale-110';
 
-    if (isActive(index))
-        return 'bg-blue-500 text-white scale-105'
+    if (isActive(index)) return 'bg-blue-500 text-white scale-105';
 
-    if (isOutOfRange(index))
-        return 'bg-gray-200 text-gray-400 opacity-40'
+    if (isOutOfRange(index)) return 'bg-gray-200 text-gray-400 opacity-40';
 
-    return 'bg-slate-100 text-slate-800'
-}
+    return 'bg-slate-100 text-slate-800';
+};
 </script>
 
 <template>
-    <div class="w-full flex justify-center">
-        <div class="flex gap-3 items-end">
+    <div class="h-full w-full overflow-y-auto px-4 py-8">
+        <div class="flex flex-wrap items-start justify-center gap-2 md:gap-3">
             <div
                 v-for="(num, index) in numbers"
                 :key="index"
                 class="relative transition-all duration-300"
             >
-                <div class="text-xs text-center text-gray-500 mb-1">
+                <!-- Index Label -->
+                <div
+                    class="mb-1 text-center text-[10px] text-gray-400 md:text-xs"
+                >
                     {{ index }}
                 </div>
 
+                <!-- Box -->
                 <div
                     :class="[
-                        'w-14 h-14 flex items-center justify-center rounded-lg font-semibold shadow-md',
-                        boxClass(index)
+                        'flex h-10 w-10 items-center justify-center rounded-lg border-2 font-bold shadow-lg transition-all duration-300 md:h-14 md:w-14',
+                        boxClass(index),
                     ]"
                 >
-                    {{ num }}
+                    <span class="text-sm md:text-base">{{ num }}</span>
                 </div>
 
-                <div class="mt-1 text-xs text-center h-4">
-                    <span v-if="index === low" class="text-purple-600">
-                        L
-                    </span>
-                    <span v-if="index === high" class="text-red-600 ml-1">
-                        H
-                    </span>
-                    <span v-if="index === mid" class="text-blue-600 ml-1">
-                        M
-                    </span>
+                <!-- Marker Labels (L, H, M) -->
+                <div
+                    class="mt-1 flex h-4 items-center justify-center gap-1 text-[10px] font-bold md:text-xs"
+                >
+                    <span v-if="index === low" class="text-purple-400">L</span>
+                    <span v-if="index === high" class="text-red-400">H</span>
+                    <span v-if="index === mid" class="text-blue-400">M</span>
                 </div>
             </div>
         </div>
