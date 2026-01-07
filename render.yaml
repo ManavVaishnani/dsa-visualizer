@@ -1,0 +1,50 @@
+services:
+  # Web Service (PHP/Laravel)
+  - type: web
+    name: dsa-visualizer
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: dsa-visualizer-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dsa-visualizer-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: dsa-visualizer-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: dsa-visualizer-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: dsa-visualizer-db
+          property: password
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: LOG_CHANNEL
+        value: errorlog
+
+  # PostgreSQL Database
+databases:
+  - name: dsa-visualizer-db
+    databaseName: dsa_visualizer
+    user: dsa_visualizer
+    plan: free
