@@ -68,6 +68,22 @@ Route::prefix('visualize')->group(function () {
             ]
         ]);
     });
+    Route::get('/linear-search', function () {
+        return Inertia::render('visualize/LinearSearch', [
+            'breadcrumbs' => [
+                ['title' => 'Algorithms', 'href' => '/'],
+                ['title' => 'Linear Search']
+            ]
+        ]);
+    });
+    Route::get('/binary-search', function () {
+        return Inertia::render('visualize/BinarySearch', [
+            'breadcrumbs' => [
+                ['title' => 'Algorithms', 'href' => '/'],
+                ['title' => 'Binary Search']
+            ]
+        ]);
+    });
 });
 
 require __DIR__.'/settings.php';

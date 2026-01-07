@@ -3,6 +3,16 @@ import { Head, Link } from '@inertiajs/vue3';
 
 const algorithms = [
     {
+        title: 'Linear Search',
+        href: '/visualize/linear-search',
+        img: '/linear-search.png',
+    },
+    {
+        title: 'Binary Search',
+        href: '/visualize/binary-search',
+        img: '/binary-search.png',
+    },
+    {
         title: 'Bubble Sort',
         href: '/visualize/bubble-sort',
         img: '/bubble-sort.png',
