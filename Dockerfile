@@ -6,17 +6,21 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install Node dependencies
-RUN npm ci
+# Install ALL dependencies (including devDependencies needed for build)
+RUN npm ci --include=dev
 
-# Copy source files
-COPY . .
+# Copy source files needed for build
+COPY resources ./resources
+COPY vite.config.ts ./
+COPY tsconfig.json ./
+COPY public ./public
 
-# Build assets with SSR
+# Build assets with SSR (skip wayfinder to avoid PHP dependency)
+ENV SKIP_WAYFINDER=true
 RUN npm run build:ssr
 
 # PHP runtime stage
-FROM php:8.2-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
