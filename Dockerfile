@@ -52,10 +52,15 @@ COPY --from=node-builder /app/bootstrap/ssr ./bootstrap/ssr
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Create SQLite database file
+RUN touch /var/www/html/database/database.sqlite
+
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/database \
+    && chmod 664 /var/www/html/database/database.sqlite
 
 # Configure Nginx
 COPY <<'EOF' /etc/nginx/http.d/default.conf
