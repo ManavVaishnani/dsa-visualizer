@@ -65,12 +65,12 @@ onMounted(() => {
         <!-- Notification Popup -->
         <div
             v-if="showNotFoundMessage"
-            class="animate-slide-in-right fixed top-20 right-6 z-50 rounded-lg border border-[#ef4444] bg-[#1e293b] px-6 py-4 shadow-xl"
+            class="animate-slide-in-right fixed top-20 right-6 z-50 rounded-lg border border-[#f59e0b] bg-[#1e293b] px-6 py-4 shadow-xl"
         >
             <div class="flex items-center gap-3">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 text-[#ef4444]"
+                    class="h-6 w-6 text-[#f59e0b]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -79,7 +79,7 @@ onMounted(() => {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                 </svg>
                 <div>
@@ -148,19 +148,19 @@ onMounted(() => {
 
                 <!-- Stats Section -->
                 <div
-                    class="mt-6 flex w-full max-w-4xl justify-between rounded-lg bg-[#1e293b] px-6 py-4 text-sm"
+                    class="mt-6 flex w-full max-w-4xl flex-col gap-4 rounded-lg bg-[#1e293b] px-6 py-4 text-sm md:flex-row md:justify-between md:gap-0"
                 >
-                    <div>
+                    <div class="flex justify-between md:block">
                         <strong class="text-[#94a3b8]">Comparisons:</strong>
                         <span class="ml-2 text-[#f1f5f9]">{{
                             comparisonsCount
                         }}</span>
                     </div>
-                    <div>
+                    <div class="flex justify-between md:block">
                         <strong class="text-[#94a3b8]">Time Complexity:</strong>
                         <span class="ml-2 text-[#f1f5f9]">O(log n)</span>
                     </div>
-                    <div>
+                    <div class="flex justify-between md:block">
                         <strong class="text-[#94a3b8]"
                             >Space Complexity:</strong
                         >

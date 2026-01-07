@@ -20,7 +20,6 @@ const transformedBreadcrumbs = computed(() => {
 
 <template>
     <div class="flex h-screen bg-[#0f172a] text-[#f1f5f9]">
-
         <!-- Main Area -->
         <div class="flex flex-1 flex-col overflow-hidden">
             <!-- Top Controls -->
@@ -29,13 +28,13 @@ const transformedBreadcrumbs = computed(() => {
             <!-- Breadcrumbs -->
             <div
                 v-if="transformedBreadcrumbs.length > 0"
-                class="border-b border-[#334155] px-6 py-3"
+                class="border-b border-[#334155] px-4 py-3 md:px-6"
             >
                 <Breadcrumbs :breadcrumbs="transformedBreadcrumbs" />
             </div>
 
             <!-- Content -->
-            <main class="flex-1 overflow-hidden p-6">
+            <main class="flex-1 overflow-hidden p-4 md:p-6">
                 <slot />
             </main>
         </div>

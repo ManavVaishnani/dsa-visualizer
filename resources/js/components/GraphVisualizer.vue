@@ -144,7 +144,7 @@ const calculateEdgeEndpoint = (
                     :cy="node.y"
                     :r="30"
                     :fill="getNodeColor(node.id)"
-                    class="cursor-pointer transition-all duration-300 opacity-80"
+                    class="cursor-pointer opacity-80 transition-all duration-300"
                     :class="{
                         'ring-4 ring-[#22c55e]': selectedStartNode === node.id,
                         'animate-pulse': currentNode === node.id,
@@ -168,14 +168,16 @@ const calculateEdgeEndpoint = (
         <!-- Queue Display -->
         <div
             v-if="queue.length > 0"
-            class="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-lg bg-[#1e293b] px-6 py-3 shadow-lg"
+            class="absolute right-4 bottom-12 left-4 overflow-x-auto rounded-lg bg-[#1e293b] px-4 py-2 shadow-lg md:right-auto md:bottom-4 md:left-1/2 md:-translate-x-1/2 md:px-6 md:py-3"
         >
-            <div class="text-center text-sm text-[#94a3b8]">Queue</div>
-            <div class="mt-2 flex gap-2">
+            <div class="text-center text-xs text-[#94a3b8] md:text-sm">
+                Queue
+            </div>
+            <div class="mt-2 flex justify-center gap-2">
                 <div
                     v-for="nodeId in queue"
                     :key="nodeId"
-                    class="flex size-10 items-center justify-center rounded-full bg-[#6366f1] text-sm font-bold text-white"
+                    class="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#6366f1] text-xs font-bold text-white md:size-10 md:text-sm"
                 >
                     {{ nodes[nodeId]?.label }}
                 </div>
@@ -185,19 +187,19 @@ const calculateEdgeEndpoint = (
         <!-- DFS Call Stack -->
         <div
             v-if="dfsCallStack.length > 0"
-            class="absolute right-4 bottom-4 w-48 rounded-lg bg-[#1e293b] p-4 shadow-lg"
+            class="absolute right-4 bottom-12 w-32 rounded-lg bg-[#1e293b] p-3 shadow-lg md:bottom-4 md:w-48 md:p-4"
         >
-            <div class="mb-2 text-sm font-semibold text-[#f1f5f9]">
+            <div class="mb-2 text-xs font-semibold text-[#f1f5f9] md:text-sm">
                 DFS Call Stack
             </div>
 
-            <div class="flex flex-col-reverse gap-2">
+            <div class="flex flex-col-reverse gap-1 md:gap-2">
                 <div
                     v-for="nodeId in dfsCallStack"
                     :key="nodeId"
-                    class="flex items-center justify-center rounded bg-[#8b5cf6] px-3 py-1 text-sm font-bold text-white transition-all"
+                    class="flex items-center justify-center rounded bg-[#8b5cf6] px-2 py-1 text-xs font-bold text-white transition-all md:px-3 md:text-sm"
                     :class="{
-                        'ring-2 ring-white':
+                        'ring-1 ring-white md:ring-2':
                             nodeId === dfsCallStack[dfsCallStack.length - 1],
                     }"
                 >
@@ -205,7 +207,7 @@ const calculateEdgeEndpoint = (
                 </div>
             </div>
 
-            <div class="mt-2 text-center text-xs text-[#94a3b8]">
+            <div class="mt-2 text-center text-[10px] text-[#94a3b8] md:text-xs">
                 Top of Stack ↑
             </div>
         </div>
@@ -220,7 +222,7 @@ const calculateEdgeEndpoint = (
 
         <!-- Legend -->
         <div
-            class="absolute top-4 right-4 rounded-lg bg-[#1e293b] p-4 text-sm shadow-lg"
+            class="absolute top-4 right-4 hidden rounded-lg bg-[#1e293b] p-4 text-sm shadow-lg lg:block"
         >
             <div class="mb-2 font-semibold text-[#f1f5f9]">Legend</div>
             <div class="space-y-2">
@@ -243,35 +245,37 @@ const calculateEdgeEndpoint = (
             </div>
         </div>
 
-        <!-- DFS Time Complexity Panel -->
+        <!-- Time Complexity Panel -->
         <div
             v-if="visitedCount > 0"
-            class="absolute bottom-4 left-4 w-56 rounded-lg bg-[#1e293b] p-4 text-sm shadow-lg"
+            class="absolute top-4 left-4 w-48 rounded-lg bg-[#1e293b] p-3 text-[10px] shadow-lg md:w-60 md:p-4 md:text-sm"
         >
-            <div class="mb-2 font-semibold text-[#f1f5f9]">Time Complexity</div>
+            <div class="mb-2 font-semibold text-[#f1f5f9]">Complexity</div>
 
-            <div class="space-y-1 text-[#94a3b8]">
-                <div>
-                    Visited Nodes:
+            <div class="space-y-1.5 md:space-y-2">
+                <div class="flex justify-between">
+                    <span class="text-[#94a3b8]">Nodes Visited:</span>
                     <span class="font-bold text-white">
-                        {{ visitedCount }} / {{ nodes.length }}
+                        {{ visitedCount }}/{{ nodes.length }}
                     </span>
                 </div>
 
-                <div>
-                    Edges Explored:
+                <div class="flex justify-between">
+                    <span class="text-[#94a3b8]">Edges Explored:</span>
                     <span class="font-bold text-white">
-                        {{ edgeExploredCount }} / {{ edges.length }}
+                        {{ edgeExploredCount }}/{{ edges.length }}
                     </span>
                 </div>
 
-                <div class="pt-2 font-semibold text-[#22c55e]">
-                    Current Cost: O({{ visitedCount }} +
-                    {{ edgeExploredCount }})
+                <div
+                    class="mt-1 flex justify-between border-t border-[#334155] pt-1 md:mt-2 md:pt-2"
+                >
+                    <span class="text-[#94a3b8]">Time:</span>
+                    <span class="font-bold text-[#22c55e]">O(V + E)</span>
                 </div>
-
-                <div class="pt-1 text-xs text-[#94a3b8]">
-                    Final Complexity: O(V + E)
+                <div class="flex justify-between">
+                    <span class="text-[#94a3b8]">Space:</span>
+                    <span class="font-bold text-[#3b82f6]">O(V)</span>
                 </div>
             </div>
         </div>
