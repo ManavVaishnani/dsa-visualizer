@@ -13,6 +13,7 @@ export interface Edge {
 }
 
 export type GraphType = 'directed' | 'undirected'
+export type VisualizationType = 'graph' | 'tree'
 
 export const nodes = ref<Node[]>([])
 export const edges = ref<Edge[]>([])
@@ -46,9 +47,103 @@ export const isPlaying = ref(false)
 let playTimer: ReturnType<typeof setInterval> | null = null
 
 export const graphType = ref<GraphType>('undirected')
+export const visualizationType = ref<VisualizationType>('graph')
 
 const sleep = (ms: number) =>
     new Promise(resolve => setTimeout(resolve, ms))
+
+// Generate a sample tree (Binary Tree)
+export const generateTree = () => {
+    if (isTraversing.value) return
+
+    const maxDepth = Math.floor(Math.random() * 2) + 3 // Depth 3 or 4
+    const width = 800
+    const height = 600
+    const marginX = 80
+    const marginYTop = 220
+    const marginYBottom = 30
+
+    // Calculate vertical space ensuring padding at top and bottom
+    const availableHeight = height - marginYTop - marginYBottom
+    const levelHeight = availableHeight / Math.max(1, maxDepth)
+
+    const newNodes: Node[] = []
+    const newEdges: Edge[] = []
+    let nodeId = 0
+
+    const createNode = (level: number, xPos: number, labelSuffix: string = '') => {
+        const id = nodeId++
+        return {
+            id,
+            x: xPos,
+            y: marginYTop + level * levelHeight,
+            label: String.fromCharCode(65 + id) + labelSuffix,
+        }
+    }
+
+    // Root node
+    const root = createNode(0, width / 2)
+    newNodes.push(root)
+
+    interface TreeNode {
+        node: Node
+        level: number
+        xRange: [number, number]
+    }
+
+    const queue: TreeNode[] = [{ node: root, level: 0, xRange: [marginX, width - marginX] }]
+
+    while (queue.length > 0 && newNodes.length < 15) {
+        const { node, level, xRange } = queue.shift()!
+        if (level >= maxDepth) continue
+
+        // Randomly decide children
+        const leftExists = node.id === 0 ? true : Math.random() > 0.3
+        const rightExists = Math.random() > 0.3
+
+        const mid = (xRange[0] + xRange[1]) / 2
+
+        if (leftExists) {
+            const leftChild = createNode(level + 1, (xRange[0] + mid) / 2)
+            newNodes.push(leftChild)
+            newEdges.push({ from: node.id, to: leftChild.id })
+            queue.push({ node: leftChild, level: level + 1, xRange: [xRange[0], mid] })
+        }
+
+        if (rightExists) {
+            const rightChild = createNode(level + 1, (mid + xRange[1]) / 2)
+            newNodes.push(rightChild)
+            newEdges.push({ from: node.id, to: rightChild.id })
+            queue.push({ node: rightChild, level: level + 1, xRange: [mid, xRange[1]] })
+        }
+    }
+
+    nodes.value = newNodes
+    edges.value = newEdges
+
+    // Reset traversal state
+    resetGraphState()
+}
+
+const resetGraphState = () => {
+    visitedNodes.value = []
+    currentNode.value = null
+    queue.value = []
+    currentEdge.value = null
+    selectedStartNode.value = null
+    dfsCallStack.value = []
+    visitedCount.value = 0
+    edgeExploredCount.value = 0
+}
+
+// Generate a sample graph or tree based on visualizationType
+export const generateData = () => {
+    if (visualizationType.value === 'tree') {
+        generateTree()
+    } else {
+        generateGraph()
+    }
+}
 
 // Generate a sample graph
 export const generateGraph = () => {
@@ -57,13 +152,15 @@ export const generateGraph = () => {
     const nodeCount = Math.floor(Math.random() * 4) + 6 // 6–9 nodes
     const width = 800
     const height = 600
-    const margin = 80
+    const marginX = 80
+    const marginTop = 200
+    const marginBottom = 30
 
     // 1️⃣ Generate random nodes
     nodes.value = Array.from({ length: nodeCount }, (_, i) => ({
         id: i,
-        x: Math.random() * (width - margin * 2) + margin,
-        y: Math.random() * (height - margin * 2) + margin,
+        x: Math.random() * (width - marginX * 2) + marginX,
+        y: Math.random() * (height - marginTop - marginBottom) + marginTop,
         label: String.fromCharCode(65 + i), // A, B, C...
     }))
 
@@ -106,7 +203,6 @@ export const generateGraph = () => {
     dfsCallStack.value = []
     visitedCount.value = 0
     edgeExploredCount.value = 0
-
 }
 
 const buildAdjacencyList = () => {

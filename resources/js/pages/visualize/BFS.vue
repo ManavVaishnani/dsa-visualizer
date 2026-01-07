@@ -2,7 +2,11 @@
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import GraphControls from '@/components/GraphControls.vue';
 import GraphVisualizer from '@/components/GraphVisualizer.vue';
-import { generateGraph } from '@/composables/useGraphController';
+import TreeVisualizer from '@/components/TreeVisualizer.vue';
+import {
+    generateData,
+    visualizationType,
+} from '@/composables/useGraphController';
 import type { BreadcrumbItemType } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { computed, onMounted } from 'vue';
@@ -23,7 +27,7 @@ const transformedBreadcrumbs = computed(() => {
     }));
 });
 
-onMounted(() => generateGraph());
+onMounted(() => generateData());
 </script>
 
 <template>
@@ -45,7 +49,8 @@ onMounted(() => generateGraph());
 
             <!-- Content -->
             <main class="flex-1 overflow-hidden">
-                <GraphVisualizer />
+                <GraphVisualizer v-if="visualizationType === 'graph'" />
+                <TreeVisualizer v-else />
             </main>
         </div>
     </div>

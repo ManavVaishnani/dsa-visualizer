@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-    generateGraph,
+    generateData,
     graphType,
     isPaused,
     isTraversing,
@@ -16,6 +16,7 @@ import {
     speed,
     stepIndex,
     steps,
+    visualizationType,
 } from '@/composables/useGraphController';
 
 interface Props {
@@ -63,6 +64,15 @@ const pause = () => {
         <!-- Controls -->
         <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3">
             <select
+                v-model="visualizationType"
+                class="rounded bg-[#1e293b] px-2 py-1.5 text-xs text-white md:px-3 md:py-1 md:text-sm"
+                @change="generateData"
+            >
+                <option value="graph">Graph</option>
+                <option value="tree">Tree</option>
+            </select>
+            <select
+                v-if="visualizationType === 'graph'"
                 v-model="graphType"
                 class="rounded bg-[#1e293b] px-2 py-1.5 text-xs text-white md:px-3 md:py-1 md:text-sm"
             >
@@ -71,7 +81,7 @@ const pause = () => {
             </select>
             <button
                 class="rounded bg-[#3b82f6] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:opacity-50 md:px-4 md:py-2 md:text-sm"
-                @click="generateGraph"
+                @click="generateData"
                 :disabled="isTraversing"
             >
                 Generate
