@@ -11,6 +11,8 @@ services:
         value: "false"
       - key: APP_KEY
         generateValue: true
+      - key: APP_URL
+        value: https://algoflow-0mcf.onrender.com
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
