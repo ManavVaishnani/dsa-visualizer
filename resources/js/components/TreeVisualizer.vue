@@ -5,7 +5,6 @@ import {
     dfsCallStack,
     edgeExploredCount,
     edges,
-    graphType,
     isTraversing,
     nodes,
     queue,
@@ -58,44 +57,11 @@ const calculateEdgeEndpoint = (
 
 <template>
     <div class="relative h-full w-full overflow-hidden bg-[#0f172a]">
-        <svg class="h-full w-full" viewBox="0 0 800 600">
-            <!-- Define arrow markers for directed edges -->
-            <defs>
-                <marker
-                    id="arrowhead-gray"
-                    markerWidth="10"
-                    markerHeight="10"
-                    refX="9"
-                    refY="3"
-                    orient="auto"
-                    markerUnits="strokeWidth"
-                >
-                    <polygon points="0 0, 10 3, 0 6" fill="#475569" />
-                </marker>
-                <marker
-                    id="arrowhead-green"
-                    markerWidth="10"
-                    markerHeight="10"
-                    refX="9"
-                    refY="3"
-                    orient="auto"
-                    markerUnits="strokeWidth"
-                >
-                    <polygon points="0 0, 10 3, 0 6" fill="#10b981" />
-                </marker>
-                <marker
-                    id="arrowhead-orange"
-                    markerWidth="10"
-                    markerHeight="10"
-                    refX="9"
-                    refY="3"
-                    orient="auto"
-                    markerUnits="strokeWidth"
-                >
-                    <polygon points="0 0, 10 3, 0 6" fill="#f59e0b" />
-                </marker>
-            </defs>
-
+        <svg
+            class="h-full w-full"
+            viewBox="0 0 800 600"
+            preserveAspectRatio="xMidYMin meet"
+        >
             <!-- Draw edges first (so they appear behind nodes) -->
             <line
                 v-for="(edge, index) in edges"
@@ -120,16 +86,6 @@ const calculateEdgeEndpoint = (
                 "
                 :stroke="getEdgeColor(edge.from, edge.to)"
                 :stroke-width="isEdgeActive(edge.from, edge.to) ? 4 : 2"
-                :marker-end="
-                    graphType === 'directed'
-                        ? isEdgeActive(edge.from, edge.to)
-                            ? 'url(#arrowhead-orange)'
-                            : visitedNodes.includes(edge.from) &&
-                                visitedNodes.includes(edge.to)
-                              ? 'url(#arrowhead-green)'
-                              : 'url(#arrowhead-gray)'
-                        : undefined
-                "
                 class="transition-all duration-300"
             />
 
@@ -162,17 +118,29 @@ const calculateEdgeEndpoint = (
                 >
                     {{ node.label }}
                 </text>
+
+                <!-- Label for Root node -->
+                <text
+                    v-if="node.id === 0"
+                    :x="node.x"
+                    :y="node.y - 45"
+                    text-anchor="middle"
+                    class="text-xs font-semibold tracking-wider uppercase"
+                    fill="white"
+                >
+                    Root
+                </text>
             </g>
         </svg>
 
-        <!-- Queue/Stack Components -->
+        <!-- Queue/Stack and other UI components -->
         <!-- Queue Display -->
         <div
             v-if="queue.length > 0"
             class="absolute right-4 bottom-4 z-10 max-w-[50%] overflow-x-auto rounded-lg border border-white/5 bg-[#1e293b]/90 px-4 py-2 shadow-lg md:right-auto md:bottom-4 md:left-1/2 md:max-w-none md:-translate-x-1/2 md:px-6 md:py-3"
         >
             <div class="text-center text-xs text-[#94a3b8] md:text-sm">
-                Queue
+                Queue (BFS)
             </div>
             <div class="mt-2 flex justify-center gap-2">
                 <div
@@ -191,7 +159,7 @@ const calculateEdgeEndpoint = (
             class="absolute right-4 bottom-4 z-20 w-32 rounded-lg border border-white/5 bg-[#1e293b]/90 p-3 shadow-lg md:bottom-4 md:w-48 md:p-4"
         >
             <div class="mb-2 text-xs font-semibold text-[#f1f5f9] md:text-sm">
-                DFS Call Stack
+                Recursion Stack (DFS)
             </div>
 
             <div class="flex flex-col-reverse gap-1 md:gap-2">
@@ -209,10 +177,9 @@ const calculateEdgeEndpoint = (
             </div>
 
             <div class="mt-2 text-center text-[10px] text-[#94a3b8] md:text-xs">
-                Top of Stack ↑
+                Top ↑
             </div>
         </div>
-
         <!-- Selected Start Node -->
         <div
             v-if="selectedStartNode === null"
@@ -225,19 +192,15 @@ const calculateEdgeEndpoint = (
         <div
             class="absolute top-4 right-4 z-10 hidden rounded-lg border border-white/5 bg-[#1e293b] p-4 text-sm shadow-lg lg:block"
         >
-            <div class="mb-2 font-semibold text-[#f1f5f9]">Legend</div>
+            <div class="mb-2 font-semibold text-[#f1f5f9]">Tree Legend</div>
             <div class="space-y-2">
                 <div class="flex items-center gap-2">
                     <div class="size-4 rounded-full bg-[#3b82f6]"></div>
-                    <span class="text-[#94a3b8]">Unvisited</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <div class="size-4 rounded-full bg-[#6366f1]"></div>
-                    <span class="text-[#94a3b8]">In Queue</span>
+                    <span class="text-[#94a3b8]">Node</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="size-4 rounded-full bg-[#f59e0b]"></div>
-                    <span class="text-[#94a3b8]">Processing</span>
+                    <span class="text-[#94a3b8]">Current</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="size-4 rounded-full bg-[#10b981]"></div>
@@ -249,9 +212,11 @@ const calculateEdgeEndpoint = (
         <!-- Time Complexity Panel -->
         <div
             v-if="visitedCount > 0"
-            class="absolute bottom-4 left-4 z-20 w-48 rounded-lg border border-white/5 bg-[#1e293b] p-3 text-[10px] shadow-lg md:top-4 md:bottom-auto md:w-60 md:p-4 md:text-sm"
+            class="absolute bottom-4 left-4 z-20 w-48 rounded-lg border border-white/5 bg-[#1e293b] p-3 text-[10px] shadow-lg md:top-8 md:bottom-auto md:w-60 md:p-4 md:text-sm"
         >
-            <div class="mb-2 font-semibold text-[#f1f5f9]">Complexity</div>
+            <div class="mb-2 font-semibold text-[#f1f5f9]">
+                Complexity (Tree)
+            </div>
 
             <div class="space-y-1.5 md:space-y-2">
                 <div class="flex justify-between">
@@ -272,11 +237,11 @@ const calculateEdgeEndpoint = (
                     class="mt-1 flex justify-between border-t border-[#334155] pt-1 md:mt-2 md:pt-2"
                 >
                     <span class="text-[#94a3b8]">Time:</span>
-                    <span class="font-bold text-[#22c55e]">O(V + E)</span>
+                    <span class="font-bold text-[#22c55e]">O(N)</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-[#94a3b8]">Space:</span>
-                    <span class="font-bold text-[#3b82f6]">O(V)</span>
+                    <span class="font-bold text-[#3b82f6]">O(H)</span>
                 </div>
             </div>
         </div>
