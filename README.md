@@ -1,85 +1,48 @@
-# DSA Visualizer
+# AlgoFlow
 
-A Laravel + Inertia + Vue 3 TypeScript project for visualizing common data structures and algorithms (sorting algorithms, BFS/DFS, etc.). This repository combines a Laravel backend with an Inertia-powered Vue 3 frontend, Vite, and Tailwind CSS.
+This template should help get you started developing with Vue 3 in Vite.
 
-## Key Technologies
+## Recommended IDE Setup
 
-- Backend: Laravel (PHP 8.2+, Laravel 12)
-- Frontend: Vue 3, TypeScript, Inertia.js
-- Build: Vite
-- Styling: Tailwind CSS
-- Testing: Pest / PHPUnit
+[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
-## Features
+## Recommended Browser Setup
 
-- Inertia-driven single-page navigation
-- Visualizations for algorithms: Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, Quick Sort, BFS, DFS
-- Vue + TypeScript pages under `resources/js/pages`
-- Fast dev workflow with Vite and Laravel dev server
+- Chromium-based browsers (Chrome, Edge, Brave, etc.):
+  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
+  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
+- Firefox:
+  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
+  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
 
-## Requirements
+## Type Support for `.vue` Imports in TS
 
-- PHP 8.2 or newer
-- Composer
-- Node.js 18+ and npm (or yarn)
-- SQLite, MySQL, or other supported database (SQLite is configured in some scripts)
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
 
-## Quick Start (Unix)
+## Customize configuration
 
-1. Install PHP dependencies and Node modules, copy env, and generate app key:
+See [Vite Configuration Reference](https://vite.dev/config/).
 
-```bash
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate
+## Project Setup
+
+```sh
 npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
 npm run dev
 ```
 
-## Quick Start (Windows PowerShell)
+### Type-Check, Compile and Minify for Production
 
-```powershell
-composer install
-Copy-Item .env.example .env
-php artisan key:generate
-php artisan migrate
-npm install
-npm run dev
-```
-
-## Building for Production
-
-```bash
+```sh
 npm run build
-php artisan migrate --force
 ```
 
-## Tests
+### Lint with [ESLint](https://eslint.org/)
 
-- Run the test suite (Pest/PHPUnit):
-
-```bash
-composer test
-# or
-php artisan test
+```sh
+npm run lint
 ```
-
-## Project Structure (high level)
-
-- `app/` — Laravel backend code (models, controllers, providers)
-- `routes/` — route definitions (see `routes/web.php` for algorithm pages)
-- `resources/js/` — front-end entrypoints, pages, components, composables
-- `resources/css/` — Tailwind styles
-- `database/` — migrations and seeders
-- `tests/` — Pest / PHPUnit tests
-
-## Routes / Pages
-
-Primary pages are registered in `routes/web.php`. Example visualizer routes live under `/visualize/*`, e.g. `/visualize/bubble-sort` which renders the `visualize/BubbleSort` Inertia page.
-
-## Contributing
-
-1. Fork and create a feature branch
-2. Add tests for new behavior where applicable
-3. Open a pull request describing the change
