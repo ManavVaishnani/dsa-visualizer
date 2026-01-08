@@ -1,0 +1,15 @@
+<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="40" width="25" height="40" fill="none" stroke="black" stroke-width="2"/>
+  <rect x="50" y="40" width="25" height="40" fill="none" stroke="black" stroke-width="2"/>
+
+  <rect x="85" y="35" width="30" height="50" fill="black" stroke="black" stroke-width="3"/>
+  <text x="100" y="65" font-family="monospace" font-size="8" fill="white" text-anchor="middle">PIVOT</text>
+
+  <rect x="125" y="40" width="25" height="40" fill="none" stroke="black" stroke-width="2"/>
+  <rect x="155" y="40" width="25" height="40" fill="none" stroke="black" stroke-width="2"/>
+
+  <path d="M45 30 L85 30" stroke="black" stroke-width="1" marker-start="url(#dot)"/>
+  <path d="M155 30 L115 30" stroke="black" stroke-width="1" marker-start="url(#dot)"/>
+
+  <text x="100" y="115" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle" fill="black">QUICK_SORT</text>
+</svg>

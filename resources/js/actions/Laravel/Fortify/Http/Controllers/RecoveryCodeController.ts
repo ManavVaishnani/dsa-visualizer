@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
 /**
 * @see \Laravel\Fortify\Http\Controllers\RecoveryCodeController::index
  * @see vendor/laravel/fortify/src/Http/Controllers/RecoveryCodeController.php:19
@@ -42,41 +42,6 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
-    /**
-* @see \Laravel\Fortify\Http\Controllers\RecoveryCodeController::index
- * @see vendor/laravel/fortify/src/Http/Controllers/RecoveryCodeController.php:19
- * @route '/user/two-factor-recovery-codes'
- */
-    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-        action: index.url(options),
-        method: 'get',
-    })
-
-            /**
-* @see \Laravel\Fortify\Http\Controllers\RecoveryCodeController::index
- * @see vendor/laravel/fortify/src/Http/Controllers/RecoveryCodeController.php:19
- * @route '/user/two-factor-recovery-codes'
- */
-        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: index.url(options),
-            method: 'get',
-        })
-            /**
-* @see \Laravel\Fortify\Http\Controllers\RecoveryCodeController::index
- * @see vendor/laravel/fortify/src/Http/Controllers/RecoveryCodeController.php:19
- * @route '/user/two-factor-recovery-codes'
- */
-        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: index.url({
-                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-                            _method: 'HEAD',
-                            ...(options?.query ?? options?.mergeQuery ?? {}),
-                        }
-                    }),
-            method: 'get',
-        })
-    
-    index.form = indexForm
 /**
 * @see \Laravel\Fortify\Http\Controllers\RecoveryCodeController::store
  * @see vendor/laravel/fortify/src/Http/Controllers/RecoveryCodeController.php:38
@@ -110,28 +75,6 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
-
-    /**
-* @see \Laravel\Fortify\Http\Controllers\RecoveryCodeController::store
- * @see vendor/laravel/fortify/src/Http/Controllers/RecoveryCodeController.php:38
- * @route '/user/two-factor-recovery-codes'
- */
-    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-        action: store.url(options),
-        method: 'post',
-    })
-
-            /**
-* @see \Laravel\Fortify\Http\Controllers\RecoveryCodeController::store
- * @see vendor/laravel/fortify/src/Http/Controllers/RecoveryCodeController.php:38
- * @route '/user/two-factor-recovery-codes'
- */
-        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-            action: store.url(options),
-            method: 'post',
-        })
-    
-    store.form = storeForm
 const RecoveryCodeController = { index, store }
 
 export default RecoveryCodeController

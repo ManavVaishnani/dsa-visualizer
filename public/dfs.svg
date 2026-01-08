@@ -1,0 +1,17 @@
+<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tree Structure -->
+  <circle cx="100" cy="20" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <circle cx="70" cy="50" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <circle cx="50" cy="80" r="10" fill="black" stroke="black" stroke-width="2"/>
+  <circle cx="130" cy="50" r="10" fill="none" stroke="black" stroke-width="2"/>
+
+  <line x1="92" y1="28" x2="78" y2="42" stroke="black" stroke-width="2"/>
+  <line x1="65" y1="58" x2="55" y2="72" stroke="black" stroke-width="2"/>
+  <line x1="108" y1="28" x2="122" y2="42" stroke="black" stroke-width="2"/>
+
+  <!-- "Path" arrow -->
+  <path d="M115 15 L85 45 L65 75" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="2"/>
+
+  <text x="100" y="110" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle" fill="black">DFS_RECURSION</text>
+  <text x="35" y="85" font-family="monospace" font-size="6" fill="black">DEPTH_MAX</text>
+</svg>

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Laravel\Fortify\Http\Controllers\VerifyEmailController::__invoke
  * @see vendor/laravel/fortify/src/Http/Controllers/VerifyEmailController.php:18
@@ -58,42 +58,6 @@ __invoke.head = (args: { id: string | number, hash: string | number } | [id: str
     url: __invoke.url(args, options),
     method: 'head',
 })
-
-    /**
-* @see \Laravel\Fortify\Http\Controllers\VerifyEmailController::__invoke
- * @see vendor/laravel/fortify/src/Http/Controllers/VerifyEmailController.php:18
- * @route '/email/verify/{id}/{hash}'
- */
-    const __invokeForm = (args: { id: string | number, hash: string | number } | [id: string | number, hash: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-        action: __invoke.url(args, options),
-        method: 'get',
-    })
-
-            /**
-* @see \Laravel\Fortify\Http\Controllers\VerifyEmailController::__invoke
- * @see vendor/laravel/fortify/src/Http/Controllers/VerifyEmailController.php:18
- * @route '/email/verify/{id}/{hash}'
- */
-        __invokeForm.get = (args: { id: string | number, hash: string | number } | [id: string | number, hash: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: __invoke.url(args, options),
-            method: 'get',
-        })
-            /**
-* @see \Laravel\Fortify\Http\Controllers\VerifyEmailController::__invoke
- * @see vendor/laravel/fortify/src/Http/Controllers/VerifyEmailController.php:18
- * @route '/email/verify/{id}/{hash}'
- */
-        __invokeForm.head = (args: { id: string | number, hash: string | number } | [id: string | number, hash: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: __invoke.url(args, {
-                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-                            _method: 'HEAD',
-                            ...(options?.query ?? options?.mergeQuery ?? {}),
-                        }
-                    }),
-            method: 'get',
-        })
-    
-    __invoke.form = __invokeForm
 const VerifyEmailController = { __invoke }
 
 export default VerifyEmailController

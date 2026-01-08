@@ -1,0 +1,19 @@
+<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Divided Array -->
+  <rect x="10" y="40" width="30" height="40" fill="none" stroke="black" stroke-width="1" stroke-dasharray="2" opacity="0.3"/>
+  <rect x="45" y="40" width="30" height="40" fill="none" stroke="black" stroke-width="1" stroke-dasharray="2" opacity="0.3"/>
+
+  <rect x="80" y="40" width="40" height="40" fill="none" stroke="black" stroke-width="3"/>
+  <text x="100" y="65" font-family="monospace" font-size="14" text-anchor="middle" font-weight="bold">MID</text>
+
+  <rect x="125" y="40" width="30" height="40" fill="none" stroke="black" stroke-width="1" stroke-dasharray="2" opacity="0.3"/>
+  <rect x="160" y="40" width="30" height="40" fill="none" stroke="black" stroke-width="1" stroke-dasharray="2" opacity="0.3"/>
+
+  <!-- Brackets -->
+  <path d="M80 30 L80 20 L120 20 L120 30" fill="none" stroke="black" stroke-width="2"/>
+  <text x="100" y="15" font-family="monospace" font-size="8" text-anchor="middle">RECURSE</text>
+
+  <!-- Footer -->
+  <text x="100" y="105" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle" fill="black">BINARY_SEARCH</text>
+  <text x="100" y="115" font-family="monospace" font-size="7" text-anchor="middle" fill="gray">O(LOG_N)</text>
+</svg>

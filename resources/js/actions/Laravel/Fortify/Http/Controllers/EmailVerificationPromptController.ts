@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
 /**
 * @see \Laravel\Fortify\Http\Controllers\EmailVerificationPromptController::__invoke
  * @see vendor/laravel/fortify/src/Http/Controllers/EmailVerificationPromptController.php:18
@@ -41,42 +41,6 @@ __invoke.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: __invoke.url(options),
     method: 'head',
 })
-
-    /**
-* @see \Laravel\Fortify\Http\Controllers\EmailVerificationPromptController::__invoke
- * @see vendor/laravel/fortify/src/Http/Controllers/EmailVerificationPromptController.php:18
- * @route '/email/verify'
- */
-    const __invokeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-        action: __invoke.url(options),
-        method: 'get',
-    })
-
-            /**
-* @see \Laravel\Fortify\Http\Controllers\EmailVerificationPromptController::__invoke
- * @see vendor/laravel/fortify/src/Http/Controllers/EmailVerificationPromptController.php:18
- * @route '/email/verify'
- */
-        __invokeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: __invoke.url(options),
-            method: 'get',
-        })
-            /**
-* @see \Laravel\Fortify\Http\Controllers\EmailVerificationPromptController::__invoke
- * @see vendor/laravel/fortify/src/Http/Controllers/EmailVerificationPromptController.php:18
- * @route '/email/verify'
- */
-        __invokeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: __invoke.url({
-                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-                            _method: 'HEAD',
-                            ...(options?.query ?? options?.mergeQuery ?? {}),
-                        }
-                    }),
-            method: 'get',
-        })
-    
-    __invoke.form = __invokeForm
 const EmailVerificationPromptController = { __invoke }
 
 export default EmailVerificationPromptController

@@ -13,10 +13,10 @@ const props = defineProps<{
     data-slot="breadcrumb-separator"
     role="presentation"
     aria-hidden="true"
-    :class="cn('[&>svg]:size-3.5', props.class)"
+    :class="cn('font-mono text-black', props.class)"
   >
     <slot>
-      <ChevronRight />
+      >
     </slot>
   </li>
 </template>

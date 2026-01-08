@@ -1,0 +1,15 @@
+<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+  <rect x="70" y="10" width="60" height="20" fill="none" stroke="black" stroke-width="2"/>
+
+  <rect x="40" y="45" width="25" height="15" fill="none" stroke="black" stroke-width="1"/>
+  <rect x="70" y="45" width="25" height="15" fill="none" stroke="black" stroke-width="1"/>
+  <rect x="105" y="45" width="25" height="15" fill="none" stroke="black" stroke-width="1"/>
+  <rect x="135" y="45" width="25" height="15" fill="none" stroke="black" stroke-width="1"/>
+
+  <rect x="70" y="80" width="60" height="20" fill="black" stroke="black" stroke-width="2"/>
+
+  <path d="M100 30 L100 40 M60 30 L50 45 M140 30 L150 45" stroke="black" stroke-width="1"/>
+  <path d="M50 60 L75 80 M150 60 L125 80" stroke="black" stroke-width="1" stroke-dasharray="2"/>
+
+  <text x="100" y="115" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle" fill="black">MERGE_SORT</text>
+</svg>

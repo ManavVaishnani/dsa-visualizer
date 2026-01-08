@@ -60,8 +60,8 @@ export const generateTree = () => {
     const width = 800
     const height = 600
     const marginX = 80
-    const marginYTop = 220
-    const marginYBottom = 30
+    const marginYTop = 120
+    const marginYBottom = 120
 
     // Calculate vertical space ensuring padding at top and bottom
     const availableHeight = height - marginYTop - marginYBottom
@@ -153,8 +153,8 @@ export const generateGraph = () => {
     const width = 800
     const height = 600
     const marginX = 80
-    const marginTop = 200
-    const marginBottom = 30
+    const marginTop = 120
+    const marginBottom = 120
 
     // 1️⃣ Generate random nodes
     nodes.value = Array.from({ length: nodeCount }, (_, i) => ({

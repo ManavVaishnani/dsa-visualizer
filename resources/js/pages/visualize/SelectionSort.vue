@@ -1,26 +1,30 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import AppLayout from '@/layouts/AppLayout.vue'
-import BarsVisualizer from '@/components/BarsVisualizer.vue'
-import { generateBars } from '@/composables/useSortingController'
-import { Head } from '@inertiajs/vue3'
-import type { BreadcrumbItemType } from '@/types'
+import BarsVisualizer from '@/components/BarsVisualizer.vue';
+import SortingControls from '@/components/SortingControls.vue';
+import { generateBars } from '@/composables/useSortingController';
+import AppLayout from '@/layouts/AppLayout.vue';
+import type { BreadcrumbItemType } from '@/types';
+import { Head } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
 
 interface Props {
-    breadcrumbs?: BreadcrumbItemType[]
+    breadcrumbs?: BreadcrumbItemType[];
 }
 
 withDefaults(defineProps<Props>(), {
-    breadcrumbs: () => []
-})
+    breadcrumbs: () => [],
+});
 
-onMounted(() => generateBars())
+onMounted(() => generateBars());
 </script>
 
 <template>
     <Head title="Selection Sort Visualization" />
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="h-full flex items-center justify-center">
+        <template #controls>
+            <SortingControls />
+        </template>
+        <div class="flex h-full items-center justify-center">
             <BarsVisualizer />
         </div>
     </AppLayout>

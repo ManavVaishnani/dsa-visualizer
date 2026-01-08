@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 export type SearchAlgo = 'linear' | 'binary'
 export type DataStructure = 'array' | 'linkedlist'
@@ -20,7 +20,7 @@ export const isPaused = ref(false)
 
 export const comparisonsCount = ref(0)
 export const arraySize = ref(10)
-export const speed = ref(500)
+export const speed = ref(50)
 
 const sleep = (ms: number) =>
     new Promise(resolve => setTimeout(resolve, ms))
@@ -75,7 +75,7 @@ export const runLinearSearch = async () => {
         currentIndex.value = i
         comparisonsCount.value++
 
-        await sleep(speed.value)
+        await sleep((100 - speed.value) * 15 + 50)
 
         if (numbers.value[i] === target.value) {
             foundIndex.value = i
@@ -112,7 +112,7 @@ export const runBinarySearch = async () => {
         mid.value = Math.floor((low.value + high.value) / 2)
         comparisonsCount.value++
 
-        await sleep(speed.value)
+        await sleep((100 - speed.value) * 15 + 50)
 
         if (numbers.value[mid.value] === target.value) {
             foundIndex.value = mid.value

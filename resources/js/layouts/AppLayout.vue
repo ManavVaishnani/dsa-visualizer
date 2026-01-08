@@ -13,6 +13,9 @@ withDefaults(defineProps<Props>(), {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #controls>
+            <slot name="controls" />
+        </template>
         <slot />
     </AppLayout>
 </template>

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
 /**
 * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
  * @see vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
@@ -42,41 +42,6 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
-    /**
-* @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
- * @route '/login'
- */
-    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-        action: create.url(options),
-        method: 'get',
-    })
-
-            /**
-* @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
- * @route '/login'
- */
-        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: create.url(options),
-            method: 'get',
-        })
-            /**
-* @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
- * @route '/login'
- */
-        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: create.url({
-                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-                            _method: 'HEAD',
-                            ...(options?.query ?? options?.mergeQuery ?? {}),
-                        }
-                    }),
-            method: 'get',
-        })
-    
-    create.form = createForm
 /**
 * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
  * @see vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:58
@@ -111,27 +76,6 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
-    /**
-* @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
- * @see vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:58
- * @route '/login'
- */
-    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-        action: store.url(options),
-        method: 'post',
-    })
-
-            /**
-* @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
- * @see vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:58
- * @route '/login'
- */
-        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-            action: store.url(options),
-            method: 'post',
-        })
-    
-    store.form = storeForm
 /**
 * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
  * @see vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
@@ -165,28 +109,6 @@ destroy.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: destroy.url(options),
     method: 'post',
 })
-
-    /**
-* @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
- * @route '/logout'
- */
-    const destroyForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-        action: destroy.url(options),
-        method: 'post',
-    })
-
-            /**
-* @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
- * @route '/logout'
- */
-        destroyForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-            action: destroy.url(options),
-            method: 'post',
-        })
-    
-    destroy.form = destroyForm
 const AuthenticatedSessionController = { create, store, destroy }
 
 export default AuthenticatedSessionController

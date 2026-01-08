@@ -1,0 +1,16 @@
+<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Array Elements -->
+  <rect x="10" y="40" width="30" height="40" fill="none" stroke="black" stroke-width="2"/>
+  <rect x="45" y="40" width="30" height="40" fill="none" stroke="black" stroke-width="2"/>
+  <rect x="80" y="40" width="30" height="40" fill="none" stroke="black" stroke-width="2"/>
+  <rect x="115" y="40" width="30" height="40" fill="black" stroke="black" stroke-width="2"/>
+  <rect x="150" y="40" width="30" height="40" fill="none" stroke="black" stroke-width="2"/>
+
+  <!-- Magnifying Glass / Pointer -->
+  <circle cx="130" cy="50" r="15" fill="none" stroke="black" stroke-width="3" opacity="0.8"/>
+  <line x1="140" y1="60" x2="155" y2="75" stroke="black" stroke-width="3" />
+
+  <!-- Text Labels -->
+  <text x="100" y="25" font-family="monospace" font-size="10" font-bold="true" text-anchor="middle" fill="black">LINEAR_SEARCH</text>
+  <text x="100" y="105" font-family="monospace" font-size="8" text-anchor="middle" fill="gray">O(N)_COMPLEXITY</text>
+</svg>

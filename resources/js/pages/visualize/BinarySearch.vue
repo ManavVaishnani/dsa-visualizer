@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import ArrayVisualizer from '@/components/ArrayVisualizer.vue';
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import LinkedListVisualizer from '@/components/LinkedListVisualizer.vue';
 import SearchControls from '@/components/SearchControls.vue';
 import {
     arraySize,
@@ -18,24 +16,17 @@ import {
     sortArray,
     target,
 } from '@/composables/useSearchController';
+import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
 import type { BreadcrumbItemType } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { computed, onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 interface Props {
     breadcrumbs?: BreadcrumbItemType[];
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
     breadcrumbs: () => [],
-});
-
-const transformedBreadcrumbs = computed(() => {
-    if (!props.breadcrumbs) return [];
-    return props.breadcrumbs.map((item) => ({
-        title: (item as any).label || item.title || '',
-        href: item.href,
-    }));
 });
 
 const showNotFoundMessage = ref(false);
@@ -61,16 +52,20 @@ onMounted(() => {
 <template>
     <Head title="Binary Search Visualization" />
 
-    <div class="flex h-screen bg-[#0f172a] text-[#f1f5f9]">
+    <AppSidebarLayout :breadcrumbs="breadcrumbs">
+        <template #controls>
+            <SearchControls />
+        </template>
+
         <!-- Notification Popup -->
         <div
             v-if="showNotFoundMessage"
-            class="animate-slide-in-right fixed top-20 right-6 z-50 rounded-lg border border-[#f59e0b] bg-[#1e293b] px-6 py-4 shadow-xl"
+            class="animate-slide-in-right fixed top-20 right-6 z-50 border-2 border-black bg-white px-6 py-4 font-mono shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
         >
             <div class="flex items-center gap-3">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 text-[#f59e0b]"
+                    class="h-6 w-6 text-orange-500"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -83,10 +78,8 @@ onMounted(() => {
                     />
                 </svg>
                 <div>
-                    <p class="font-semibold text-[#f1f5f9]">
-                        Element Not Found
-                    </p>
-                    <p class="text-sm text-[#94a3b8]">
+                    <p class="font-bold text-black">Element Not Found</p>
+                    <p class="text-sm text-gray-600">
                         Target value {{ target }} is not in the
                         {{ dataStructure }}
                     </p>
@@ -94,80 +87,35 @@ onMounted(() => {
             </div>
         </div>
 
-        <!-- Main Area -->
-        <div class="flex flex-1 flex-col overflow-hidden">
-            <!-- Top Controls -->
-            <SearchControls />
+        <div class="flex h-full flex-col items-center justify-center p-6">
+            <ArrayVisualizer
+                :numbers="numbers"
+                :target="target"
+                :currentIndex="currentIndex"
+                :low="low"
+                :high="high"
+                :mid="mid"
+                :foundIndex="foundIndex"
+            />
 
-            <!-- Breadcrumbs -->
             <div
-                v-if="transformedBreadcrumbs.length > 0"
-                class="border-b border-[#334155] px-6 py-3"
+                class="mt-6 flex w-full max-w-4xl flex-wrap items-center justify-center gap-x-4 gap-y-2 border-2 border-black bg-white px-4 py-3 font-mono text-xs shadow-[4px_4px_0_0_rgba(0,0,0,1)] md:justify-between md:px-6 md:py-4 md:text-sm"
             >
-                <Breadcrumbs :breadcrumbs="transformedBreadcrumbs" />
+                <div class="flex items-center gap-1 whitespace-nowrap">
+                    <strong class="text-gray-500">COMPARISONS:</strong>
+                    <span class="font-bold text-black">{{
+                        comparisonsCount
+                    }}</span>
+                </div>
+                <div class="flex items-center gap-1 whitespace-nowrap">
+                    <strong class="text-gray-500">TIME:</strong>
+                    <span class="font-bold text-green-600">O(log n)</span>
+                </div>
+                <div class="flex items-center gap-1 whitespace-nowrap">
+                    <strong class="text-gray-500">SPACE:</strong>
+                    <span class="font-bold text-blue-600">O(1)</span>
+                </div>
             </div>
-
-            <!-- Content -->
-            <main
-                class="flex flex-1 flex-col items-center justify-center overflow-hidden"
-            >
-                <!-- Title Section -->
-                <div class="mb-6 text-center">
-                    <h1 class="text-3xl font-bold text-[#f1f5f9]">
-                        Binary Search Visualization
-                    </h1>
-                    <p class="mt-2 text-sm text-[#94a3b8]">
-                        Efficiently searches a sorted array by repeatedly
-                        dividing the search interval in half
-                    </p>
-                </div>
-
-                <!-- Visualizer -->
-                <div class="w-full flex-1 overflow-auto">
-                    <ArrayVisualizer
-                        v-if="dataStructure === 'array'"
-                        :numbers="numbers"
-                        :target="target"
-                        :currentIndex="currentIndex"
-                        :low="low"
-                        :high="high"
-                        :mid="mid"
-                        :foundIndex="foundIndex"
-                    />
-                    <LinkedListVisualizer
-                        v-else
-                        :numbers="numbers"
-                        :target="target"
-                        :currentIndex="currentIndex"
-                        :low="low"
-                        :high="high"
-                        :mid="mid"
-                        :foundIndex="foundIndex"
-                    />
-                </div>
-
-                <!-- Stats Section -->
-                <div
-                    class="mt-6 flex w-full max-w-4xl flex-col gap-4 rounded-lg bg-[#1e293b] px-6 py-4 text-sm md:flex-row md:justify-between md:gap-0"
-                >
-                    <div class="flex justify-between md:block">
-                        <strong class="text-[#94a3b8]">Comparisons:</strong>
-                        <span class="ml-2 text-[#f1f5f9]">{{
-                            comparisonsCount
-                        }}</span>
-                    </div>
-                    <div class="flex justify-between md:block">
-                        <strong class="text-[#94a3b8]">Time Complexity:</strong>
-                        <span class="ml-2 text-[#f1f5f9]">O(log n)</span>
-                    </div>
-                    <div class="flex justify-between md:block">
-                        <strong class="text-[#94a3b8]"
-                            >Space Complexity:</strong
-                        >
-                        <span class="ml-2 text-[#f1f5f9]">O(1)</span>
-                    </div>
-                </div>
-            </main>
         </div>
-    </div>
+    </AppSidebarLayout>
 </template>

@@ -13,10 +13,10 @@ export default defineConfig({
         }),
         tailwindcss(),
         ...(process.env.SKIP_WAYFINDER ? [] : [
-            wayfinder({
-                formVariants: true,
-            }),
-        ]),
+                  wayfinder({
+                      formVariants: true,
+                  }),
+              ]),
         vue({
             template: {
                 transformAssetUrls: {

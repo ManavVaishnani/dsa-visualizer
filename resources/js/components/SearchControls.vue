@@ -51,39 +51,28 @@ const handleGenerate = () => {
 
 <template>
     <header
-        class="flex flex-col gap-4 border-b border-[#334155] bg-[#0f172a] px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 md:py-3"
+        class="flex flex-col gap-4 border-b-2 border-black bg-white px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 md:py-3"
     >
         <!-- Sliders and Inputs -->
         <div
             class="flex flex-wrap items-center justify-center gap-4 md:justify-start md:gap-6"
         >
-            <!-- Data Structure Selector -->
-            <div class="flex flex-col">
-                <label class="text-xs text-[#94a3b8]">Data Structure</label>
-                <select
-                    v-model="dataStructure"
-                    class="mt-1 block w-32 rounded border-[#334155] bg-[#1e293b] px-2 py-1 text-sm text-[#f1f5f9]"
-                    :disabled="isSearching"
-                >
-                    <option value="array">Array</option>
-                    <option value="linkedlist">Linked List</option>
-                </select>
-            </div>
-
             <!-- Target Value -->
-            <div class="flex flex-col">
-                <label class="text-xs text-[#94a3b8]">Target</label>
+            <div class="flex flex-col font-mono">
+                <label class="text-xs font-bold text-gray-500 uppercase"
+                    >Target</label
+                >
                 <input
                     type="number"
                     v-model.number="target"
-                    class="mt-1 w-20 rounded border-[#334155] bg-[#1e293b] px-2 py-1 text-sm text-[#f1f5f9] md:w-24"
+                    class="mt-1 w-20 border-2 border-black bg-white px-2 py-1 font-mono text-sm text-black focus:outline-none md:w-24"
                     :disabled="isSearching"
                 />
             </div>
 
             <!-- Array Size -->
-            <div class="flex flex-col">
-                <label class="text-xs text-[#94a3b8]"
+            <div class="flex flex-col font-mono">
+                <label class="text-xs font-bold text-gray-500 uppercase"
                     >Size: {{ arraySize }}</label
                 >
                 <input
@@ -91,21 +80,23 @@ const handleGenerate = () => {
                     min="5"
                     max="20"
                     v-model.number="arraySize"
-                    class="w-24 accent-[#3b82f6] md:w-32"
+                    class="w-24 accent-black md:w-32"
                     :disabled="isSearching"
                 />
             </div>
 
             <!-- Speed -->
-            <div class="flex flex-col">
-                <label class="text-xs text-[#94a3b8]">Speed</label>
+            <div class="flex flex-col font-mono">
+                <label class="text-xs font-bold text-gray-500 uppercase"
+                    >Speed</label
+                >
                 <input
                     type="range"
-                    min="100"
-                    max="1500"
-                    step="100"
+                    min="1"
+                    max="100"
+                    step="1"
                     v-model.number="speed"
-                    class="w-24 accent-[#3b82f6] md:w-32"
+                    class="w-24 accent-black md:w-32"
                 />
             </div>
         </div>
@@ -113,14 +104,14 @@ const handleGenerate = () => {
         <!-- Control Buttons -->
         <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3">
             <button
-                class="rounded bg-[#3b82f6] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#2563eb] md:px-4 md:py-2"
+                class="border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
                 @click="handleGenerate"
                 :disabled="isSearching"
             >
                 Generate
             </button>
             <button
-                class="rounded bg-[#10b981] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#059669] disabled:cursor-not-allowed disabled:opacity-50 md:px-4 md:py-2"
+                class="border-2 border-black bg-black px-3 py-1.5 font-mono text-xs font-bold text-white uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
                 @click="runSearch"
                 :disabled="
                     isSearching || target === null || numbers.length === 0
@@ -129,14 +120,14 @@ const handleGenerate = () => {
                 Start
             </button>
             <button
-                class="rounded bg-[#f59e0b] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#d97706] disabled:cursor-not-allowed disabled:opacity-50 md:px-4 md:py-2"
+                class="border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
                 @click="togglePause"
                 :disabled="!isSearching"
             >
                 {{ isPaused ? 'Resume' : 'Pause' }}
             </button>
             <button
-                class="rounded bg-[#ef4444] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#dc2626] md:px-4 md:py-2"
+                class="border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:bg-red-50 hover:text-red-600 hover:shadow-none active:translate-x-0.5 active:translate-y-0.5"
                 @click="resetState"
             >
                 Reset
