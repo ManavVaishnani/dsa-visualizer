@@ -22,17 +22,19 @@ const steps = [
     <!-- Content -->
     <div class="space-y-6">
       <div class="space-y-2">
-        <h1 class="font-mono text-4xl font-black tracking-tight md:text-5xl">
+        <h1 class="font-mono text-3xl font-black tracking-tight sm:text-4xl md:text-5xl">
           ALGORITHM<br />VISUALIZER
         </h1>
-        <p class="border-l-4 border-gray-300 py-1 pl-3 font-mono text-gray-600">
+        <p
+          class="border-l-4 border-gray-300 py-1 pl-3 font-mono text-gray-600 text-sm sm:text-base"
+        >
           > Interactive visualizations for <br />
           > data structures and algorithms.
         </p>
       </div>
 
       <!-- Schematic Diagram -->
-      <div class="grid grid-cols-3 gap-2 text-center font-mono text-xs">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-2 text-center font-mono text-xs">
         <div v-for="(step, i) in steps" :key="i" class="group relative">
           <div
             class="relative z-10 border-2 border-black bg-white p-2 transition-transform group-hover:-translate-y-1"
@@ -44,10 +46,10 @@ const steps = [
             </div>
             <div>{{ step.value }}</div>
           </div>
-          <!-- Connector Line (Pseudo) -->
+          <!-- Connector Line (Pseudo) - Horizontal for Desktop, Vertical for Mobile -->
           <div
             v-if="i < steps.length - 1"
-            class="absolute top-1/2 -right-3 z-0 h-0.5 w-4 bg-black"
+            class="absolute left-1/2 -bottom-4 z-0 h-4 w-0.5 bg-black md:top-1/2 md:-right-3 md:bottom-auto md:left-auto md:h-0.5 md:w-4"
           ></div>
         </div>
       </div>

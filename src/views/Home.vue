@@ -33,7 +33,7 @@ const sortCode = `function bubbleSort(arr) {
       </RetroCard>
 
       <!-- Cell 2: Sorting (1x2) -->
-      <RetroCard class="group overflow-hidden bg-white md:col-span-1 md:row-span-2">
+      <RetroCard class="group overflow-hidden bg-white md:col-span-1 md:row-span-2 flex flex-col">
         <div class="absolute top-0 right-0 p-4 font-mono text-6xl font-bold opacity-10 select-none">
           O(n)
         </div>
@@ -136,10 +136,10 @@ const sortCode = `function bubbleSort(arr) {
       >
         <img
           src="/github.svg"
-          class="mb-2 h-8 w-8 transition-all group-hover:scale-110"
+          class="mb-2 h-16 w-16 transition-all group-hover:scale-110"
           alt="GitHub"
         />
-        <div class="font-mono text-[10px] font-bold tracking-widest uppercase">SOURCE_CODE</div>
+        <div class="font-mono text font-bold tracking-widest uppercase">SOURCE_CODE</div>
         <a
           href="https://github.com/ManavVaishnani/dsa-visualizer"
           target="_blank"
