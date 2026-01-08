@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CodeBlock from '@/components/CodeBlock.vue';
+import AsciiMV from '@/components/home/AsciiMV.vue';
 import NerdyHero from '@/components/home/NerdyHero.vue';
 import RetroCard from '@/components/RetroCard.vue';
 import { Head, Link } from '@inertiajs/vue3';
@@ -200,16 +201,11 @@ const sortCode = `function bubbleSort(arr) {
                 </Link>
             </RetroCard>
 
-            <!-- Cell 6: Extra Info (1x1) -->
+            <!-- Cell 6: Extra Info (1x1) - Now 3D ASCII MV -->
             <RetroCard
                 class="flex flex-col items-center justify-center text-center md:col-span-1 md:row-span-1"
             >
-                <div class="font-mono text-4xl font-bold">12+</div>
-                <div
-                    class="mt-1 w-full border-t border-black pt-1 font-mono text-xs tracking-wider uppercase"
-                >
-                    Modules
-                </div>
+                <AsciiMV />
             </RetroCard>
 
             <!-- Cell 7: GitHub (1x1) -->
