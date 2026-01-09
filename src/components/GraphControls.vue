@@ -56,7 +56,7 @@ const graphOptions = [
 
 <template>
   <header
-    class="relative z-20 flex flex-col gap-4 border-b-2 border-black bg-white px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 md:py-3"
+    class="relative z-30 flex flex-col gap-4 border-b-2 border-black bg-white px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 md:py-3"
   >
     <!-- Speed Control -->
     <div class="flex items-center justify-center gap-6 md:justify-start">
