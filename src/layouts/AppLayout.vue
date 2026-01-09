@@ -23,7 +23,7 @@ const transformedBreadcrumbs = computed(() => {
 </script>
 
 <template>
-  <div class="flex h-screen bg-gray-50 font-sans text-gray-900">
+  <div class="flex h-screen font-sans text-gray-900">
     <!-- Main Area -->
     <div class="flex flex-1 flex-col overflow-hidden">
       <!-- Top Controls -->

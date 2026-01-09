@@ -34,7 +34,7 @@ const algorithms = [
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 px-6 py-8 font-sans text-gray-900">
+  <div class="min-h-screen px-6 py-8 font-sans text-gray-900">
     <div class="mx-auto max-w-6xl">
       <RouterLink
         to="/"

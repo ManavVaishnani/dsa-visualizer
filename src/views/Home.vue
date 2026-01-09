@@ -32,7 +32,7 @@ const sortCode = `function bubbleSort(arr) {
 
 <template>
   <div
-    class="relative flex min-h-screen items-center justify-center overflow-hidden bg-gray-50 p-4 font-sans text-gray-900 sm:p-8"
+    class="relative flex min-h-screen items-center justify-center overflow-hidden p-4 font-sans text-gray-900 sm:p-8"
   >
     <!-- Main Grid -->
     <div

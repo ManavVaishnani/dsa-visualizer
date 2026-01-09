@@ -56,7 +56,7 @@ const calculateEdgeEndpoint = (
 </script>
 
 <template>
-  <div class="relative h-full w-full overflow-hidden border-2 border-black bg-gray-50">
+  <div class="relative h-full w-full overflow-hidden border-2 border-black">
     <svg class="h-full w-full" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
       <!-- Draw edges first (so they appear behind nodes) -->
       <line

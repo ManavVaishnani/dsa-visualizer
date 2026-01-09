@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+body {
+  @apply bg-gray-50;
+}
+
 .blueprint-grid {
   /* Dot Matrix Pattern */
   background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
@@ -8,10 +12,6 @@
 
   /* Subtle animation */
   animation: pan 60s linear infinite;
-
-  /* Vignette / Mask effect using mask-image for better browser support */
-  mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
 
   opacity: 0.6;
 

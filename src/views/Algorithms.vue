@@ -64,7 +64,7 @@ const algorithms = [
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 px-6 py-8 font-sans text-gray-900">
+  <div class="min-h-screen px-6 py-8 font-sans text-gray-900">
     <div class="mx-auto max-w-6xl">
       <h1 class="mb-6 border-b-2 border-black pb-4 text-center font-mono text-3xl font-bold">
         Available Algorithms
