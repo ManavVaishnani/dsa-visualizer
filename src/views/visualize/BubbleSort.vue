@@ -3,7 +3,7 @@ import BarsVisualizer from '@/components/BarsVisualizer.vue'
 import SortingControls from '@/components/SortingControls.vue'
 import { generateBars } from '@/composables/useSortingController'
 import AppLayout from '@/layouts/AppLayout.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
 
 const breadcrumbs = [
@@ -12,7 +12,16 @@ const breadcrumbs = [
   { title: 'Bubble Sort' },
 ]
 
-useTitle('Bubble Sort Visualization')
+useHead({
+  title: 'Bubble Sort',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Visualize how Bubble Sort works step-by-step. Understand the swapping mechanism and time complexity of this fundamental sorting algorithm.',
+    },
+  ],
+})
 
 onMounted(() => generateBars())
 </script>

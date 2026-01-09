@@ -3,7 +3,7 @@ import BarsVisualizer from '@/components/BarsVisualizer.vue'
 import SortingControls from '@/components/SortingControls.vue'
 import { generateBars } from '@/composables/useSortingController'
 import AppLayout from '@/layouts/AppLayout.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
 
 const breadcrumbs = [
@@ -12,7 +12,16 @@ const breadcrumbs = [
   { title: 'Merge Sort' },
 ]
 
-useTitle('Merge Sort Visualization')
+useHead({
+  title: 'Merge Sort',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Visualize Merge Sort algorithm. Observe the divide and conquer strategy in action as it recursively sorts subarrays.',
+    },
+  ],
+})
 
 onMounted(() => generateBars())
 </script>

@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import RetroCard from '@/components/RetroCard.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { ArrowLeft, Search } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
-useTitle('Search Algorithms')
+useHead({
+  title: 'Search Algorithms',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Visualize and understand search algorithms including Linear Search and Binary Search.',
+    },
+  ],
+})
 
 const algorithms = [
   {

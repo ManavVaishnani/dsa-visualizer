@@ -3,7 +3,7 @@ import BarsVisualizer from '@/components/BarsVisualizer.vue'
 import SortingControls from '@/components/SortingControls.vue'
 import { generateBars } from '@/composables/useSortingController'
 import AppLayout from '@/layouts/AppLayout.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
 
 const breadcrumbs = [
@@ -12,7 +12,16 @@ const breadcrumbs = [
   { title: 'Insertion Sort' },
 ]
 
-useTitle('Insertion Sort Visualization')
+useHead({
+  title: 'Insertion Sort',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Understand Insertion Sort with step-by-step visualization. Watch how it builds the final sorted array one item at a time.',
+    },
+  ],
+})
 
 onMounted(() => generateBars())
 </script>

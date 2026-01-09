@@ -3,7 +3,7 @@ import BarsVisualizer from '@/components/BarsVisualizer.vue'
 import SortingControls from '@/components/SortingControls.vue'
 import { generateBars } from '@/composables/useSortingController'
 import AppLayout from '@/layouts/AppLayout.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
 
 const breadcrumbs = [
@@ -12,7 +12,16 @@ const breadcrumbs = [
   { title: 'Quick Sort' },
 ]
 
-useTitle('Quick Sort Visualization')
+useHead({
+  title: 'Quick Sort',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Master Quick Sort algorithm with our interactive visualizer. See partitioning and recursive sorting in real-time.',
+    },
+  ],
+})
 
 onMounted(() => generateBars())
 </script>

@@ -16,7 +16,7 @@ import {
   target,
 } from '@/composables/useSearchController'
 import AppLayout from '@/layouts/AppLayout.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { onMounted, ref, watch } from 'vue'
 
 const breadcrumbs = [
@@ -25,7 +25,16 @@ const breadcrumbs = [
   { title: 'Linear Search' },
 ]
 
-useTitle('Linear Search Visualization')
+useHead({
+  title: 'Linear Search',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Visualize Linear Search algorithm. Watch as it sequentially checks each element in the list until a match is found.',
+    },
+  ],
+})
 
 const showNotFoundMessage = ref(false)
 

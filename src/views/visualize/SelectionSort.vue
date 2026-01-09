@@ -3,7 +3,7 @@ import BarsVisualizer from '@/components/BarsVisualizer.vue'
 import SortingControls from '@/components/SortingControls.vue'
 import { generateBars } from '@/composables/useSortingController'
 import AppLayout from '@/layouts/AppLayout.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
 
 const breadcrumbs = [
@@ -12,7 +12,16 @@ const breadcrumbs = [
   { title: 'Selection Sort' },
 ]
 
-useTitle('Selection Sort Visualization')
+useHead({
+  title: 'Selection Sort',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Learn Selection Sort algorithm through interactive visualization. See how it repeatedly selects the smallest element from the unsorted portion.',
+    },
+  ],
+})
 
 onMounted(() => generateBars())
 </script>

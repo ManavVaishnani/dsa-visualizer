@@ -4,7 +4,7 @@ import GraphVisualizer from '@/components/GraphVisualizer.vue'
 import TreeVisualizer from '@/components/TreeVisualizer.vue'
 import { generateData, visualizationType } from '@/composables/useGraphController'
 import AppLayout from '@/layouts/AppLayout.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
 
 const breadcrumbs = [
@@ -13,7 +13,16 @@ const breadcrumbs = [
   { title: 'DFS' },
 ]
 
-useTitle('DFS Visualization')
+useHead({
+  title: 'Depth First Search (DFS)',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Interactive DFS visualization. Learn how Depth First Search explores as far as possible along each branch.',
+    },
+  ],
+})
 
 onMounted(() => generateData())
 </script>

@@ -17,7 +17,7 @@ import {
   target,
 } from '@/composables/useSearchController'
 import AppLayout from '@/layouts/AppLayout.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { onMounted, ref, watch } from 'vue'
 
 const breadcrumbs = [
@@ -26,7 +26,16 @@ const breadcrumbs = [
   { title: 'Binary Search' },
 ]
 
-useTitle('Binary Search Visualization')
+useHead({
+  title: 'Binary Search',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Understand Binary Search efficiency. Visualize how it divides the search interval in half to find the target value.',
+    },
+  ],
+})
 
 const showNotFoundMessage = ref(false)
 

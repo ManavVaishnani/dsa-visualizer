@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import RetroCard from '@/components/RetroCard.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { RouterLink } from 'vue-router'
 
-useTitle('All Algorithms')
+useHead({
+  title: 'All Algorithms',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Browse our comprehensive collection of data structure and algorithm visualizations including sorting, searching, and graph algorithms.',
+    },
+  ],
+})
 
 const algorithms = [
   {

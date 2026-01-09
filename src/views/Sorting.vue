@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import RetroCard from '@/components/RetroCard.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { ArrowLeft, Binary } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
-useTitle('Sorting Algorithms')
+useHead({
+  title: 'Sorting Algorithms',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Explore visualization of various sorting algorithms like Bubble Sort, Merge Sort, Quick Sort, and more.',
+    },
+  ],
+})
 
 const algorithms = [
   {

@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import RetroCard from '@/components/RetroCard.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { ArrowLeft, GitGraph } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
-useTitle('Graph Algorithms')
+useHead({
+  title: 'Graph Algorithms',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Dive into graph algorithms with interactive visualizations for BFS, DFS, and other pathfinding algorithms.',
+    },
+  ],
+})
 
 const algorithms = [
   {

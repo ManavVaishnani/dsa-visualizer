@@ -3,11 +3,20 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import AsciiMV from '@/components/home/AsciiMV.vue'
 import NerdyHero from '@/components/home/NerdyHero.vue'
 import RetroCard from '@/components/RetroCard.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { ArrowRight, Binary, GitGraph, Search } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
-useTitle('AlgoFlow - DSA Visualizer')
+useHead({
+  title: 'Home',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Master Data Structures and Algorithms with interactive visualizations. Explore sorting checking, searching, and graph algorithms in a retro-styled interface.',
+    },
+  ],
+})
 
 // Use a simple code snippet for the demo
 const sortCode = `function bubbleSort(arr) {

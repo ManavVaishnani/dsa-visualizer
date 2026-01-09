@@ -4,7 +4,7 @@ import GraphVisualizer from '@/components/GraphVisualizer.vue'
 import TreeVisualizer from '@/components/TreeVisualizer.vue'
 import { generateData, visualizationType } from '@/composables/useGraphController'
 import AppLayout from '@/layouts/AppLayout.vue'
-import { useTitle } from '@vueuse/core'
+import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
 
 const breadcrumbs = [
@@ -13,7 +13,16 @@ const breadcrumbs = [
   { title: 'BFS' },
 ]
 
-useTitle('BFS Visualization')
+useHead({
+  title: 'Breadth First Search (BFS)',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Interactive BFS visualization. Learn how Breadth First Search explores nodes layer by layer.',
+    },
+  ],
+})
 
 onMounted(() => generateData())
 </script>
