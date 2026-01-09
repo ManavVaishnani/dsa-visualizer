@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import RetroSelect from '@/components/ui/RetroSelect.vue'
 import {
   generateData,
   graphType,
@@ -41,6 +42,16 @@ const prepareSteps = () => {
 const pause = () => {
   isPaused.value = !isPaused.value
 }
+
+const vizOptions = [
+  { label: 'Graph', value: 'graph' },
+  { label: 'Tree', value: 'tree' },
+]
+
+const graphOptions = [
+  { label: 'Undirected', value: 'undirected' },
+  { label: 'Directed', value: 'directed' },
+]
 </script>
 
 <template>
@@ -57,22 +68,18 @@ const pause = () => {
 
     <!-- Controls -->
     <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3">
-      <select
+      <RetroSelect
         v-model="visualizationType"
-        class="border-2 border-black bg-white px-2 py-1.5 font-mono text-xs font-bold text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none focus:outline-none md:px-3 md:py-1 md:text-sm"
+        :options="vizOptions"
         @change="generateData"
-      >
-        <option value="graph">Graph</option>
-        <option value="tree">Tree</option>
-      </select>
-      <select
+        class="w-auto min-w-25"
+      />
+      <RetroSelect
         v-if="visualizationType === 'graph'"
         v-model="graphType"
-        class="border-2 border-black bg-white px-2 py-1.5 font-mono text-xs font-bold text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none focus:outline-none md:px-3 md:py-1 md:text-sm"
-      >
-        <option value="undirected">Undirected</option>
-        <option value="directed">Directed</option>
-      </select>
+        :options="graphOptions"
+        class="w-auto min-w-30"
+      />
       <button
         class="border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
         @click="generateData"
@@ -127,7 +134,7 @@ const pause = () => {
         >
           Next &raquo;
         </button>
-        <div class="text-[10px] font-bold text-gray-500 md:text-xs">
+        <div class="text-[10px] font-bold text-gray-500 md:text-xs text-center min-w-10">
           {{ stepIndex + 1 }}/{{ steps.length }}
         </div>
       </div>
