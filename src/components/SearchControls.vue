@@ -51,7 +51,7 @@ const handleGenerate = () => {
 
 <template>
   <header
-    class="flex flex-col gap-4 border-b-2 border-black bg-white px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 md:py-3"
+    class="relative z-20 flex flex-col gap-4 border-b-2 border-black bg-white px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 md:py-3"
   >
     <!-- Sliders and Inputs -->
     <div class="flex flex-wrap items-center justify-center gap-4 md:justify-start md:gap-6">

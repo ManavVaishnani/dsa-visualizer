@@ -44,7 +44,7 @@ export interface Step {
 export const steps = ref<Step[]>([])
 export const stepIndex = ref(-1)
 export const isPlaying = ref(false)
-let playTimer: ReturnType<typeof setInterval> | null = null
+const playTimer: ReturnType<typeof setInterval> | null = null
 
 export const graphType = ref<GraphType>('undirected')
 export const visualizationType = ref<VisualizationType>('graph')
@@ -263,15 +263,15 @@ export const playSteps = () => {
   if (isPlaying.value || steps.value.length === 0) return
   isPlaying.value = true
   const delay = Math.max(50, 1000 - speed.value * 9)
-  playTimer = setInterval(() => {
+  playTimer.value = setInterval(() => {
     if (stepIndex.value < steps.value.length - 1) nextStep()
     else stopPlaying()
   }, delay)
 }
 
 export const stopPlaying = () => {
-  if (playTimer) clearInterval(playTimer)
-  playTimer = null
+  if (playTimer.value) clearInterval(playTimer)
+  playTimer.value = null
   isPlaying.value = false
 }
 

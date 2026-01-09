@@ -32,7 +32,7 @@ const transformedBreadcrumbs = computed(() => {
       <!-- Breadcrumbs -->
       <div
         v-if="transformedBreadcrumbs.length > 0"
-        class="border-b-2 border-black bg-white px-4 py-3 font-mono md:px-6"
+        class="relative z-20 border-b-2 border-black bg-white px-4 py-3 font-mono md:px-6"
       >
         <Breadcrumbs :breadcrumbs="transformedBreadcrumbs" />
       </div>
