@@ -55,7 +55,7 @@ onUnmounted(() => {
     <button
       type="button"
       @click="toggleDropdown"
-      class="flex w-full items-center justify-between border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none focus:outline-none md:text-sm"
+      class="flex w-full items-center justify-between rounded-none border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[3px_3px_0px_0px_black] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none focus:outline-none md:text-sm"
     >
       <span>{{ selectedLabel }}</span>
       <ChevronDown
@@ -66,7 +66,7 @@ onUnmounted(() => {
 
     <div
       v-if="isOpen"
-      class="absolute left-0 top-[calc(100%+4px)] z-50 w-full border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+      class="absolute left-0 top-[calc(100%+4px)] z-50 w-full rounded-none border-2 border-black bg-white shadow-[5px_5px_0px_0px_black]"
     >
       <div class="max-h-60 overflow-y-auto">
         <button

@@ -9,9 +9,11 @@ import {
   nodes,
   queue,
   selectedStartNode,
+  explanation,
   visitedCount,
   visitedNodes,
 } from '@/composables/useGraphController'
+import AlgorithmExplanation from './AlgorithmExplanation.vue'
 
 const getNodeColor = (nodeId: number) => {
   if (currentNode.value === nodeId) return '#f59e0b' // Orange
@@ -57,6 +59,7 @@ const calculateEdgeEndpoint = (
 
 <template>
   <div class="relative h-full w-full overflow-hidden border-2 border-black">
+    <AlgorithmExplanation :explanation="explanation" />
     <svg class="h-full w-full" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
       <!-- Draw edges first (so they appear behind nodes) -->
       <line
@@ -131,16 +134,16 @@ const calculateEdgeEndpoint = (
     <!-- Queue Display -->
     <div
       v-if="queue.length > 0"
-      class="absolute right-4 bottom-4 z-10 max-w-[50%] overflow-x-auto border-2 border-black bg-white px-4 py-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] md:right-auto md:bottom-4 md:left-1/2 md:max-w-none md:-translate-x-1/2 md:px-6 md:py-3"
+      class="absolute bottom-4 left-4 z-10 w-auto max-w-[calc(100%-150px)] overflow-x-auto border-2 border-black bg-white px-4 py-2 shadow-[4px_4px_0_0_black] md:left-1/2 md:-translate-x-1/2 md:px-6 md:py-3"
     >
-      <div class="text-center font-mono text-xs font-bold text-gray-500 uppercase md:text-sm">
-        Queue (BFS)
+      <div class="text-center font-mono text-[10px] font-bold text-gray-500 uppercase md:text-sm">
+        Queue
       </div>
       <div class="mt-2 flex justify-center gap-2">
         <div
           v-for="nodeId in queue"
           :key="nodeId"
-          class="flex size-8 shrink-0 items-center justify-center border border-black bg-[#6366f1] text-xs font-bold text-white md:size-10 md:text-sm"
+          class="flex size-7 shrink-0 items-center justify-center border border-black bg-[#6366f1] text-[10px] font-bold text-white md:size-10 md:text-sm"
         >
           {{ nodes[nodeId]?.label }}
         </div>
@@ -150,15 +153,17 @@ const calculateEdgeEndpoint = (
     <!-- DFS Call Stack -->
     <div
       v-if="dfsCallStack.length > 0"
-      class="absolute right-4 bottom-4 z-20 w-32 border-2 border-black bg-white p-3 shadow-[4px_4px_0_0_rgba(0,0,0,1)] md:bottom-4 md:w-48 md:p-4"
+      class="absolute bottom-4 left-4 z-20 w-24 border-2 border-black bg-white p-2 shadow-[4px_4px_0_0_black] md:left-auto md:right-4 md:w-48 md:p-4"
     >
-      <div class="mb-2 font-mono text-xs font-bold text-black uppercase md:text-sm">DFS Stack</div>
+      <div class="mb-2 font-mono text-[10px] font-bold text-black uppercase md:text-sm">
+        DFS Stack
+      </div>
 
       <div class="flex flex-col-reverse gap-1 md:gap-2">
         <div
           v-for="nodeId in dfsCallStack"
           :key="nodeId"
-          class="flex items-center justify-center border border-black bg-[#8b5cf6] px-2 py-1 text-xs font-bold text-white transition-all md:px-3 md:text-sm"
+          class="flex items-center justify-center border border-black bg-[#8b5cf6] px-1 py-0.5 text-[10px] font-bold text-white transition-all md:px-3 md:py-1 md:text-sm"
           :class="{
             'ring-2 ring-black': nodeId === dfsCallStack[dfsCallStack.length - 1],
           }"
@@ -167,41 +172,22 @@ const calculateEdgeEndpoint = (
         </div>
       </div>
 
-      <div class="mt-2 text-center font-mono text-[10px] text-gray-500 md:text-xs">Top ↑</div>
+      <div class="mt-1 text-center font-mono text-[8px] text-gray-500 md:mt-2 md:text-xs">
+        Top ↑
+      </div>
     </div>
     <!-- Selected Start Node -->
     <div
       v-if="selectedStartNode === null"
-      class="absolute top-4 left-1/2 z-10 -translate-x-1/2 border-2 border-black bg-white px-4 py-2 font-mono text-sm font-bold text-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+      class="absolute top-4 left-1/2 z-10 -translate-x-1/2 rounded-none border-2 border-black bg-white px-4 py-2 font-mono text-sm font-bold text-black shadow-[5px_5px_0px_0px_black]"
     >
       SELECT_START_NODE
     </div>
 
-    <!-- Legend -->
-    <div
-      class="absolute top-4 right-4 z-10 hidden border-2 border-black bg-white p-4 font-mono text-sm shadow-[4px_4px_0_0_rgba(0,0,0,1)] lg:block"
-    >
-      <div class="mb-2 font-bold text-black uppercase">Tree Legend</div>
-      <div class="space-y-2">
-        <div class="flex items-center gap-2">
-          <div class="size-4 rounded-full border border-black bg-[#3b82f6]"></div>
-          <span class="text-xs text-gray-600 uppercase">Node</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="size-4 rounded-full border border-black bg-[#f59e0b]"></div>
-          <span class="text-xs text-gray-600 uppercase">Current</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="size-4 rounded-full border border-black bg-[#10b981]"></div>
-          <span class="text-xs text-gray-600 uppercase">Visited</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Time Complexity Panel -->
+    <!-- Top-Left Overlay (Metrics) -->
     <div
       v-if="visitedCount > 0"
-      class="absolute bottom-4 left-4 z-20 w-48 border-2 border-black bg-white p-3 font-mono text-[10px] shadow-[4px_4px_0_0_rgba(0,0,0,1)] md:top-8 md:bottom-auto md:w-60 md:p-4 md:text-sm"
+      class="absolute top-4 left-4 z-20 w-48 border-2 border-black bg-white p-3 font-mono text-[10px] shadow-[5px_5px_0px_0px_black] transition-all duration-300 md:top-6 md:left-6 md:w-60 md:p-4 md:text-sm"
     >
       <div class="mb-2 font-bold text-black uppercase">Metrics (Tree)</div>
 
@@ -225,6 +211,27 @@ const calculateEdgeEndpoint = (
         <div class="flex justify-between">
           <span class="text-gray-500">SPACE:</span>
           <span class="font-bold text-[#3b82f6]">O(H)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom-Left Overlay (Legend) -->
+    <div
+      class="absolute bottom-4 left-4 z-20 hidden border-2 border-black bg-white p-4 font-mono text-sm shadow-[5px_5px_0px_0px_black] transition-all duration-300 md:bottom-6 md:left-6 lg:block"
+    >
+      <div class="mb-2 font-bold text-black uppercase">Tree Legend</div>
+      <div class="space-y-2">
+        <div class="flex items-center gap-2">
+          <div class="size-4 rounded-full border border-black bg-[#3b82f6]"></div>
+          <span class="text-xs text-gray-600 uppercase">Node</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="size-4 rounded-full border border-black bg-[#f59e0b]"></div>
+          <span class="text-xs text-gray-600 uppercase">Current</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="size-4 rounded-full border border-black bg-[#10b981]"></div>
+          <span class="text-xs text-gray-600 uppercase">Visited</span>
         </div>
       </div>
     </div>

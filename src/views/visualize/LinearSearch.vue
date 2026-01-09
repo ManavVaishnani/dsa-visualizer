@@ -13,6 +13,7 @@ import {
   mid,
   notFound,
   numbers,
+  setInitialInfo,
   target,
 } from '@/composables/useSearchController'
 import AppLayout from '@/layouts/AppLayout.vue'
@@ -48,6 +49,7 @@ watch(notFound, (newValue) => {
 })
 
 onMounted(() => {
+  setInitialInfo('linear')
   generateRandomArray(arraySize.value)
 })
 </script>

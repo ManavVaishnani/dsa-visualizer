@@ -2,7 +2,7 @@
 import GraphControls from '@/components/GraphControls.vue'
 import GraphVisualizer from '@/components/GraphVisualizer.vue'
 import TreeVisualizer from '@/components/TreeVisualizer.vue'
-import { generateData, visualizationType } from '@/composables/useGraphController'
+import { generateData, setInitialInfo, visualizationType } from '@/composables/useGraphController'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
@@ -24,7 +24,10 @@ useHead({
   ],
 })
 
-onMounted(() => generateData())
+onMounted(() => {
+  generateData()
+  setInitialInfo('dfs')
+})
 </script>
 
 <template>

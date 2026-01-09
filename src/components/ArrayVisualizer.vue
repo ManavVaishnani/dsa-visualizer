@@ -1,6 +1,9 @@
 <script setup lang="ts">
 // import { computed } from 'vue'
 
+import { explanation } from '@/composables/useSearchController'
+import AlgorithmExplanation from './AlgorithmExplanation.vue'
+
 interface Props {
   numbers: number[]
   target: number | null
@@ -39,10 +42,11 @@ const boxClass = (index: number) => {
 
 <template>
   <div class="relative h-full w-full overflow-y-auto px-4 py-8">
+    <AlgorithmExplanation :explanation="explanation" />
     <!-- Target Selection Message -->
     <div
       v-if="target === null"
-      class="absolute top-4 left-1/2 z-10 -translate-x-1/2 border-2 border-black bg-white px-4 py-2 font-mono text-sm font-bold text-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+      class="absolute top-4 left-1/2 z-10 -translate-x-1/2 rounded-none border-2 border-black bg-white px-4 py-2 font-mono text-sm font-bold text-black shadow-[5px_5px_0px_0px_black]"
     >
       SET_TARGET_VALUE
     </div>

@@ -1,7 +1,8 @@
+```
 <script setup lang="ts">
 import BarsVisualizer from '@/components/BarsVisualizer.vue'
 import SortingControls from '@/components/SortingControls.vue'
-import { generateBars } from '@/composables/useSortingController'
+import { generateBars, setInitialInfo } from '@/composables/useSortingController'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
@@ -18,12 +19,15 @@ useHead({
     {
       name: 'description',
       content:
-        'Understand Insertion Sort with step-by-step visualization. Watch how it builds the final sorted array one item at a time.',
+        'Visualize Insertion Sort. Understand how it builds a sorted array one element at a time and why it is efficient for small datasets.',
     },
   ],
 })
 
-onMounted(() => generateBars())
+onMounted(() => {
+  generateBars()
+  setInitialInfo('insertion')
+})
 </script>
 
 <template>

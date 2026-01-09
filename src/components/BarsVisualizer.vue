@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { active, bars, sorted, swapping } from '@/composables/useSortingController'
+import { active, bars, explanation, sorted, swapping } from '@/composables/useSortingController'
+import AlgorithmExplanation from './AlgorithmExplanation.vue'
 
 const getColor = (index: number) => {
   // Nerdy Color Scheme
@@ -18,7 +19,8 @@ const getColor = (index: number) => {
 </script>
 
 <template>
-  <div class="flex h-full w-full items-center justify-center overflow-hidden px-2 md:px-4">
+  <div class="relative flex h-full w-full items-center justify-center overflow-hidden px-2 md:px-4">
+    <AlgorithmExplanation :explanation="explanation" />
     <!-- Main Sorting Container -->
     <div
       class="flex h-[80%] w-full max-w-5xl items-end justify-center gap-px border-b-2 border-black pb-px md:gap-1"

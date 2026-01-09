@@ -25,6 +25,29 @@ export const currentEdge = ref<{ from: number; to: number } | null>(null)
 export const speed = ref(50)
 export const isTraversing = ref(false)
 export const isPaused = ref(false)
+export const explanation = ref<string[]>([])
+
+export type GraphAlgo = 'bfs' | 'dfs'
+export const currentGraphAlgo = ref<GraphAlgo | null>(null)
+
+export const setInitialInfo = (algo: GraphAlgo) => {
+  currentGraphAlgo.value = algo
+  const info: Record<GraphAlgo, string[]> = {
+    bfs: [
+      'ALGO: Breadth First Search (BFS)',
+      'WHAT: Level-by-level traversal of a graph using a queue.',
+      'WHY: Finds the shortest path in unweighted graphs.',
+      'WHERE: Peer-to-peer networks, GPS navigation, social networks.',
+    ],
+    dfs: [
+      'ALGO: Depth First Search (DFS)',
+      'WHAT: Explores as far as possible along each branch before backtracking.',
+      'WHY: Very memory efficient; great for pathfinding and cycle detection.',
+      'WHERE: Solving puzzles, topological sorting, scheduling.',
+    ],
+  }
+  explanation.value = info[algo]
+}
 export const selectedStartNode = ref<number | null>(null)
 export const dfsCallStack = ref<number[]>([])
 export const visitedCount = ref(0)
@@ -240,6 +263,9 @@ const applyStep = (index: number) => {
   dfsCallStack.value = [...s.dfsCallStack]
   visitedCount.value = s.visitedCount
   edgeExploredCount.value = s.edgeExploredCount
+  if (s.description) {
+    explanation.value.push(s.description)
+  }
   stepIndex.value = index
 }
 
@@ -279,6 +305,11 @@ export const resetSteps = () => {
   stopPlaying()
   steps.value = []
   stepIndex.value = -1
+  if (currentGraphAlgo.value) {
+    setInitialInfo(currentGraphAlgo.value)
+  } else {
+    explanation.value = []
+  }
   resetGraph()
 }
 
@@ -299,6 +330,7 @@ export const runBFS = async (start?: number) => {
   currentNode.value = null
   queue.value = []
   currentEdge.value = null
+  explanation.value = ['Starting BFS traversal...']
 
   // Build adjacency list
   const adjList = buildAdjacencyList()
@@ -313,12 +345,14 @@ export const runBFS = async (start?: number) => {
 
     const node = queue.value.shift()!
     currentNode.value = node
+    explanation.value.push(`Visiting node ${nodes.value[node]?.label}.`)
 
     await sleep(1000 - speed.value * 9)
 
     visitedNodes.value.push(node)
     visitedCount.value++
     currentNode.value = null
+    explanation.value.push(`Marked ${nodes.value[node]?.label} as visited.`)
 
     for (const neighbor of adjList[node]) {
       while (isPaused.value) await sleep(100)
@@ -333,10 +367,12 @@ export const runBFS = async (start?: number) => {
         }
 
         currentEdge.value = { from: node, to: neighbor }
+        explanation.value.push(`Exploring edge ${nodes.value[node]?.label} -> ${nodes.value[neighbor]?.label}.`)
         await sleep(500 - speed.value * 4)
 
         visited.add(neighbor)
         queue.value.push(neighbor)
+        explanation.value.push(`Neighbor ${nodes.value[neighbor]?.label} added to queue.`)
 
         currentEdge.value = null
       }
@@ -346,6 +382,7 @@ export const runBFS = async (start?: number) => {
   currentNode.value = null
   queue.value = []
   isTraversing.value = false
+  explanation.value.push('BFS traversal completed!')
 }
 
 export const generateBFSSteps = (start?: number): Step[] => {
@@ -478,6 +515,7 @@ export const runDFS = async (start?: number) => {
   currentEdge.value = null
   queue.value = []
   dfsCallStack.value = []
+  explanation.value = ['Starting DFS traversal...']
 
   // Build adjacency list
   const adjList = buildAdjacencyList()
@@ -494,11 +532,13 @@ export const runDFS = async (start?: number) => {
     visited.add(node)
     visitedCount.value++
     currentNode.value = node
+    explanation.value.push(`Visiting node ${nodes.value[node]?.label}.`)
 
     await sleep(1000 - speed.value * 9)
 
     visitedNodes.value.push(node)
     currentNode.value = null
+    explanation.value.push(`Marked ${nodes.value[node]?.label} as visited.`)
 
     for (const neighbor of adjList[node]) {
       while (isPaused.value) await sleep(100)
@@ -513,6 +553,7 @@ export const runDFS = async (start?: number) => {
         }
 
         currentEdge.value = { from: node, to: neighbor }
+        explanation.value.push(`Exploring edge ${nodes.value[node]?.label} -> ${nodes.value[neighbor]?.label}.`)
         await sleep(500 - speed.value * 4)
         currentEdge.value = null
 
@@ -529,6 +570,7 @@ export const runDFS = async (start?: number) => {
   currentNode.value = null
   currentEdge.value = null
   isTraversing.value = false
+  explanation.value.push('DFS traversal completed!')
 }
 
 export const generateDFSSteps = (start?: number): Step[] => {

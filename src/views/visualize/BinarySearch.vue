@@ -13,7 +13,7 @@ import {
   mid,
   notFound,
   numbers,
-  sortArray,
+  setInitialInfo,
   target,
 } from '@/composables/useSearchController'
 import AppLayout from '@/layouts/AppLayout.vue'
@@ -49,11 +49,8 @@ watch(notFound, (newValue) => {
 })
 
 onMounted(() => {
+  setInitialInfo('binary')
   generateRandomArray(arraySize.value)
-  // Binary search requires sorted array
-  if (dataStructure.value === 'array') {
-    sortArray()
-  }
 })
 </script>
 

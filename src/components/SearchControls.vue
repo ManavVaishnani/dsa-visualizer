@@ -42,10 +42,6 @@ const togglePause = () => {
 
 const handleGenerate = () => {
   generateRandomArray(arraySize.value)
-  const path = route.path
-  if (path.includes('binary-search') && dataStructure.value === 'array') {
-    sortArray()
-  }
 }
 </script>
 
@@ -61,7 +57,7 @@ const handleGenerate = () => {
         <input
           type="number"
           v-model.number="target"
-          class="mt-1 w-20 border-2 border-black bg-white px-2 py-1 font-mono text-sm text-black focus:outline-none md:w-24"
+          class="mt-1 w-20 border-2 border-black bg-white px-2 py-1 font-mono text-sm text-black rounded-none shadow-[2px_2px_0_0_black] focus:outline-none md:w-24"
           :disabled="isSearching"
         />
       </div>
@@ -96,28 +92,28 @@ const handleGenerate = () => {
     <!-- Control Buttons -->
     <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3">
       <button
-        class="border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+        class="rounded-none border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[3px_3px_0px_0px_black] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 disabled:cursor-not-allowed disabled:opacity-50"
         @click="handleGenerate"
         :disabled="isSearching"
       >
         Generate
       </button>
       <button
-        class="border-2 border-black bg-black px-3 py-1.5 font-mono text-xs font-bold text-white uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+        class="rounded-none border-2 border-black bg-black px-3 py-1.5 font-mono text-xs font-bold text-white uppercase shadow-[3px_3px_0px_0px_black] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 disabled:cursor-not-allowed disabled:opacity-50"
         @click="runSearch"
         :disabled="isSearching || target === null || numbers.length === 0"
       >
         Start
       </button>
       <button
-        class="border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+        class="rounded-none border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[3px_3px_0px_0px_black] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 disabled:cursor-not-allowed disabled:opacity-50"
         @click="togglePause"
         :disabled="!isSearching"
       >
         {{ isPaused ? 'Resume' : 'Pause' }}
       </button>
       <button
-        class="border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:bg-red-50 hover:text-red-600 hover:shadow-none active:translate-x-0.5 active:translate-y-0.5"
+        class="rounded-none border-2 border-black bg-white px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[3px_3px_0px_0px_black] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-red-50 hover:text-red-600 hover:shadow-none active:translate-x-1 active:translate-y-1 disabled:cursor-not-allowed disabled:opacity-50"
         @click="resetState"
       >
         Reset

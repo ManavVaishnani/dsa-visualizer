@@ -10,6 +10,48 @@ export const speed = ref(50)
 
 export const isSorting = ref(false)
 export const isPaused = ref(false)
+export const explanation = ref<string[]>([])
+
+export type SortAlgo = 'bubble' | 'selection' | 'insertion' | 'merge' | 'quick'
+
+export const currentSortAlgo = ref<SortAlgo | null>(null)
+
+export const setInitialInfo = (algo: SortAlgo) => {
+  currentSortAlgo.value = algo
+  const info: Record<SortAlgo, string[]> = {
+    bubble: [
+      'ALGO: Bubble Sort',
+      'WHAT: Repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.',
+      'WHY: Simple to understand and implement.',
+      'WHERE: Small datasets and educational purposes.',
+    ],
+    selection: [
+      'ALGO: Selection Sort',
+      'WHAT: Repeatedly finds the minimum element and puts it at the beginning.',
+      'WHY: Performs few swaps, useful when memory write is expensive.',
+      'WHERE: When swap operations are costly.',
+    ],
+    insertion: [
+      'ALGO: Insertion Sort',
+      'WHAT: Builds the final sorted array one item at a time.',
+      'WHY: Very efficient for small or nearly sorted datasets.',
+      'WHERE: Real-time data streams or small arrays.',
+    ],
+    merge: [
+      'ALGO: Merge Sort',
+      'WHAT: A divide-and-conquer algorithm that divides the array in half, sorts them, and merges them back.',
+      'WHY: Guaranteed O(n log n) performance.',
+      'WHERE: Large datasets and stable sorting requirements.',
+    ],
+    quick: [
+      'ALGO: Quick Sort',
+      'WHAT: Picks a pivot and partitions the array around it.',
+      'WHY: Fastest average-case performance for general sorting.',
+      'WHERE: Standard language libraries and large datasets.',
+    ],
+  }
+  explanation.value = info[algo]
+}
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -21,6 +63,11 @@ export const generateBars = () => {
   active.value = []
   swapping.value = []
   sorted.value = []
+  if (currentSortAlgo.value) {
+    setInitialInfo(currentSortAlgo.value)
+  } else {
+    explanation.value = ['Generated new random array.']
+  }
 }
 
 export const bubbleSort = async () => {
@@ -28,6 +75,7 @@ export const bubbleSort = async () => {
 
   isSorting.value = true
   isPaused.value = false
+  explanation.value.push('Starting Bubble Sort...')
 
   const arr = bars.value
 
@@ -38,22 +86,28 @@ export const bubbleSort = async () => {
       }
 
       active.value = [j, j + 1]
+      explanation.value.push(`Comparing ${arr[j]} and ${arr[j + 1]}`)
       await sleep(101 - speed.value)
 
       if (arr[j] > arr[j + 1]) {
+        explanation.value.push(`${arr[j]} > ${arr[j + 1]}, swapping them.`)
         swapping.value = [j, j + 1]
         await sleep(101 - speed.value)
         ;[arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
+      } else {
+        explanation.value.push(`${arr[j]} <= ${arr[j + 1]}, no swap needed.`)
       }
 
       swapping.value = []
     }
 
     sorted.value.push(arr.length - i - 1)
+    explanation.value.push(`Element at index ${arr.length - i - 1} is now in its sorted position.`)
   }
 
   active.value = []
   isSorting.value = false
+  explanation.value.push('Bubble Sort completed!')
 }
 
 export const selectionSort = async () => {
@@ -61,11 +115,13 @@ export const selectionSort = async () => {
 
   isSorting.value = true
   isPaused.value = false
+  explanation.value.push('Starting Selection Sort...')
 
   const arr = bars.value
 
   for (let i = 0; i < arr.length - 1; i++) {
     let minIndex = i
+    explanation.value.push(`Finding minimum element in the unsorted portion starting from index ${i}.`)
 
     // Find the minimum element in the unsorted portion
     for (let j = i + 1; j < arr.length; j++) {
@@ -75,9 +131,11 @@ export const selectionSort = async () => {
 
       // Show comparison
       active.value = [i, j]
+      explanation.value.push(`Comparing ${arr[j]} with current minimum ${arr[minIndex]}.`)
       await sleep(101 - speed.value)
 
       if (arr[j] < arr[minIndex]) {
+        explanation.value.push(`New minimum found: ${arr[j]} at index ${j}.`)
         minIndex = j
       }
 
@@ -90,10 +148,13 @@ export const selectionSort = async () => {
         await sleep(100)
       }
 
+      explanation.value.push(`Swapping ${arr[i]} with minimum element ${arr[minIndex]}.`)
       swapping.value = [i, minIndex]
       await sleep(101 - speed.value)
       ;[arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]
       swapping.value = []
+    } else {
+      explanation.value.push(`${arr[i]} is already the smallest element in the unsorted part.`)
     }
 
     // Mark current position as sorted
@@ -105,6 +166,7 @@ export const selectionSort = async () => {
 
   active.value = []
   isSorting.value = false
+  explanation.value.push('Selection Sort completed!')
 }
 
 export const insertionSort = async () => {
@@ -112,6 +174,7 @@ export const insertionSort = async () => {
 
   isSorting.value = true
   isPaused.value = false
+  explanation.value.push('Starting Insertion Sort...')
 
   const arr = bars.value
 
@@ -121,6 +184,7 @@ export const insertionSort = async () => {
   for (let i = 1; i < arr.length; i++) {
     const key = arr[i]
     let j = i - 1
+    explanation.value.push(`Picking ${key} at index ${i} to insert into the sorted part.`)
 
     // Mark current element being inserted
     active.value = [i]
@@ -132,6 +196,7 @@ export const insertionSort = async () => {
         await sleep(100)
       }
 
+      explanation.value.push(`${arr[j]} > ${key}, shifting ${arr[j]} one position to the right.`)
       active.value = [i, j]
       await sleep(101 - speed.value)
 
@@ -145,6 +210,7 @@ export const insertionSort = async () => {
     }
 
     // Insert key at correct position
+    explanation.value.push(`Inserting ${key} at index ${j + 1}.`)
     arr[j + 1] = key
 
     // Mark all positions from 0 to i as sorted (insertion sort maintains sorted prefix)
@@ -159,6 +225,7 @@ export const insertionSort = async () => {
 
   active.value = []
   isSorting.value = false
+  explanation.value.push('Insertion Sort completed!')
 }
 
 export const mergeSort = async () => {
@@ -166,11 +233,13 @@ export const mergeSort = async () => {
 
   isSorting.value = true
   isPaused.value = false
+  explanation.value.push('Starting Merge Sort...')
 
   const arr = bars.value
   sorted.value = []
 
   const merge = async (left: number, mid: number, right: number) => {
+    explanation.value.push(`Merging subarrays [${left}...${mid}] and [${mid + 1}...${right}].`)
     const leftArr = arr.slice(left, mid + 1)
     const rightArr = arr.slice(mid + 1, right + 1)
 
@@ -184,15 +253,18 @@ export const mergeSort = async () => {
       }
 
       active.value = [left + i, mid + 1 + j]
+      explanation.value.push(`Comparing ${leftArr[i]} and ${rightArr[j]} from both halves.`)
       await sleep(101 - speed.value)
 
       if (leftArr[i] <= rightArr[j]) {
+        explanation.value.push(`${leftArr[i]} <= ${rightArr[j]}, picking from the left half.`)
         swapping.value = [k]
         await sleep(101 - speed.value)
 
         arr[k] = leftArr[i]
         i++
       } else {
+        explanation.value.push(`${leftArr[i]} > ${rightArr[j]}, picking from the right half.`)
         swapping.value = [k]
         await sleep(101 - speed.value)
 
@@ -209,6 +281,7 @@ export const mergeSort = async () => {
         await sleep(100)
       }
 
+      explanation.value.push('Copying remaining elements from the left half.')
       swapping.value = [k]
       await sleep(101 - speed.value)
 
@@ -223,6 +296,7 @@ export const mergeSort = async () => {
         await sleep(100)
       }
 
+      explanation.value.push('Copying remaining elements from the right half.')
       swapping.value = [k]
       await sleep(101 - speed.value)
 
@@ -236,6 +310,7 @@ export const mergeSort = async () => {
   const mergeSortHelper = async (left: number, right: number) => {
     if (left < right) {
       const mid = Math.floor((left + right) / 2)
+      explanation.value.push(`Splitting array into [${left}...${mid}] and [${mid + 1}...${right}].`)
 
       await mergeSortHelper(left, mid)
       await mergeSortHelper(mid + 1, right)
@@ -252,6 +327,7 @@ export const mergeSort = async () => {
 
   active.value = []
   isSorting.value = false
+  explanation.value.push('Merge Sort completed!')
 }
 
 export const quickSort = async () => {
@@ -259,12 +335,14 @@ export const quickSort = async () => {
 
   isSorting.value = true
   isPaused.value = false
+  explanation.value.push('Starting Quick Sort...')
 
   const arr = bars.value
   sorted.value = []
 
   const partition = async (low: number, high: number): Promise<number> => {
     const pivot = arr[high]
+    explanation.value.push(`Choosing ${pivot} (at index ${high}) as the pivot.`)
     let i = low - 1
 
     // Highlight pivot
@@ -277,11 +355,13 @@ export const quickSort = async () => {
       }
 
       active.value = [j, high]
+      explanation.value.push(`Comparing ${arr[j]} with pivot ${pivot}.`)
       await sleep(101 - speed.value)
 
       if (arr[j] < pivot) {
         i++
         if (i !== j) {
+          explanation.value.push(`${arr[j]} < ${pivot}, swapping ${arr[j]} with element at index ${i}.`)
           swapping.value = [i, j]
           await sleep(101 - speed.value)
           ;[arr[i], arr[j]] = [arr[j], arr[i]]
@@ -292,6 +372,7 @@ export const quickSort = async () => {
 
     // Place pivot in correct position
     if (i + 1 !== high) {
+      explanation.value.push(`Placing pivot ${pivot} at its correct position index ${i + 1}.`)
       swapping.value = [i + 1, high]
       await sleep(101 - speed.value)
       ;[arr[i + 1], arr[high]] = [arr[high], arr[i + 1]]
@@ -308,12 +389,14 @@ export const quickSort = async () => {
 
       // Mark pivot as sorted
       sorted.value.push(pivotIndex)
+      explanation.value.push(`Pivot at index ${pivotIndex} is now sorted.`)
 
       await quickSortHelper(low, pivotIndex - 1)
       await quickSortHelper(pivotIndex + 1, high)
     } else if (low === high) {
       // Mark single element as sorted
       sorted.value.push(low)
+      explanation.value.push(`Single element at index ${low} is sorted.`)
     }
   }
 
@@ -321,4 +404,5 @@ export const quickSort = async () => {
 
   active.value = []
   isSorting.value = false
+  explanation.value.push('Quick Sort completed!')
 }
