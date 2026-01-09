@@ -1,1 +1,35 @@
 @import 'tailwindcss';
+
+.blueprint-grid {
+  /* Dot Matrix Pattern */
+  background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+
+  /* Subtle animation */
+  animation: pan 60s linear infinite;
+
+  /* Vignette / Mask effect using mask-image for better browser support */
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
+
+  opacity: 0.6;
+
+  /* Absolute position full screen */
+  position: fixed; /* Fixed so it doesn't scroll away */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none; /* Let clicks pass through */
+}
+
+@keyframes pan {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 24px 24px;
+  }
+}

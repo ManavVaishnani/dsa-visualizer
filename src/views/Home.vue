@@ -32,10 +32,12 @@ const sortCode = `function bubbleSort(arr) {
 
 <template>
   <div
-    class="flex min-h-screen items-center justify-center bg-gray-50 p-4 font-sans text-gray-900 sm:p-8"
+    class="relative flex min-h-screen items-center justify-center overflow-hidden bg-gray-50 p-4 font-sans text-gray-900 sm:p-8"
   >
     <!-- Main Grid -->
-    <div class="grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-4 md:grid-rows-3">
+    <div
+      class="relative z-10 grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-4 md:grid-rows-3"
+    >
       <!-- Cell 1: Hero (Large 2x2) -->
       <RetroCard class="flex flex-col md:col-span-2 md:row-span-2">
         <NerdyHero />

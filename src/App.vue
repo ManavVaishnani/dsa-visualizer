@@ -8,5 +8,6 @@ useHead({
 </script>
 
 <template>
+  <div class="blueprint-grid"></div>
   <RouterView />
 </template>
