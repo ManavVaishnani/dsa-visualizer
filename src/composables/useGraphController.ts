@@ -44,7 +44,7 @@ export interface Step {
 export const steps = ref<Step[]>([])
 export const stepIndex = ref(-1)
 export const isPlaying = ref(false)
-const playTimer: ReturnType<typeof setInterval> | null = null
+const playTimer = ref<ReturnType<typeof setInterval> | null>(null)
 
 export const graphType = ref<GraphType>('undirected')
 export const visualizationType = ref<VisualizationType>('graph')
@@ -270,7 +270,7 @@ export const playSteps = () => {
 }
 
 export const stopPlaying = () => {
-  if (playTimer.value) clearInterval(playTimer)
+  if (playTimer.value) clearInterval(playTimer.value)
   playTimer.value = null
   isPlaying.value = false
 }
