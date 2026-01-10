@@ -1,0 +1,37 @@
+<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tree Structure -->
+  <!-- Edges -->
+  <line x1="100" y1="25" x2="60" y2="50" stroke="black" stroke-width="2"/>
+  <line x1="100" y1="25" x2="140" y2="50" stroke="black" stroke-width="2"/>
+  <line x1="60" y1="50" x2="40" y2="75" stroke="black" stroke-width="2"/>
+  <line x1="60" y1="50" x2="80" y2="75" stroke="black" stroke-width="2"/>
+  <line x1="140" y1="50" x2="120" y2="75" stroke="black" stroke-width="2"/>
+  <line x1="140" y1="50" x2="160" y2="75" stroke="black" stroke-width="2"/>
+  
+  <!-- Nodes with N-L-R order indicators -->
+  <circle cx="100" cy="20" r="10" fill="black" stroke="black" stroke-width="2"/>
+  <text x="100" y="24" font-family="monospace" font-size="8" font-weight="bold" text-anchor="middle" fill="white">1</text>
+  
+  <circle cx="60" cy="50" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <text x="60" y="54" font-family="monospace" font-size="8" font-weight="bold" text-anchor="middle" fill="black">2</text>
+  
+  <circle cx="140" cy="50" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <text x="140" y="54" font-family="monospace" font-size="8" font-weight="bold" text-anchor="middle" fill="black">5</text>
+  
+  <circle cx="40" cy="75" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <text x="40" y="79" font-family="monospace" font-size="8" font-weight="bold" text-anchor="middle" fill="black">3</text>
+  
+  <circle cx="80" cy="75" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <text x="80" y="79" font-family="monospace" font-size="8" font-weight="bold" text-anchor="middle" fill="black">4</text>
+  
+  <circle cx="120" cy="75" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <text x="120" y="79" font-family="monospace" font-size="8" font-weight="bold" text-anchor="middle" fill="black">6</text>
+  
+  <circle cx="160" cy="75" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <text x="160" y="79" font-family="monospace" font-size="8" font-weight="bold" text-anchor="middle" fill="black">7</text>
+
+  <!-- Traversal path indicator -->
+  <path d="M100 35 L60 65 L40 90" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="3"/>
+  
+  <text x="100" y="110" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle" fill="black">PREORDER_N_L_R</text>
+</svg>

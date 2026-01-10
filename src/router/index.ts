@@ -4,6 +4,7 @@ import Algorithms from '../views/Algorithms.vue'
 import Sorting from '../views/Sorting.vue'
 import Searching from '../views/Searching.vue'
 import Graphs from '../views/Graphs.vue'
+import Trees from '../views/Trees.vue'
 import BubbleSort from '../views/visualize/BubbleSort.vue'
 import SelectionSort from '../views/visualize/SelectionSort.vue'
 import InsertionSort from '../views/visualize/InsertionSort.vue'
@@ -13,6 +14,9 @@ import LinearSearch from '../views/visualize/LinearSearch.vue'
 import BinarySearch from '../views/visualize/BinarySearch.vue'
 import BFS from '../views/visualize/BFS.vue'
 import DFS from '../views/visualize/DFS.vue'
+import InOrderTraversal from '../views/visualize/InOrderTraversal.vue'
+import PreOrderTraversal from '../views/visualize/PreOrderTraversal.vue'
+import PostOrderTraversal from '../views/visualize/PostOrderTraversal.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +26,7 @@ const router = createRouter({
     { path: '/sorting', name: 'sorting', component: Sorting },
     { path: '/searching', name: 'searching', component: Searching },
     { path: '/graphs', name: 'graphs', component: Graphs },
+    { path: '/trees', name: 'trees', component: Trees },
     { path: '/visualize/bubble-sort', name: 'bubble-sort', component: BubbleSort },
     { path: '/visualize/selection-sort', name: 'selection-sort', component: SelectionSort },
     { path: '/visualize/insertion-sort', name: 'insertion-sort', component: InsertionSort },
@@ -31,6 +36,9 @@ const router = createRouter({
     { path: '/visualize/binary-search', name: 'binary-search', component: BinarySearch },
     { path: '/visualize/bfs', name: 'bfs', component: BFS },
     { path: '/visualize/dfs', name: 'dfs', component: DFS },
+    { path: '/visualize/inorder-traversal', name: 'inorder-traversal', component: InOrderTraversal },
+    { path: '/visualize/preorder-traversal', name: 'preorder-traversal', component: PreOrderTraversal },
+    { path: '/visualize/postorder-traversal', name: 'postorder-traversal', component: PostOrderTraversal },
   ],
 })
 

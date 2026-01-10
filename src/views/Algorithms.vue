@@ -60,6 +60,21 @@ const algorithms = [
     href: '/visualize/dfs',
     img: '/dfs.svg',
   },
+  {
+    title: 'In-Order Traversal',
+    href: '/visualize/inorder-traversal',
+    img: '/inorder-traversal.svg',
+  },
+  {
+    title: 'Pre-Order Traversal',
+    href: '/visualize/preorder-traversal',
+    img: '/preorder-traversal.svg',
+  },
+  {
+    title: 'Post-Order Traversal',
+    href: '/visualize/postorder-traversal',
+    img: '/postorder-traversal.svg',
+  },
 ]
 </script>
 

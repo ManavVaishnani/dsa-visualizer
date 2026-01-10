@@ -4,7 +4,7 @@ import AsciiMV from '@/components/home/AsciiMV.vue'
 import NerdyHero from '@/components/home/NerdyHero.vue'
 import RetroCard from '@/components/RetroCard.vue'
 import { useHead } from '@unhead/vue'
-import { ArrowRight, Binary, GitGraph, Search } from 'lucide-vue-next'
+import { ArrowRight, Binary, GitGraph, Search, TreePine, LayoutGrid } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
 useHead({
@@ -116,32 +116,60 @@ const sortCode = `function bubbleSort(arr) {
         <RouterLink to="/graphs" class="absolute inset-0" aria-label="Go to graphs"></RouterLink>
       </RetroCard>
 
-      <!-- Cell 5: CTA / Stats (2x1) -->
-      <RetroCard
-        variant="green"
-        class="flex items-center justify-between md:col-span-2 md:row-span-1"
-      >
-        <div>
-          <h3 class="mb-1 font-mono text-xl font-bold text-black">SYSTEM_STATUS: READY</h3>
-          <p class="font-mono text-sm text-black opacity-70">Explore all available modules.</p>
+      <!-- Cell 5: Trees (1x1) -->
+      <RetroCard class="bg-gray-50 md:col-span-1 md:row-span-1">
+        <div class="mb-2 flex items-center justify-between">
+          <h3 class="font-mono font-bold">TREES</h3>
+          <TreePine class="h-5 w-5" />
         </div>
 
-        <RouterLink
-          to="/algorithms"
-          class="border-2 border-black bg-white px-4 py-2 font-mono font-bold text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-all hover:translate-x-px hover:translate-y-px hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 cursor-pointer"
-        >
-          ALL_ALGOS
-        </RouterLink>
+        <!-- Simple Tree SVG -->
+        <svg viewBox="0 0 100 50" class="h-auto w-full border border-gray-300 bg-white p-2">
+          <line x1="50" y1="10" x2="30" y2="25" stroke="black" stroke-width="2" />
+          <line x1="50" y1="10" x2="70" y2="25" stroke="black" stroke-width="2" />
+          <line x1="30" y1="25" x2="20" y2="40" stroke="black" stroke-width="2" />
+          <line x1="30" y1="25" x2="40" y2="40" stroke="black" stroke-width="2" />
+          <circle cx="50" cy="10" r="5" fill="black" />
+          <circle cx="30" cy="25" r="5" fill="white" stroke="black" stroke-width="2" />
+          <circle cx="70" cy="25" r="5" fill="white" stroke="black" stroke-width="2" />
+          <circle cx="20" cy="40" r="5" fill="white" stroke="black" stroke-width="2" />
+          <circle cx="40" cy="40" r="5" fill="white" stroke="black" stroke-width="2" />
+        </svg>
+
+        <div class="mt-2 font-mono text-xs text-gray-500">InOrder / PreOrder / PostOrder</div>
+        <RouterLink to="/trees" class="absolute inset-0" aria-label="Go to trees"></RouterLink>
       </RetroCard>
 
-      <!-- Cell 6: Extra Info (1x1) - Now 3D ASCII MV -->
+      <!-- Cell 6: CTA / Stats (1x1) -->
+      <RetroCard
+        variant="green"
+        class="group relative flex flex-col justify-between md:col-span-1 md:row-span-1"
+      >
+        <div class="flex items-start justify-between">
+          <LayoutGrid class="h-8 w-8" />
+          <div class="h-3 w-3 rounded-full bg-black animate-pulse"></div>
+        </div>
+
+        <div>
+          <h3 class="font-mono text-lg font-bold">ALL_ALGOS</h3>
+          <p class="font-mono text-[10px] text-black opacity-70 uppercase tracking-tighter">System Status: Ready</p>
+        </div>
+
+        <div class="inline-flex items-center gap-1 font-mono text-xs font-bold group-hover:underline">
+          VIEW_ALL <ArrowRight class="h-3 w-3" />
+        </div>
+
+        <RouterLink to="/algorithms" class="absolute inset-0" aria-label="Go to all algorithms"></RouterLink>
+      </RetroCard>
+
+      <!-- Cell 7: Extra Info (1x1) -->
       <RetroCard
         class="flex flex-col items-center justify-center text-center md:col-span-1 md:row-span-1"
       >
         <AsciiMV />
       </RetroCard>
 
-      <!-- Cell 7: GitHub (1x1) -->
+      <!-- Cell 8: GitHub (1x1) -->
       <RetroCard
         class="group flex flex-col items-center justify-center text-center md:col-span-1 md:row-span-1"
       >
@@ -161,3 +189,8 @@ const sortCode = `function bubbleSort(arr) {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Grid is handled by Tailwind classes */
+</style>
+
