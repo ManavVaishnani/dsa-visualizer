@@ -152,14 +152,22 @@ const sortCode = `function bubbleSort(arr) {
 
         <div>
           <h3 class="font-mono text-lg font-bold">ALL_ALGOS</h3>
-          <p class="font-mono text-[10px] text-black opacity-70 uppercase tracking-tighter">System Status: Ready</p>
+          <p class="font-mono text-[10px] text-black opacity-70 uppercase tracking-tighter">
+            System Status: Ready
+          </p>
         </div>
 
-        <div class="inline-flex items-center gap-1 font-mono text-xs font-bold group-hover:underline">
+        <div
+          class="inline-flex items-center gap-1 font-mono text-xs font-bold group-hover:underline"
+        >
           VIEW_ALL <ArrowRight class="h-3 w-3" />
         </div>
 
-        <RouterLink to="/algorithms" class="absolute inset-0" aria-label="Go to all algorithms"></RouterLink>
+        <RouterLink
+          to="/algorithms"
+          class="absolute inset-0"
+          aria-label="Go to all algorithms"
+        ></RouterLink>
       </RetroCard>
 
       <!-- Cell 7: Extra Info (1x1) -->
@@ -193,4 +201,3 @@ const sortCode = `function bubbleSort(arr) {
 <style scoped>
 /* Grid is handled by Tailwind classes */
 </style>
-

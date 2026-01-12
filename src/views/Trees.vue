@@ -67,9 +67,10 @@ const algorithms = [
       <div class="mb-8 border-2 border-black bg-gray-50 p-6 shadow-[4px_4px_0_0_black]">
         <h2 class="mb-3 font-mono text-lg font-bold uppercase">About Tree Data Structures</h2>
         <p class="mb-4 font-mono text-sm text-gray-700 leading-relaxed">
-          A <strong>Tree</strong> is a non-linear, hierarchical data structure consisting of nodes connected by edges.
-          The top node is called the <strong>root</strong>. Each node can have child nodes, and nodes with the same
-          parent are called <strong>siblings</strong>. Nodes without children are called <strong>leaves</strong>.
+          A <strong>Tree</strong> is a non-linear, hierarchical data structure consisting of nodes
+          connected by edges. The top node is called the <strong>root</strong>. Each node can have
+          child nodes, and nodes with the same parent are called <strong>siblings</strong>. Nodes
+          without children are called <strong>leaves</strong>.
         </p>
         <div class="grid gap-4 md:grid-cols-3">
           <div class="border border-black bg-white p-3">
@@ -113,9 +114,10 @@ const algorithms = [
                   <span class="border border-black px-1 font-mono text-[10px] uppercase">{{
                     algo.complexity
                   }}</span>
-                  <span class="border border-black bg-[#8b5cf6] px-1 font-mono text-[10px] text-white uppercase">{{
-                    algo.order
-                  }}</span>
+                  <span
+                    class="border border-black bg-[#8b5cf6] px-1 font-mono text-[10px] text-white uppercase"
+                    >{{ algo.order }}</span
+                  >
                   <span
                     class="border border-black bg-black px-1 font-mono text-[10px] text-white uppercase"
                     >Visualizer</span

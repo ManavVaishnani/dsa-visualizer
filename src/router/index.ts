@@ -36,10 +36,29 @@ const router = createRouter({
     { path: '/visualize/binary-search', name: 'binary-search', component: BinarySearch },
     { path: '/visualize/bfs', name: 'bfs', component: BFS },
     { path: '/visualize/dfs', name: 'dfs', component: DFS },
-    { path: '/visualize/inorder-traversal', name: 'inorder-traversal', component: InOrderTraversal },
-    { path: '/visualize/preorder-traversal', name: 'preorder-traversal', component: PreOrderTraversal },
-    { path: '/visualize/postorder-traversal', name: 'postorder-traversal', component: PostOrderTraversal },
+    {
+      path: '/visualize/inorder-traversal',
+      name: 'inorder-traversal',
+      component: InOrderTraversal,
+    },
+    {
+      path: '/visualize/preorder-traversal',
+      name: 'preorder-traversal',
+      component: PreOrderTraversal,
+    },
+    {
+      path: '/visualize/postorder-traversal',
+      name: 'postorder-traversal',
+      component: PostOrderTraversal,
+    },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  },
 })
 
 export default router

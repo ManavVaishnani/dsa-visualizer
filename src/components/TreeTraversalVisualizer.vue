@@ -190,7 +190,9 @@ const calculateEdgeStart = (
       v-if="callStack.length > 0"
       class="absolute top-4 right-4 z-20 w-16 border-2 border-black bg-white p-1.5 shadow-[3px_3px_0_0_black] md:top-20 md:w-48 md:p-4 md:shadow-[4px_4px_0_0_black]"
     >
-      <div class="mb-1 hidden font-mono text-[9px] font-bold text-black uppercase md:block md:text-sm">
+      <div
+        class="mb-1 hidden font-mono text-[9px] font-bold text-black uppercase md:block md:text-sm"
+      >
         Call Stack
       </div>
 
@@ -200,7 +202,8 @@ const calculateEdgeStart = (
           :key="nodeId"
           class="flex items-center justify-center border border-black bg-[#8b5cf6] px-0.5 py-0.5 text-[8px] font-bold text-white transition-all md:px-3 md:py-1 md:text-sm"
           :class="{
-            'ring-1 ring-black font-black scale-105 md:ring-2': nodeId === callStack[callStack.length - 1],
+            'ring-1 ring-black font-black scale-105 md:ring-2':
+              nodeId === callStack[callStack.length - 1],
           }"
         >
           {{ treeNodes[nodeId]?.label }}
@@ -221,10 +224,14 @@ const calculateEdgeStart = (
 
         <div class="flex justify-between">
           <span class="text-gray-400">E:</span>
-          <span class="font-bold text-black"> {{ treeEdgeExploredCount }}/{{ treeEdges.length }} </span>
+          <span class="font-bold text-black">
+            {{ treeEdgeExploredCount }}/{{ treeEdges.length }}
+          </span>
         </div>
 
-        <div class="mt-0.5 flex justify-between border-t border-dashed border-gray-300 pt-0.5 md:mt-2 md:border-t-2 md:pt-2">
+        <div
+          class="mt-0.5 flex justify-between border-t border-dashed border-gray-300 pt-0.5 md:mt-2 md:border-t-2 md:pt-2"
+        >
           <span class="font-bold text-[#10b981]">O(N)</span>
           <span class="font-bold text-[#3b82f6]">O(H)</span>
         </div>

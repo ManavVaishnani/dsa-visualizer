@@ -121,7 +121,9 @@ export const selectionSort = async () => {
 
   for (let i = 0; i < arr.length - 1; i++) {
     let minIndex = i
-    explanation.value.push(`Finding minimum element in the unsorted portion starting from index ${i}.`)
+    explanation.value.push(
+      `Finding minimum element in the unsorted portion starting from index ${i}.`,
+    )
 
     // Find the minimum element in the unsorted portion
     for (let j = i + 1; j < arr.length; j++) {
@@ -361,7 +363,9 @@ export const quickSort = async () => {
       if (arr[j] < pivot) {
         i++
         if (i !== j) {
-          explanation.value.push(`${arr[j]} < ${pivot}, swapping ${arr[j]} with element at index ${i}.`)
+          explanation.value.push(
+            `${arr[j]} < ${pivot}, swapping ${arr[j]} with element at index ${i}.`,
+          )
           swapping.value = [i, j]
           await sleep(101 - speed.value)
           ;[arr[i], arr[j]] = [arr[j], arr[i]]

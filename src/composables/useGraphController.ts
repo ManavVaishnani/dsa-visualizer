@@ -396,7 +396,9 @@ export const runBFS = async (start?: number) => {
         }
 
         currentEdge.value = { from: node, to: neighbor }
-        explanation.value.push(`Exploring edge ${nodes.value[node]?.label} -> ${nodes.value[neighbor]?.label}.`)
+        explanation.value.push(
+          `Exploring edge ${nodes.value[node]?.label} -> ${nodes.value[neighbor]?.label}.`,
+        )
         await sleep(500 - speed.value * 4)
 
         visited.add(neighbor)
@@ -594,7 +596,9 @@ export const runDFS = async (start?: number) => {
         }
 
         currentEdge.value = { from: node, to: neighbor }
-        explanation.value.push(`Exploring edge ${nodes.value[node]?.label} -> ${nodes.value[neighbor]?.label}.`)
+        explanation.value.push(
+          `Exploring edge ${nodes.value[node]?.label} -> ${nodes.value[neighbor]?.label}.`,
+        )
         await sleep(500 - speed.value * 4)
         currentEdge.value = null
 

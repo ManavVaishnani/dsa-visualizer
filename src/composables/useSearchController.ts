@@ -133,7 +133,9 @@ export const runBinarySearch = async () => {
 
     mid.value = Math.floor((low.value + high.value) / 2)
     comparisonsCount.value++
-    explanation.value.push(`Current range: [${low.value}...${high.value}]. Midpoint at index ${mid.value} is ${numbers.value[mid.value]}.`)
+    explanation.value.push(
+      `Current range: [${low.value}...${high.value}]. Midpoint at index ${mid.value} is ${numbers.value[mid.value]}.`,
+    )
 
     await sleep((100 - speed.value) * 15 + 50)
 
@@ -145,10 +147,14 @@ export const runBinarySearch = async () => {
     }
 
     if (numbers.value[mid.value] < target.value) {
-      explanation.value.push(`${numbers.value[mid.value]} < ${target.value}, ignoring the left half. New low: ${mid.value + 1}.`)
+      explanation.value.push(
+        `${numbers.value[mid.value]} < ${target.value}, ignoring the left half. New low: ${mid.value + 1}.`,
+      )
       low.value = mid.value + 1
     } else {
-      explanation.value.push(`${numbers.value[mid.value]} > ${target.value}, ignoring the right half. New high: ${mid.value - 1}.`)
+      explanation.value.push(
+        `${numbers.value[mid.value]} > ${target.value}, ignoring the right half. New high: ${mid.value - 1}.`,
+      )
       high.value = mid.value - 1
     }
   }

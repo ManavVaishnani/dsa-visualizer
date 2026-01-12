@@ -107,7 +107,7 @@ export const generateBinaryTree = () => {
     isLeft: boolean,
     level: number,
     xMin: number,
-    xMax: number
+    xMax: number,
   ) => {
     const availableHeight = height - marginYTop - marginYBottom
     const levelHeight = availableHeight / 5 // Max 5 levels
@@ -292,7 +292,9 @@ export const runInOrderTraversal = async () => {
     visitedTreeNodes.value.push(nodeId)
     traversalResult.value.push(node.value)
     treeVisitedCount.value++
-    treeExplanation.value.push(`VISIT: ${node.label} → Result: [${traversalResult.value.join(', ')}]`)
+    treeExplanation.value.push(
+      `VISIT: ${node.label} → Result: [${traversalResult.value.join(', ')}]`,
+    )
     await sleep(700 - treeSpeed.value * 6)
 
     // Traverse right subtree
@@ -315,7 +317,9 @@ export const runInOrderTraversal = async () => {
   currentTreeEdge.value = null
   callStack.value = []
   isTreeTraversing.value = false
-  treeExplanation.value.push(`In-Order Traversal Complete! Result: [${traversalResult.value.join(', ')}]`)
+  treeExplanation.value.push(
+    `In-Order Traversal Complete! Result: [${traversalResult.value.join(', ')}]`,
+  )
 }
 
 // Pre-Order Traversal: Node -> Left -> Right
@@ -340,7 +344,9 @@ export const runPreOrderTraversal = async () => {
     visitedTreeNodes.value.push(nodeId)
     traversalResult.value.push(node.value)
     treeVisitedCount.value++
-    treeExplanation.value.push(`VISIT: ${node.label} → Result: [${traversalResult.value.join(', ')}]`)
+    treeExplanation.value.push(
+      `VISIT: ${node.label} → Result: [${traversalResult.value.join(', ')}]`,
+    )
     await sleep(700 - treeSpeed.value * 6)
 
     // Traverse left subtree
@@ -375,7 +381,9 @@ export const runPreOrderTraversal = async () => {
   currentTreeEdge.value = null
   callStack.value = []
   isTreeTraversing.value = false
-  treeExplanation.value.push(`Pre-Order Traversal Complete! Result: [${traversalResult.value.join(', ')}]`)
+  treeExplanation.value.push(
+    `Pre-Order Traversal Complete! Result: [${traversalResult.value.join(', ')}]`,
+  )
 }
 
 // Post-Order Traversal: Left -> Right -> Node
@@ -426,7 +434,9 @@ export const runPostOrderTraversal = async () => {
     visitedTreeNodes.value.push(nodeId)
     traversalResult.value.push(node.value)
     treeVisitedCount.value++
-    treeExplanation.value.push(`VISIT: ${node.label} → Result: [${traversalResult.value.join(', ')}]`)
+    treeExplanation.value.push(
+      `VISIT: ${node.label} → Result: [${traversalResult.value.join(', ')}]`,
+    )
     await sleep(700 - treeSpeed.value * 6)
 
     callStack.value.pop()
@@ -439,7 +449,9 @@ export const runPostOrderTraversal = async () => {
   currentTreeEdge.value = null
   callStack.value = []
   isTreeTraversing.value = false
-  treeExplanation.value.push(`Post-Order Traversal Complete! Result: [${traversalResult.value.join(', ')}]`)
+  treeExplanation.value.push(
+    `Post-Order Traversal Complete! Result: [${traversalResult.value.join(', ')}]`,
+  )
 }
 
 // Generate steps for step-by-step mode
