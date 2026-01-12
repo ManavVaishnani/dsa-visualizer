@@ -178,13 +178,38 @@ export const generateGraph = () => {
   const marginTop = 120
   const marginBottom = 120
 
-  // 1️⃣ Generate random nodes
-  nodes.value = Array.from({ length: nodeCount }, (_, i) => ({
-    id: i,
-    x: Math.random() * (width - marginX * 2) + marginX,
-    y: Math.random() * (height - marginTop - marginBottom) + marginTop,
-    label: String.fromCharCode(65 + i), // A, B, C...
-  }))
+  // 1️⃣ Generate random nodes with minimum distance
+  const newNodes: Node[] = []
+  const minNodeDistance = 100 // Minimum distance between nodes
+
+  for (let i = 0; i < nodeCount; i++) {
+    let x, y, tooClose
+    let attempts = 0
+    do {
+      tooClose = false
+      x = Math.random() * (width - marginX * 2) + marginX
+      y = Math.random() * (height - marginTop - marginBottom) + marginTop
+
+      for (const node of newNodes) {
+        const dx = x - node.x
+        const dy = y - node.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < minNodeDistance) {
+          tooClose = true
+          break
+        }
+      }
+      attempts++
+    } while (tooClose && attempts < 100)
+
+    newNodes.push({
+      id: i,
+      x,
+      y,
+      label: String.fromCharCode(65 + i),
+    })
+  }
+  nodes.value = newNodes
 
   const newEdges: Edge[] = []
 

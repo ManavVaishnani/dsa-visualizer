@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import {
   currentEdge,
   currentNode,
@@ -40,28 +41,102 @@ const getEdgeColor = (from: number, to: number) => {
   return '#000000' // Black - default
 }
 
-// Calculate the edge endpoint position (shortened to stop at node radius)
-const calculateEdgeEndpoint = (
-  fromX: number,
-  fromY: number,
-  toX: number,
-  toY: number,
-  nodeRadius = 30,
-) => {
-  const dx = toX - fromX
-  const dy = toY - fromY
-  const angle = Math.atan2(dy, dx)
-  return {
-    x: toX - nodeRadius * Math.cos(angle),
-    y: toY - nodeRadius * Math.sin(angle),
+// Calculate edge path with optional curvature
+const getEdgePath = (fromId: number, toId: number) => {
+  const from = nodes.value[fromId]
+  const to = nodes.value[toId]
+  if (!from || !to) return ''
+
+  if (fromId === toId) {
+    // Self-loop
+    const x = from.x
+    const y = from.y - 30 // Start from top of node
+    return `M ${x + 5} ${y + 2} A 15 15 0 1 0 ${x - 5} ${y + 2}`
   }
+
+  const dx = to.x - from.x
+  const dy = to.y - from.y
+  const dist = Math.sqrt(dx * dx + dy * dy)
+  const nodeRadius = 30
+
+  // Start and end points at the boundary of the nodes
+  const startX = from.x + (dx / dist) * nodeRadius
+  const startY = from.y + (dy / dist) * nodeRadius
+  const endX = to.x - (dx / dist) * nodeRadius
+  const endY = to.y - (dy / dist) * nodeRadius
+
+  // Check for bi-directional edges (A->B and B->A) or for slight curvature to avoid straight line overlaps
+  const isBiDirectional =
+    graphType.value === 'directed' && edges.value.some((e) => e.from === toId && e.to === fromId)
+
+  // Use curvature for bi-directional or a very slight nudge for directed to avoid overlap
+  const midX = (startX + endX) / 2
+  const midY = (startY + endY) / 2
+  const invDist = 1 / dist
+  const nx = -dy * invDist
+  const ny = dx * invDist
+
+  if (isBiDirectional) {
+    const offset = 25
+    const controlX = midX + nx * offset
+    const controlY = midY + ny * offset
+    return `M ${startX} ${startY} Q ${controlX} ${controlY} ${endX} ${endY}`
+  }
+
+  // Still add a tiny curve for directed graphs to help differentiate overlapping routes
+  if (graphType.value === 'directed') {
+    const offset = 4
+    const controlX = midX + nx * offset
+    const controlY = midY + ny * offset
+    return `M ${startX} ${startY} Q ${controlX} ${controlY} ${endX} ${endY}`
+  }
+
+  return `M ${startX} ${startY} L ${endX} ${endY}`
+}
+
+// Node dragging logic
+const draggedNodeId = ref<number | null>(null)
+const svgRef = ref<SVGSVGElement | null>(null)
+
+const handleMouseDown = (nodeId: number) => {
+  if (isTraversing.value) return
+  draggedNodeId.value = nodeId
+  window.addEventListener('mousemove', handleMouseMove)
+  window.addEventListener('mouseup', handleMouseUp)
+}
+
+const handleMouseMove = (e: MouseEvent) => {
+  if (draggedNodeId.value === null || !svgRef.value) return
+
+  const svg = svgRef.value
+  const pt = svg.createSVGPoint()
+  pt.x = e.clientX
+  pt.y = e.clientY
+  const cursorPoint = pt.matrixTransform(svg.getScreenCTM()?.inverse())
+
+  const node = nodes.value.find((n) => n.id === draggedNodeId.value)
+  if (node) {
+    node.x = cursorPoint.x
+    node.y = cursorPoint.y
+  }
+}
+
+const handleMouseUp = () => {
+  draggedNodeId.value = null
+  window.removeEventListener('mousemove', handleMouseMove)
+  window.removeEventListener('mouseup', handleMouseUp)
 }
 </script>
 
 <template>
   <div class="relative h-full w-full overflow-hidden border-2 border-black">
     <AlgorithmExplanation :explanation="explanation" />
-    <svg class="h-full w-full" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+    <svg
+      ref="svgRef"
+      class="h-full w-full"
+      viewBox="0 0 800 600"
+      preserveAspectRatio="xMidYMid meet"
+    >
       <!-- Define arrow markers for directed edges -->
       <defs>
         <marker
@@ -100,27 +175,11 @@ const calculateEdgeEndpoint = (
       </defs>
 
       <!-- Draw edges first (so they appear behind nodes) -->
-      <line
+      <path
         v-for="(edge, index) in edges"
         :key="'edge-' + index"
-        :x1="nodes[edge.from]?.x"
-        :y1="nodes[edge.from]?.y"
-        :x2="
-          calculateEdgeEndpoint(
-            nodes[edge.from]?.x,
-            nodes[edge.from]?.y,
-            nodes[edge.to]?.x,
-            nodes[edge.to]?.y,
-          ).x
-        "
-        :y2="
-          calculateEdgeEndpoint(
-            nodes[edge.from]?.x,
-            nodes[edge.from]?.y,
-            nodes[edge.to]?.x,
-            nodes[edge.to]?.y,
-          ).y
-        "
+        :d="getEdgePath(edge.from, edge.to)"
+        fill="none"
         :stroke="getEdgeColor(edge.from, edge.to)"
         :stroke-width="isEdgeActive(edge.from, edge.to) ? 4 : 2"
         :marker-end="
@@ -132,32 +191,42 @@ const calculateEdgeEndpoint = (
                 : 'url(#arrowhead-gray)'
             : undefined
         "
-        class="transition-all duration-300"
+        class="duration-300"
+        :class="{ 'transition-all': draggedNodeId === null }"
       />
 
       <!-- Draw nodes -->
-      <g v-for="node in nodes" :key="node.id" class="transition-all duration-500">
+      <g
+        v-for="node in nodes"
+        :key="node.id"
+        class="duration-500"
+        :class="{ 'transition-all': draggedNodeId === null }"
+        :transform="`translate(${node.x}, ${node.y})`"
+        @mousedown="handleMouseDown(node.id)"
+      >
         <circle
-          :cx="node.x"
-          :cy="node.y"
+          cx="0"
+          cy="0"
           :r="30"
           :fill="getNodeColor(node.id)"
           stroke="black"
           stroke-width="2"
-          class="cursor-pointer opacity-100 transition-all duration-300"
+          class="cursor-grab opacity-100 duration-300"
           :class="{
+            'transition-all': draggedNodeId === null,
             'border-0 ring-4 ring-[#22c55e]': selectedStartNode === node.id,
             'animate-pulse': currentNode === node.id,
+            'cursor-grabbing': draggedNodeId === node.id,
           }"
           @click="!isTraversing && (selectedStartNode = node.id)"
         />
 
         <text
-          :x="node.x"
-          :y="node.y"
+          x="0"
+          y="0"
           text-anchor="middle"
           dominant-baseline="middle"
-          class="font-mono text-xl font-bold select-none"
+          class="pointer-events-none font-mono text-xl font-bold select-none"
           fill="black"
         >
           {{ node.label }}
