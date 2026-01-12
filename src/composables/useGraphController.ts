@@ -49,6 +49,8 @@ export const setInitialInfo = (algo: GraphAlgo) => {
   explanation.value = info[algo]
 }
 export const selectedStartNode = ref<number | null>(null)
+export const selectedTargetNode = ref<number | null>(null)
+export const targetFound = ref(false)
 export const dfsCallStack = ref<number[]>([])
 export const visitedCount = ref(0)
 export const edgeExploredCount = ref(0)
@@ -153,6 +155,8 @@ const resetGraphState = () => {
   queue.value = []
   currentEdge.value = null
   selectedStartNode.value = null
+  selectedTargetNode.value = null
+  targetFound.value = false
   dfsCallStack.value = []
   visitedCount.value = 0
   edgeExploredCount.value = 0
@@ -238,14 +242,7 @@ export const generateGraph = () => {
   edges.value = newEdges
 
   // 4️⃣ Reset traversal state
-  visitedNodes.value = []
-  currentNode.value = null
-  queue.value = []
-  currentEdge.value = null
-  selectedStartNode.value = null
-  dfsCallStack.value = []
-  visitedCount.value = 0
-  edgeExploredCount.value = 0
+  resetGraphState()
 }
 
 const buildAdjacencyList = () => {
@@ -355,6 +352,7 @@ export const runBFS = async (start?: number) => {
   currentNode.value = null
   queue.value = []
   currentEdge.value = null
+  targetFound.value = false
   explanation.value = ['Starting BFS traversal...']
 
   // Build adjacency list
@@ -378,6 +376,12 @@ export const runBFS = async (start?: number) => {
     visitedCount.value++
     currentNode.value = null
     explanation.value.push(`Marked ${nodes.value[node]?.label} as visited.`)
+
+    if (node === selectedTargetNode.value) {
+      explanation.value.push(`Target node ${nodes.value[node]?.label} reached!`)
+      targetFound.value = true
+      break
+    }
 
     for (const neighbor of adjList[node]) {
       while (isPaused.value) await sleep(100)
@@ -474,6 +478,11 @@ export const generateBFSSteps = (start?: number): Step[] => {
       }),
     )
 
+    if (node === selectedTargetNode.value) {
+      stepList.push(snapshot({ description: `Target ${nodes.value[node]?.label} found!` }))
+      break
+    }
+
     for (const neighbor of adjList[node]) {
       const edgeKey =
         graphType.value === 'directed' ? `${node}->${neighbor}` : [node, neighbor].sort().join('-')
@@ -539,6 +548,7 @@ export const runDFS = async (start?: number) => {
   currentNode.value = null
   currentEdge.value = null
   queue.value = []
+  targetFound.value = false
   dfsCallStack.value = []
   explanation.value = ['Starting DFS traversal...']
 
@@ -565,6 +575,12 @@ export const runDFS = async (start?: number) => {
     currentNode.value = null
     explanation.value.push(`Marked ${nodes.value[node]?.label} as visited.`)
 
+    if (node === selectedTargetNode.value) {
+      explanation.value.push(`Target node ${nodes.value[node]?.label} reached!`)
+      targetFound.value = true
+      return true // Found target
+    }
+
     for (const neighbor of adjList[node]) {
       while (isPaused.value) await sleep(100)
 
@@ -582,11 +598,12 @@ export const runDFS = async (start?: number) => {
         await sleep(500 - speed.value * 4)
         currentEdge.value = null
 
-        await dfs(neighbor)
+        if (await dfs(neighbor)) return true // Found target in subtree
       }
     }
 
     dfsCallStack.value.pop()
+    return false
   }
 
   await dfs(startNode)
@@ -649,6 +666,11 @@ export const generateDFSSteps = (start?: number): Step[] => {
       }),
     )
 
+    if (node === selectedTargetNode.value) {
+      stepList.push(snapshot({ description: `Target ${nodes.value[node]?.label} found!` }))
+      return true
+    }
+
     for (const neighbor of adjList[node]) {
       const edgeKey =
         graphType.value === 'directed' ? `${node}->${neighbor}` : [node, neighbor].sort().join('-')
@@ -674,7 +696,7 @@ export const generateDFSSteps = (start?: number): Step[] => {
         )
 
         localEdge = null
-        dfs(neighbor)
+        if (dfs(neighbor)) return true
       }
     }
 
@@ -691,6 +713,7 @@ export const generateDFSSteps = (start?: number): Step[] => {
         description: `backtrack ${node}`,
       }),
     )
+    return false
   }
 
   // initial
@@ -723,6 +746,8 @@ export const resetGraph = () => {
   queue.value = []
   currentEdge.value = null
   selectedStartNode.value = null
+  selectedTargetNode.value = null
+  targetFound.value = false
   dfsCallStack.value = []
   visitedCount.value = 0
   edgeExploredCount.value = 0

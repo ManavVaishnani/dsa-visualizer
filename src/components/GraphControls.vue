@@ -78,6 +78,7 @@ const graphOptions = [
         v-if="visualizationType === 'graph'"
         v-model="graphType"
         :options="graphOptions"
+        @change="generateData"
         class="w-auto min-w-30"
       />
       <button

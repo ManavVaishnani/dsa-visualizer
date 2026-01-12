@@ -44,7 +44,7 @@ watch(
     <!-- Explanation Card -->
     <div
       v-if="!isHidden"
-      class="pointer-events-auto flex h-64 w-72 origin-bottom flex-col overflow-hidden rounded-none border-[3px] border-black bg-white shadow-[6px_6px_0px_0px_black] transition-all duration-500 md:h-[calc(100vh-320px)] md:max-h-96 md:w-80 md:origin-top md:shadow-[8px_8px_0px_0px_black] lg:w-96"
+      class="pointer-events-auto flex h-64 w-72 origin-bottom flex-col overflow-hidden rounded-none border-[3px] border-black bg-white shadow-[5px_5px_0px_0px_black] transition-all duration-500 md:h-[calc(100vh-320px)] md:max-h-96 md:w-80 md:origin-top md:shadow-[5px_5px_0px_0px_black] lg:w-96"
     >
       <!-- Header -->
       <div class="flex items-center justify-between border-b-4 border-black bg-[#fafafa] p-4">
