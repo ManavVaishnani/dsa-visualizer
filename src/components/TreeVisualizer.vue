@@ -9,6 +9,8 @@ import {
   nodes,
   queue,
   selectedStartNode,
+  selectedTargetNode,
+  targetFound,
   explanation,
   visitedCount,
   visitedNodes,
@@ -19,7 +21,8 @@ const getNodeColor = (nodeId: number) => {
   if (currentNode.value === nodeId) return '#f59e0b' // Orange
   if (visitedNodes.value.includes(nodeId)) return '#10b981' // Green
   if (queue.value.includes(nodeId)) return '#6366f1' // Indigo
-  if (selectedStartNode.value === nodeId) return '#22c55e' // Green 400
+  if (selectedTargetNode.value === nodeId) return '#ef4444' // Red 500 for Target
+  if (selectedStartNode.value === nodeId) return '#22c55e' // Green 400 for Start
   return '#ffffff' // White default
 }
 
@@ -55,6 +58,34 @@ const calculateEdgeEndpoint = (
     y: toY - nodeRadius * Math.sin(angle),
   }
 }
+
+// Node selection logic
+const handleNodeClick = (nodeId: number) => {
+  if (isTraversing.value) return
+
+  if (selectedStartNode.value === null) {
+    selectedStartNode.value = nodeId
+  } else if (selectedTargetNode.value === null && selectedStartNode.value !== nodeId) {
+    selectedTargetNode.value = nodeId
+  } else if (selectedStartNode.value === nodeId) {
+    // Deselect start (and target if set)
+    selectedStartNode.value = null
+    selectedTargetNode.value = null
+  } else if (selectedTargetNode.value === nodeId) {
+    // Deselect target
+    selectedTargetNode.value = null
+  }
+}
+
+// Auto-dismiss target found message
+import { watch } from 'vue'
+watch(targetFound, (newVal) => {
+  if (newVal) {
+    setTimeout(() => {
+      targetFound.value = false
+    }, 5000)
+  }
+})
 </script>
 
 <template>
@@ -99,10 +130,11 @@ const calculateEdgeEndpoint = (
           stroke-width="2"
           class="cursor-pointer opacity-100 transition-all duration-300"
           :class="{
-            'border-0 ring-4 ring-[#22c55e]': selectedStartNode === node.id,
+            'ring-4 ring-[#22c55e] border-black': selectedStartNode === node.id,
+            'ring-4 ring-[#ef4444] border-black': selectedTargetNode === node.id,
             'animate-pulse': currentNode === node.id,
           }"
-          @click="!isTraversing && (selectedStartNode = node.id)"
+          @click="handleNodeClick(node.id)"
         />
 
         <text
@@ -176,12 +208,22 @@ const calculateEdgeEndpoint = (
         Top ↑
       </div>
     </div>
-    <!-- Selected Start Node -->
+    <!-- Selection Overlay -->
     <div
-      v-if="selectedStartNode === null"
+      v-if="
+        !isTraversing && !targetFound && (selectedStartNode === null || selectedTargetNode === null)
+      "
       class="absolute top-4 left-1/2 z-10 -translate-x-1/2 rounded-none border-2 border-black bg-white px-4 py-2 font-mono text-sm font-bold text-black shadow-[5px_5px_0px_0px_black]"
     >
-      SELECT_START_NODE
+      {{ selectedStartNode === null ? 'SELECT_START_NODE' : 'SELECT_TARGET_NODE' }}
+    </div>
+
+    <!-- Success Message Overlay -->
+    <div
+      v-if="targetFound"
+      class="absolute top-4 left-1/2 z-50 -translate-x-1/2 animate-bounce rounded-none border-2 border-black bg-[#10b981] px-4 py-2 font-mono text-sm font-black text-white shadow-[4px_4px_0_0_black] md:px-6 md:py-3 md:text-lg md:shadow-[5px_5px_0_0_black]"
+    >
+      TARGET_REACHED: {{ nodes[selectedTargetNode!]?.label }}
     </div>
 
     <!-- Top-Left Overlay (Metrics) -->
@@ -222,16 +264,24 @@ const calculateEdgeEndpoint = (
       <div class="mb-2 font-bold text-black uppercase">Tree Legend</div>
       <div class="space-y-2">
         <div class="flex items-center gap-2">
-          <div class="size-4 rounded-full border border-black bg-[#3b82f6]"></div>
-          <span class="text-xs text-gray-600 uppercase">Node</span>
+          <div class="size-4 border border-black bg-[#22c55e]"></div>
+          <span class="text-xs text-gray-600 uppercase">Start</span>
         </div>
         <div class="flex items-center gap-2">
-          <div class="size-4 rounded-full border border-black bg-[#f59e0b]"></div>
-          <span class="text-xs text-gray-600 uppercase">Current</span>
+          <div class="size-4 border border-black bg-[#ef4444]"></div>
+          <span class="text-xs text-gray-600 uppercase">Target</span>
         </div>
         <div class="flex items-center gap-2">
-          <div class="size-4 rounded-full border border-black bg-[#10b981]"></div>
-          <span class="text-xs text-gray-600 uppercase">Visited</span>
+          <div class="size-4 border border-black bg-[#6366f1]"></div>
+          <span class="text-xs text-gray-600 uppercase">Queued</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="size-4 border border-black bg-[#f59e0b]"></div>
+          <span class="text-xs text-gray-600 uppercase">Active</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="size-4 border border-black bg-[#10b981]"></div>
+          <span class="text-xs text-gray-600 uppercase">Done</span>
         </div>
       </div>
     </div>

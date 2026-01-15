@@ -63,6 +63,7 @@ export interface Step {
   dfsCallStack: number[]
   visitedCount: number
   edgeExploredCount: number
+  targetFound: boolean
   description?: string
 }
 
@@ -271,6 +272,7 @@ const snapshot = (opts: Partial<Step> = {}): Step => ({
   dfsCallStack: [...dfsCallStack.value],
   visitedCount: visitedCount.value,
   edgeExploredCount: edgeExploredCount.value,
+  targetFound: targetFound.value,
   ...opts,
 })
 
@@ -285,6 +287,7 @@ const applyStep = (index: number) => {
   dfsCallStack.value = [...s.dfsCallStack]
   visitedCount.value = s.visitedCount
   edgeExploredCount.value = s.edgeExploredCount
+  targetFound.value = s.targetFound
   if (s.description) {
     explanation.value.push(s.description)
   }
@@ -445,6 +448,7 @@ export const generateBFSSteps = (start?: number): Step[] => {
     dfsCallStack: [...localDfsStack],
     visitedCount: localVisitedCount,
     edgeExploredCount: localEdgeCount,
+    targetFound: false,
     description: 'start',
   })
 
@@ -481,7 +485,12 @@ export const generateBFSSteps = (start?: number): Step[] => {
     )
 
     if (node === selectedTargetNode.value) {
-      stepList.push(snapshot({ description: `Target ${nodes.value[node]?.label} found!` }))
+      stepList.push(
+        snapshot({
+          targetFound: true,
+          description: `Target ${nodes.value[node]?.label} found!`,
+        }),
+      )
       break
     }
 
@@ -530,7 +539,7 @@ export const generateBFSSteps = (start?: number): Step[] => {
     }
   }
 
-  stepList.push(snapshot({ description: 'finished' }))
+  stepList.push(snapshot({ targetFound: targetFound.value, description: 'finished' }))
   return stepList
 }
 
@@ -671,7 +680,12 @@ export const generateDFSSteps = (start?: number): Step[] => {
     )
 
     if (node === selectedTargetNode.value) {
-      stepList.push(snapshot({ description: `Target ${nodes.value[node]?.label} found!` }))
+      stepList.push(
+        snapshot({
+          targetFound: true,
+          description: `Target ${nodes.value[node]?.label} found!`,
+        }),
+      )
       return true
     }
 
@@ -721,9 +735,9 @@ export const generateDFSSteps = (start?: number): Step[] => {
   }
 
   // initial
-  stepList.push(snapshot({ description: 'start' }))
+  stepList.push(snapshot({ targetFound: false, description: 'start' }))
   dfs(startNode)
-  stepList.push(snapshot({ description: 'finished' }))
+  stepList.push(snapshot({ targetFound: targetFound.value, description: 'finished' }))
 
   return stepList
 }
