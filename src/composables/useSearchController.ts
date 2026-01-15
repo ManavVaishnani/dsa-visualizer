@@ -32,24 +32,26 @@ const waitIfPaused = async () => {
 }
 
 export const currentAlgo = ref<SearchAlgo | null>(null)
+export const searchInfo = ref<string[]>([])
 
 export const setInitialInfo = (algo: SearchAlgo) => {
   currentAlgo.value = algo
   if (algo === 'linear') {
-    explanation.value = [
+    searchInfo.value = [
       'ALGO: Linear Search',
       'WHAT: A simple algorithm that checks every element sequentially.',
       'WHY: Works on unsorted data and is easy to implement.',
       'WHERE: Small datasets or unsorted lists.',
     ]
   } else {
-    explanation.value = [
+    searchInfo.value = [
       'ALGO: Binary Search',
       'WHAT: A fast search that divides the search interval in half.',
       'WHY: Extremely efficient for large datasets (O(log n)).',
       'WHERE: Sorted arrays, database indexing.',
     ]
   }
+  explanation.value = [...searchInfo.value]
 }
 
 export const resetState = () => {
@@ -78,15 +80,15 @@ export const generateRandomArray = (size = 10, min = 1, max = 99) => {
 
   if (currentAlgo.value === 'binary') {
     numbers.value.sort((a, b) => a - b)
-    explanation.value = ['Generated new random sorted array for Binary Search.']
+    explanation.value.push('Generated new random sorted array for Binary Search.')
   } else {
-    explanation.value = ['Generated new random array.']
+    explanation.value.push('Generated new random array.')
   }
 }
 
 export const sortArray = () => {
   numbers.value = [...numbers.value].sort((a, b) => a - b)
-  explanation.value = ['Sorted the array for Binary Search.']
+  explanation.value.push('Sorted the array for Binary Search.')
 }
 
 export const runLinearSearch = async () => {

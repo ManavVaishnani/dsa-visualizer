@@ -34,6 +34,7 @@ export const treeExplanation = ref<string[]>([])
 
 export type TreeAlgo = 'inorder' | 'preorder' | 'postorder'
 export const currentTreeAlgo = ref<TreeAlgo | null>(null)
+export const treeInfo = ref<string[]>([])
 
 export const setTreeInitialInfo = (algo: TreeAlgo) => {
   currentTreeAlgo.value = algo
@@ -57,7 +58,8 @@ export const setTreeInitialInfo = (algo: TreeAlgo) => {
       'WHERE: Memory cleanup, expression evaluation, children-first operations.',
     ],
   }
-  treeExplanation.value = info[algo]
+  treeInfo.value = info[algo]
+  treeExplanation.value = [...treeInfo.value]
 }
 
 export const treeVisitedCount = ref(0)
@@ -263,7 +265,8 @@ export const runInOrderTraversal = async () => {
   isTreeTraversing.value = true
   isTreePaused.value = false
   resetTreeState()
-  treeExplanation.value = ['Starting In-Order Traversal (Left → Node → Right)...']
+  treeExplanation.value = [...treeInfo.value]
+  treeExplanation.value.push('Starting In-Order Traversal (Left → Node → Right)...')
 
   const inOrder = async (nodeId: number | null) => {
     if (nodeId === null) return
@@ -329,7 +332,8 @@ export const runPreOrderTraversal = async () => {
   isTreeTraversing.value = true
   isTreePaused.value = false
   resetTreeState()
-  treeExplanation.value = ['Starting Pre-Order Traversal (Node → Left → Right)...']
+  treeExplanation.value = [...treeInfo.value]
+  treeExplanation.value.push('Starting Pre-Order Traversal (Node → Left → Right)...')
 
   const preOrder = async (nodeId: number | null) => {
     if (nodeId === null) return
@@ -393,7 +397,8 @@ export const runPostOrderTraversal = async () => {
   isTreeTraversing.value = true
   isTreePaused.value = false
   resetTreeState()
-  treeExplanation.value = ['Starting Post-Order Traversal (Left → Right → Node)...']
+  treeExplanation.value = [...treeInfo.value]
+  treeExplanation.value.push('Starting Post-Order Traversal (Left → Right → Node)...')
 
   const postOrder = async (nodeId: number | null) => {
     if (nodeId === null) return
@@ -813,6 +818,8 @@ export const generatePostOrderSteps = (): TreeStep[] => {
 
 export const prepareInOrderSteps = (autoPlay = false) => {
   stopTreePlaying()
+  treeExplanation.value = [...treeInfo.value]
+  treeExplanation.value.push('Prepared In-Order steps.')
   treeSteps.value = generateInOrderSteps()
   treeStepIndex.value = -1
   if (autoPlay) playTreeSteps()
@@ -820,6 +827,8 @@ export const prepareInOrderSteps = (autoPlay = false) => {
 
 export const preparePreOrderSteps = (autoPlay = false) => {
   stopTreePlaying()
+  treeExplanation.value = [...treeInfo.value]
+  treeExplanation.value.push('Prepared Pre-Order steps.')
   treeSteps.value = generatePreOrderSteps()
   treeStepIndex.value = -1
   if (autoPlay) playTreeSteps()
@@ -827,6 +836,8 @@ export const preparePreOrderSteps = (autoPlay = false) => {
 
 export const preparePostOrderSteps = (autoPlay = false) => {
   stopTreePlaying()
+  treeExplanation.value = [...treeInfo.value]
+  treeExplanation.value.push('Prepared Post-Order steps.')
   treeSteps.value = generatePostOrderSteps()
   treeStepIndex.value = -1
   if (autoPlay) playTreeSteps()

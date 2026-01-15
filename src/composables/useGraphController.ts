@@ -29,6 +29,7 @@ export const explanation = ref<string[]>([])
 
 export type GraphAlgo = 'bfs' | 'dfs'
 export const currentGraphAlgo = ref<GraphAlgo | null>(null)
+export const algoInfo = ref<string[]>([])
 
 export const setInitialInfo = (algo: GraphAlgo) => {
   currentGraphAlgo.value = algo
@@ -46,7 +47,8 @@ export const setInitialInfo = (algo: GraphAlgo) => {
       'WHERE: Solving puzzles, topological sorting, scheduling.',
     ],
   }
-  explanation.value = info[algo]
+  algoInfo.value = info[algo]
+  explanation.value = [...algoInfo.value]
 }
 export const selectedStartNode = ref<number | null>(null)
 export const selectedTargetNode = ref<number | null>(null)
@@ -356,7 +358,8 @@ export const runBFS = async (start?: number) => {
   queue.value = []
   currentEdge.value = null
   targetFound.value = false
-  explanation.value = ['Starting BFS traversal...']
+  explanation.value = [...algoInfo.value]
+  explanation.value.push('Starting BFS traversal...')
 
   // Build adjacency list
   const adjList = buildAdjacencyList()
@@ -561,7 +564,8 @@ export const runDFS = async (start?: number) => {
   queue.value = []
   targetFound.value = false
   dfsCallStack.value = []
-  explanation.value = ['Starting DFS traversal...']
+  explanation.value = [...algoInfo.value]
+  explanation.value.push('Starting DFS traversal...')
 
   // Build adjacency list
   const adjList = buildAdjacencyList()
@@ -744,6 +748,8 @@ export const generateDFSSteps = (start?: number): Step[] => {
 
 export const prepareBFSSteps = (start?: number, autoPlay = false) => {
   stopPlaying()
+  explanation.value = [...algoInfo.value]
+  explanation.value.push('Prepared BFS steps.')
   steps.value = generateBFSSteps(start)
   stepIndex.value = -1
   if (autoPlay) playSteps()
@@ -751,6 +757,8 @@ export const prepareBFSSteps = (start?: number, autoPlay = false) => {
 
 export const prepareDFSSteps = (start?: number, autoPlay = false) => {
   stopPlaying()
+  explanation.value = [...algoInfo.value]
+  explanation.value.push('Prepared DFS steps.')
   steps.value = generateDFSSteps(start)
   stepIndex.value = -1
   if (autoPlay) playSteps()
