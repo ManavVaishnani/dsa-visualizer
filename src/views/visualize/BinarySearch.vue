@@ -38,6 +38,16 @@ useHead({
 })
 
 const showNotFoundMessage = ref(false)
+const showSuccessMessage = ref(false)
+
+watch(foundIndex, (newValue) => {
+  if (newValue !== null) {
+    showSuccessMessage.value = true
+    setTimeout(() => {
+      showSuccessMessage.value = false
+    }, 5000)
+  }
+})
 
 watch(notFound, (newValue) => {
   if (newValue) {
@@ -59,6 +69,14 @@ onMounted(() => {
     <template #controls>
       <SearchControls />
     </template>
+
+    <!-- Success Message Overlay -->
+    <div
+      v-if="showSuccessMessage"
+      class="absolute top-4 left-1/2 z-50 -translate-x-1/2 animate-bounce rounded-none border-2 border-black bg-[#10b981] px-4 py-2 font-mono text-sm font-black text-white shadow-[4px_4px_0_0_black] md:px-6 md:py-3 md:text-lg md:shadow-[5px_5px_0_0_black]"
+    >
+      TARGET_FOUND: {{ target }} AT INDEX {{ foundIndex }}
+    </div>
 
     <!-- Notification Popup -->
     <div
@@ -90,7 +108,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="flex h-full flex-col items-center justify-center p-6">
+    <div class="relative flex h-full flex-col items-center justify-center p-6">
       <ArrayVisualizer
         :numbers="numbers"
         :target="target"

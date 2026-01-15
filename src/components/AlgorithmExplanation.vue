@@ -27,7 +27,7 @@ watch(
 <template>
   <!-- Unified Positioning Container -->
   <div
-    class="pointer-events-none absolute bottom-4 right-4 z-50 flex flex-col-reverse items-end gap-3 transition-all duration-500 ease-in-out md:top-4 md:bottom-auto md:flex-col"
+    class="pointer-events-none absolute bottom-2 right-2 z-50 flex flex-col-reverse items-end gap-3 transition-all duration-500 ease-in-out md:top-4 md:right-4 md:bottom-auto md:flex-col"
   >
     <!-- Toggle Button -->
     <button
