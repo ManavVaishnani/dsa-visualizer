@@ -75,6 +75,11 @@ const algorithms = [
     href: '/visualize/postorder-traversal',
     img: '/postorder-traversal.svg',
   },
+  {
+    title: "Dijkstra's Algorithm",
+    href: '/visualize/dijkstra',
+    img: '/dijkstra.svg',
+  },
 ]
 </script>
 

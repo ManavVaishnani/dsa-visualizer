@@ -16,6 +16,9 @@ import {
   explanation,
   visitedCount,
   visitedNodes,
+  distances,
+  currentGraphAlgo,
+  shortestPathEdges,
 } from '@/composables/useGraphController'
 import AlgorithmExplanation from './AlgorithmExplanation.vue'
 
@@ -36,8 +39,15 @@ const isEdgeActive = (from: number, to: number) => {
   )
 }
 
+const isEdgeOnShortestPath = (from: number, to: number) => {
+  return shortestPathEdges.value.some(
+    (e) => (e.from === from && e.to === to) || (e.from === to && e.to === from),
+  )
+}
+
 const getEdgeColor = (from: number, to: number) => {
   if (isEdgeActive(from, to)) return '#f59e0b' // Orange - active
+  if (isEdgeOnShortestPath(from, to)) return '#3b82f6' // Blue - shortest path
   if (visitedNodes.value.includes(from) && visitedNodes.value.includes(to)) {
     return '#10b981' // Green - both nodes visited
   }
@@ -95,6 +105,35 @@ const getEdgePath = (fromId: number, toId: number) => {
   }
 
   return `M ${startX} ${startY} L ${endX} ${endY}`
+}
+
+const getEdgeMidpoint = (fromId: number, toId: number) => {
+  const from = nodes.value[fromId]
+  const to = nodes.value[toId]
+  if (!from || !to) return { x: 0, y: 0 }
+
+  const dx = to.x - from.x
+  const dy = to.y - from.y
+  const dist = Math.sqrt(dx * dx + dy * dy)
+
+  const midX = (from.x + to.x) / 2
+  const midY = (from.y + to.y) / 2
+
+  const isBiDirectional =
+    graphType.value === 'directed' && edges.value.some((e) => e.from === toId && e.to === fromId)
+
+  if (isBiDirectional || graphType.value === 'directed') {
+    const invDist = 1 / dist
+    const nx = -dy * invDist
+    const ny = dx * invDist
+    const offset = isBiDirectional ? 15 : 2
+    return {
+      x: midX + nx * offset,
+      y: midY + ny * offset,
+    }
+  }
+
+  return { x: midX, y: midY }
 }
 
 // Node dragging logic
@@ -201,6 +240,17 @@ const handleNodeClick = (nodeId: number) => {
         >
           <polygon points="0 0, 10 3, 0 6" fill="#f59e0b" />
         </marker>
+        <marker
+          id="arrowhead-blue"
+          markerWidth="10"
+          markerHeight="10"
+          refX="9"
+          refY="3"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <polygon points="0 0, 10 3, 0 6" fill="#3b82f6" />
+        </marker>
       </defs>
 
       <!-- Draw edges first (so they appear behind nodes) -->
@@ -210,19 +260,50 @@ const handleNodeClick = (nodeId: number) => {
         :d="getEdgePath(edge.from, edge.to)"
         fill="none"
         :stroke="getEdgeColor(edge.from, edge.to)"
-        :stroke-width="isEdgeActive(edge.from, edge.to) ? 4 : 2"
+        :stroke-width="
+          isEdgeActive(edge.from, edge.to) || isEdgeOnShortestPath(edge.from, edge.to) ? 4 : 2
+        "
         :marker-end="
           graphType === 'directed'
             ? isEdgeActive(edge.from, edge.to)
               ? 'url(#arrowhead-orange)'
-              : visitedNodes.includes(edge.from) && visitedNodes.includes(edge.to)
-                ? 'url(#arrowhead-green)'
-                : 'url(#arrowhead-gray)'
+              : isEdgeOnShortestPath(edge.from, edge.to)
+                ? 'url(#arrowhead-blue)'
+                : visitedNodes.includes(edge.from) && visitedNodes.includes(edge.to)
+                  ? 'url(#arrowhead-green)'
+                  : 'url(#arrowhead-gray)'
             : undefined
         "
         class="duration-300"
         :class="{ 'transition-all': draggedNodeId === null }"
       />
+
+      <!-- Edge Weights -->
+      <g v-for="(edge, index) in edges" :key="'weight-' + index">
+        <rect
+          v-if="edge.weight !== undefined"
+          :x="getEdgeMidpoint(edge.from, edge.to).x - 10"
+          :y="getEdgeMidpoint(edge.from, edge.to).y - 10"
+          width="20"
+          height="20"
+          fill="white"
+          stroke="black"
+          stroke-width="1"
+          class="duration-300"
+          :class="{ 'transition-all': draggedNodeId === null }"
+        />
+        <text
+          v-if="edge.weight !== undefined"
+          :x="getEdgeMidpoint(edge.from, edge.to).x"
+          :y="getEdgeMidpoint(edge.from, edge.to).y"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          class="pointer-events-none font-mono text-xs font-bold"
+          fill="black"
+        >
+          {{ edge.weight }}
+        </text>
+      </g>
 
       <!-- Draw nodes -->
       <g
@@ -260,6 +341,18 @@ const handleNodeClick = (nodeId: number) => {
           fill="black"
         >
           {{ node.label }}
+        </text>
+
+        <!-- Node Distance (for Dijkstra) -->
+        <text
+          v-if="distances[node.id] !== undefined && distances[node.id] !== Infinity"
+          x="0"
+          y="-40"
+          text-anchor="middle"
+          class="pointer-events-none font-mono text-xs font-bold"
+          fill="#4f46e5"
+        >
+          dist: {{ distances[node.id] }}
         </text>
       </g>
     </svg>
@@ -351,7 +444,9 @@ const handleNodeClick = (nodeId: number) => {
           class="mt-1 flex justify-between border-t-2 border-dashed border-gray-300 pt-1 md:mt-2 md:pt-2"
         >
           <span class="text-gray-500">TIME:</span>
-          <span class="font-bold text-[#10b981]">O(V+E)</span>
+          <span class="font-bold text-[#10b981]">
+            {{ currentGraphAlgo === 'dijkstra' ? 'O(V²)' : 'O(V+E)' }}
+          </span>
         </div>
         <div class="flex justify-between">
           <span class="text-gray-500">SPACE:</span>
@@ -385,6 +480,10 @@ const handleNodeClick = (nodeId: number) => {
         <div class="flex items-center gap-2">
           <div class="size-4 border border-black bg-[#10b981]"></div>
           <span class="text-xs text-gray-600 uppercase">Done</span>
+        </div>
+        <div class="flex items-center gap-2" v-if="currentGraphAlgo === 'dijkstra'">
+          <div class="size-4 border border-black bg-[#3b82f6]"></div>
+          <span class="text-xs text-gray-600 uppercase">Shortest Path</span>
         </div>
       </div>
     </div>

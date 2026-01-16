@@ -9,10 +9,12 @@ import {
   nodes,
   prepareBFSSteps,
   prepareDFSSteps,
+  prepareDijkstraSteps,
   previousStep,
   resetGraph,
   runBFS,
   runDFS,
+  runDijkstra,
   selectedStartNode,
   speed,
   stepIndex,
@@ -21,7 +23,7 @@ import {
 } from '@/composables/useGraphController'
 
 interface Props {
-  algorithm: 'bfs' | 'dfs'
+  algorithm: 'bfs' | 'dfs' | 'dijkstra'
 }
 
 const props = defineProps<Props>()
@@ -29,24 +31,34 @@ const props = defineProps<Props>()
 const startTraversal = () => {
   if (props.algorithm === 'bfs') {
     runBFS()
-  } else {
+  } else if (props.algorithm === 'dfs') {
     runDFS()
+  } else {
+    runDijkstra()
   }
 }
 
 const prepareSteps = () => {
   if (props.algorithm === 'bfs') prepareBFSSteps()
-  else prepareDFSSteps()
+  else if (props.algorithm === 'dfs') prepareDFSSteps()
+  else prepareDijkstraSteps()
 }
 
 const pause = () => {
   isPaused.value = !isPaused.value
 }
 
-const vizOptions = [
-  { label: 'Graph', value: 'graph' },
-  { label: 'Tree', value: 'tree' },
-]
+import { computed } from 'vue'
+
+const vizOptions = computed(() => {
+  if (props.algorithm === 'dijkstra') {
+    return [{ label: 'Graph', value: 'graph' }]
+  }
+  return [
+    { label: 'Graph', value: 'graph' },
+    { label: 'Tree', value: 'tree' },
+  ]
+})
 
 const graphOptions = [
   { label: 'Undirected', value: 'undirected' },

@@ -14,6 +14,7 @@ import LinearSearch from '../views/visualize/LinearSearch.vue'
 import BinarySearch from '../views/visualize/BinarySearch.vue'
 import BFS from '../views/visualize/BFS.vue'
 import DFS from '../views/visualize/DFS.vue'
+import Dijkstra from '../views/visualize/Dijkstra.vue'
 import InOrderTraversal from '../views/visualize/InOrderTraversal.vue'
 import PreOrderTraversal from '../views/visualize/PreOrderTraversal.vue'
 import PostOrderTraversal from '../views/visualize/PostOrderTraversal.vue'
@@ -36,6 +37,7 @@ const router = createRouter({
     { path: '/visualize/binary-search', name: 'binary-search', component: BinarySearch },
     { path: '/visualize/bfs', name: 'bfs', component: BFS },
     { path: '/visualize/dfs', name: 'dfs', component: DFS },
+    { path: '/visualize/dijkstra', name: 'dijkstra', component: Dijkstra },
     {
       path: '/visualize/inorder-traversal',
       name: 'inorder-traversal',

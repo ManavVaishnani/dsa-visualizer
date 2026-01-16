@@ -30,6 +30,13 @@ const algorithms = [
     desc: 'Explores as far as possible along each branch before backtracking.',
     complexity: 'O(V+E)',
   },
+  {
+    title: "Dijkstra's Algorithm",
+    href: '/visualize/dijkstra',
+    img: '/dijkstra.svg',
+    desc: 'Finds the shortest paths from a source node to all other nodes in a weighted graph.',
+    complexity: 'O(V^2)',
+  },
 ]
 </script>
 

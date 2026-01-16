@@ -10,6 +10,7 @@ export interface Node {
 export interface Edge {
   from: number
   to: number
+  weight?: number
 }
 
 export type GraphType = 'directed' | 'undirected'
@@ -26,10 +27,14 @@ export const speed = ref(50)
 export const isTraversing = ref(false)
 export const isPaused = ref(false)
 export const explanation = ref<string[]>([])
+export const shortestPathEdges = ref<{ from: number; to: number }[]>([])
 
-export type GraphAlgo = 'bfs' | 'dfs'
+export type GraphAlgo = 'bfs' | 'dfs' | 'dijkstra'
 export const currentGraphAlgo = ref<GraphAlgo | null>(null)
 export const algoInfo = ref<string[]>([])
+
+export const distances = ref<Record<number, number>>({})
+export const predecessors = ref<Record<number, number | null>>({})
 
 export const setInitialInfo = (algo: GraphAlgo) => {
   currentGraphAlgo.value = algo
@@ -46,9 +51,19 @@ export const setInitialInfo = (algo: GraphAlgo) => {
       'WHY: Very memory efficient; great for pathfinding and cycle detection.',
       'WHERE: Solving puzzles, topological sorting, scheduling.',
     ],
+    dijkstra: [
+      'ALGO: Dijkstra\'s Algorithm',
+      'WHAT: Finds the shortest paths from a source node to all other nodes in a weighted graph.',
+      'WHY: Guaranteed to find the absolute shortest path if all edge weights are non-negative.',
+      'WHERE: Google Maps, OSPF routing protocol, network pathfinding.',
+    ],
   }
   algoInfo.value = info[algo]
   explanation.value = [...algoInfo.value]
+  if (algo === 'dijkstra') {
+    visualizationType.value = 'graph'
+    generateData()
+  }
 }
 export const selectedStartNode = ref<number | null>(null)
 export const selectedTargetNode = ref<number | null>(null)
@@ -66,6 +81,9 @@ export interface Step {
   visitedCount: number
   edgeExploredCount: number
   targetFound: boolean
+  distances?: Record<number, number>
+  predecessors?: Record<number, number | null>
+  shortestPathEdges?: { from: number; to: number }[]
   description?: string
 }
 
@@ -133,14 +151,14 @@ export const generateTree = () => {
     if (leftExists) {
       const leftChild = createNode(level + 1, (xRange[0] + mid) / 2)
       newNodes.push(leftChild)
-      newEdges.push({ from: node.id, to: leftChild.id })
+      newEdges.push({ from: node.id, to: leftChild.id, weight: Math.floor(Math.random() * 9) + 1 })
       queue.push({ node: leftChild, level: level + 1, xRange: [xRange[0], mid] })
     }
 
     if (rightExists) {
       const rightChild = createNode(level + 1, (mid + xRange[1]) / 2)
       newNodes.push(rightChild)
-      newEdges.push({ from: node.id, to: rightChild.id })
+      newEdges.push({ from: node.id, to: rightChild.id, weight: Math.floor(Math.random() * 9) + 1 })
       queue.push({ node: rightChild, level: level + 1, xRange: [mid, xRange[1]] })
     }
   }
@@ -163,6 +181,9 @@ const resetGraphState = () => {
   dfsCallStack.value = []
   visitedCount.value = 0
   edgeExploredCount.value = 0
+  distances.value = {}
+  predecessors.value = {}
+  shortestPathEdges.value = []
 }
 
 // Generate a sample graph or tree based on visualizationType
@@ -227,7 +248,7 @@ export const generateGraph = () => {
   // 2️⃣ Create a spanning tree (ensures connectivity)
   for (let i = 1; i < nodeCount; i++) {
     const parent = Math.floor(Math.random() * i)
-    newEdges.push({ from: parent, to: i })
+    newEdges.push({ from: parent, to: i, weight: Math.floor(Math.random() * 9) + 1 })
   }
 
   // 3️⃣ Add extra random edges
@@ -238,7 +259,7 @@ export const generateGraph = () => {
     const to = Math.floor(Math.random() * nodeCount)
 
     if (from !== to && !edgeExists(from, to)) {
-      newEdges.push({ from, to })
+      newEdges.push({ from, to, weight: Math.floor(Math.random() * 9) + 1 })
     }
   }
 
@@ -275,6 +296,9 @@ const snapshot = (opts: Partial<Step> = {}): Step => ({
   visitedCount: visitedCount.value,
   edgeExploredCount: edgeExploredCount.value,
   targetFound: targetFound.value,
+  distances: { ...distances.value },
+  predecessors: { ...predecessors.value },
+  shortestPathEdges: [...shortestPathEdges.value],
   ...opts,
 })
 
@@ -290,6 +314,10 @@ const applyStep = (index: number) => {
   visitedCount.value = s.visitedCount
   edgeExploredCount.value = s.edgeExploredCount
   targetFound.value = s.targetFound
+  distances.value = s.distances ? { ...s.distances } : {}
+  predecessors.value = s.predecessors ? { ...s.predecessors } : {}
+  shortestPathEdges.value = s.shortestPathEdges ? [...s.shortestPathEdges] : []
+
   if (s.description) {
     explanation.value.push(s.description)
   }
@@ -746,6 +774,239 @@ export const generateDFSSteps = (start?: number): Step[] => {
   return stepList
 }
 
+// Dijkstra's Algorithm
+export const runDijkstra = async (start?: number) => {
+  visitedCount.value = 0
+  edgeExploredCount.value = 0
+
+  const startNode = start ?? selectedStartNode.value
+  if (startNode === null || isTraversing.value || nodes.value.length === 0) return
+
+  isTraversing.value = true
+  isPaused.value = false
+
+  visitedNodes.value = []
+  currentNode.value = null
+  queue.value = []
+  currentEdge.value = null
+  targetFound.value = false
+  distances.value = {}
+  predecessors.value = {}
+
+  nodes.value.forEach((node) => {
+    distances.value[node.id] = Infinity
+    predecessors.value[node.id] = null
+  })
+  distances.value[startNode] = 0
+
+  explanation.value = [...algoInfo.value]
+  explanation.value.push("Starting Dijkstra's algorithm...")
+
+  const adjList = buildAdjacencyList()
+  const unvisited = new Set(nodes.value.map((n) => n.id))
+
+  while (unvisited.size > 0) {
+    while (isPaused.value) await sleep(100)
+
+    // Find node with minimum distance
+    let current: number | null = null
+    let minDist = Infinity
+
+    unvisited.forEach((nodeId) => {
+      if (distances.value[nodeId] < minDist) {
+        minDist = distances.value[nodeId]
+        current = nodeId
+      }
+    })
+
+    if (current === null || minDist === Infinity) break
+
+    currentNode.value = current
+    explanation.value.push(`Selecting node ${nodes.value[current]?.label} with distance ${minDist}.`)
+    await sleep(1000 - speed.value * 9)
+
+    if (current === selectedTargetNode.value) {
+      explanation.value.push(`Target node ${nodes.value[current]?.label} reached!`)
+      targetFound.value = true
+      visitedNodes.value.push(current)
+      visitedCount.value++
+      break
+    }
+
+    unvisited.delete(current)
+    visitedNodes.value.push(current)
+    visitedCount.value++
+
+    for (const neighborId of adjList[current]) {
+      if (!unvisited.has(neighborId)) continue
+
+      const edge = edges.value.find(
+        (e) =>
+          (e.from === current && e.to === neighborId) ||
+          (e.from === neighborId && e.to === current),
+      )
+      const weight = edge?.weight || 1
+
+      currentEdge.value = { from: current, to: neighborId }
+      explanation.value.push(
+        `Relaxing edge ${nodes.value[current]?.label} -> ${nodes.value[neighborId]?.label} (weight: ${weight}).`,
+      )
+      await sleep(500 - speed.value * 4)
+
+      const newDist = distances.value[current] + weight
+      if (newDist < distances.value[neighborId]) {
+        distances.value[neighborId] = newDist
+        predecessors.value[neighborId] = current
+        explanation.value.push(`Updated distance for ${nodes.value[neighborId]?.label} to ${newDist}.`)
+      }
+      currentEdge.value = null
+    }
+
+    currentNode.value = null
+  }
+
+  isTraversing.value = false
+  if (targetFound.value && selectedTargetNode.value !== null) {
+    let curr = selectedTargetNode.value
+    while (predecessors.value[curr] !== null) {
+      const prev = predecessors.value[curr]!
+      shortestPathEdges.value.push({ from: prev, to: curr })
+      curr = prev
+    }
+    explanation.value.push('Shortest path highlighted!')
+  }
+  explanation.value.push("Dijkstra's algorithm completed!")
+}
+
+export const generateDijkstraSteps = (start?: number): Step[] => {
+  const startNode = start ?? selectedStartNode.value
+  if (startNode === null || nodes.value.length === 0) return []
+
+  const adjList = buildAdjacencyList()
+  const stepList: Step[] = []
+
+  const localDistances: Record<number, number> = {}
+  const localPredecessors: Record<number, number | null> = {}
+  const localVisited: number[] = []
+  const unvisited = new Set(nodes.value.map((n) => n.id))
+
+  nodes.value.forEach((node) => {
+    localDistances[node.id] = Infinity
+    localPredecessors[node.id] = null
+  })
+  localDistances[startNode] = 0
+
+  stepList.push(
+    snapshot({
+      distances: { ...localDistances },
+      predecessors: { ...localPredecessors },
+      description: 'Initialize distances: source = 0, others = ∞',
+    }),
+  )
+
+  while (unvisited.size > 0) {
+    let current: number | null = null
+    let minDist = Infinity
+
+    unvisited.forEach((nodeId) => {
+      if (localDistances[nodeId] < minDist) {
+        minDist = localDistances[nodeId]
+        current = nodeId
+      }
+    })
+
+    if (current === null || minDist === Infinity) break
+
+    stepList.push(
+      snapshot({
+        currentNode: current,
+        distances: { ...localDistances },
+        predecessors: { ...localPredecessors },
+        visitedNodes: [...localVisited],
+        description: `Pick unvisited node ${nodes.value[current]?.label} with smallest distance (${minDist})`,
+      }),
+    )
+
+    if (current === selectedTargetNode.value) {
+      localVisited.push(current)
+      stepList.push(
+        snapshot({
+          currentNode: current,
+          targetFound: true,
+          visitedNodes: [...localVisited],
+          description: `Target ${nodes.value[current]?.label} found!`,
+        }),
+      )
+      break
+    }
+
+    unvisited.delete(current)
+    localVisited.push(current)
+
+    for (const neighborId of adjList[current]) {
+      if (!unvisited.has(neighborId)) continue
+
+      const edge = edges.value.find(
+        (e) =>
+          (e.from === current && e.to === neighborId) ||
+          (e.from === neighborId && e.to === current),
+      )
+      const weight = edge?.weight || 1
+
+      stepList.push(
+        snapshot({
+          currentNode: current,
+          currentEdge: { from: current, to: neighborId },
+          distances: { ...localDistances },
+          predecessors: { ...localPredecessors },
+          visitedNodes: [...localVisited],
+          description: `Relaxing edge ${nodes.value[current]?.label} -> ${nodes.value[neighborId]?.label}`,
+        }),
+      )
+
+      const newDist = localDistances[current] + weight
+      if (newDist < localDistances[neighborId]) {
+        localDistances[neighborId] = newDist
+        localPredecessors[neighborId] = current
+        stepList.push(
+          snapshot({
+            currentNode: current,
+            currentEdge: { from: current, to: neighborId },
+            distances: { ...localDistances },
+            predecessors: { ...localPredecessors },
+            visitedNodes: [...localVisited],
+            description: `Updated distance for ${nodes.value[neighborId]?.label} to ${newDist}`,
+          }),
+        )
+      }
+    }
+  }
+
+  const finalShortestPath: { from: number; to: number }[] = []
+  if (selectedTargetNode.value !== null && localVisited.includes(selectedTargetNode.value)) {
+    let curr = selectedTargetNode.value
+    while (localPredecessors[curr] !== null) {
+      const prev = localPredecessors[curr]!
+      finalShortestPath.push({ from: prev, to: curr })
+      curr = prev
+    }
+  }
+
+  stepList.push(
+    snapshot({
+      currentNode: null,
+      currentEdge: null,
+      visitedNodes: [...localVisited],
+      shortestPathEdges: finalShortestPath,
+      distances: { ...localDistances },
+      predecessors: { ...localPredecessors },
+      description: 'Dijkstra completed. Shortest path found.',
+    }),
+  )
+
+  return stepList
+}
+
 export const prepareBFSSteps = (start?: number, autoPlay = false) => {
   stopPlaying()
   explanation.value = [...algoInfo.value]
@@ -764,6 +1025,15 @@ export const prepareDFSSteps = (start?: number, autoPlay = false) => {
   if (autoPlay) playSteps()
 }
 
+export const prepareDijkstraSteps = (start?: number, autoPlay = false) => {
+  stopPlaying()
+  explanation.value = [...algoInfo.value]
+  explanation.value.push('Prepared Dijkstra steps.')
+  steps.value = generateDijkstraSteps(start)
+  stepIndex.value = -1
+  if (autoPlay) playSteps()
+}
+
 export const resetGraph = () => {
   if (isTraversing.value) return
 
@@ -777,4 +1047,7 @@ export const resetGraph = () => {
   dfsCallStack.value = []
   visitedCount.value = 0
   edgeExploredCount.value = 0
+  distances.value = {}
+  predecessors.value = {}
+  shortestPathEdges.value = []
 }
