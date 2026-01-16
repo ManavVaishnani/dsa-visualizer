@@ -281,7 +281,7 @@ const handleNodeClick = (nodeId: number) => {
       <!-- Edge Weights -->
       <g v-for="(edge, index) in edges" :key="'weight-' + index">
         <rect
-          v-if="edge.weight !== undefined"
+          v-if="currentGraphAlgo === 'dijkstra' && edge.weight !== undefined"
           :x="getEdgeMidpoint(edge.from, edge.to).x - 10"
           :y="getEdgeMidpoint(edge.from, edge.to).y - 10"
           width="20"
@@ -293,7 +293,7 @@ const handleNodeClick = (nodeId: number) => {
           :class="{ 'transition-all': draggedNodeId === null }"
         />
         <text
-          v-if="edge.weight !== undefined"
+          v-if="currentGraphAlgo === 'dijkstra' && edge.weight !== undefined"
           :x="getEdgeMidpoint(edge.from, edge.to).x"
           :y="getEdgeMidpoint(edge.from, edge.to).y"
           text-anchor="middle"
@@ -345,7 +345,11 @@ const handleNodeClick = (nodeId: number) => {
 
         <!-- Node Distance (for Dijkstra) -->
         <text
-          v-if="distances[node.id] !== undefined && distances[node.id] !== Infinity"
+          v-if="
+            currentGraphAlgo === 'dijkstra' &&
+            distances[node.id] !== undefined &&
+            distances[node.id] !== Infinity
+          "
           x="0"
           y="-40"
           text-anchor="middle"

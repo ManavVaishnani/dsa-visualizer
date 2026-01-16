@@ -386,6 +386,9 @@ export const runBFS = async (start?: number) => {
   queue.value = []
   currentEdge.value = null
   targetFound.value = false
+  distances.value = {}
+  predecessors.value = {}
+  shortestPathEdges.value = []
   explanation.value = [...algoInfo.value]
   explanation.value.push('Starting BFS traversal...')
 
@@ -592,6 +595,9 @@ export const runDFS = async (start?: number) => {
   queue.value = []
   targetFound.value = false
   dfsCallStack.value = []
+  distances.value = {}
+  predecessors.value = {}
+  shortestPathEdges.value = []
   explanation.value = [...algoInfo.value]
   explanation.value.push('Starting DFS traversal...')
 
@@ -1009,6 +1015,9 @@ export const generateDijkstraSteps = (start?: number): Step[] => {
 
 export const prepareBFSSteps = (start?: number, autoPlay = false) => {
   stopPlaying()
+  distances.value = {}
+  predecessors.value = {}
+  shortestPathEdges.value = []
   explanation.value = [...algoInfo.value]
   explanation.value.push('Prepared BFS steps.')
   steps.value = generateBFSSteps(start)
@@ -1018,6 +1027,9 @@ export const prepareBFSSteps = (start?: number, autoPlay = false) => {
 
 export const prepareDFSSteps = (start?: number, autoPlay = false) => {
   stopPlaying()
+  distances.value = {}
+  predecessors.value = {}
+  shortestPathEdges.value = []
   explanation.value = [...algoInfo.value]
   explanation.value.push('Prepared DFS steps.')
   steps.value = generateDFSSteps(start)
