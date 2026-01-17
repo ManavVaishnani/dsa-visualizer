@@ -281,7 +281,7 @@ const handleNodeClick = (nodeId: number) => {
       <!-- Edge Weights -->
       <g v-for="(edge, index) in edges" :key="'weight-' + index">
         <rect
-          v-if="currentGraphAlgo === 'dijkstra' && edge.weight !== undefined"
+          v-if="(currentGraphAlgo === 'dijkstra' || currentGraphAlgo === 'astar') && edge.weight !== undefined"
           :x="getEdgeMidpoint(edge.from, edge.to).x - 10"
           :y="getEdgeMidpoint(edge.from, edge.to).y - 10"
           width="20"
@@ -293,7 +293,7 @@ const handleNodeClick = (nodeId: number) => {
           :class="{ 'transition-all': draggedNodeId === null }"
         />
         <text
-          v-if="currentGraphAlgo === 'dijkstra' && edge.weight !== undefined"
+          v-if="(currentGraphAlgo === 'dijkstra' || currentGraphAlgo === 'astar') && edge.weight !== undefined"
           :x="getEdgeMidpoint(edge.from, edge.to).x"
           :y="getEdgeMidpoint(edge.from, edge.to).y"
           text-anchor="middle"
@@ -358,6 +358,50 @@ const handleNodeClick = (nodeId: number) => {
         >
           dist: {{ distances[node.id] }}
         </text>
+
+        <!-- Node Metrics (for A*) -->
+        <g
+          v-if="
+            currentGraphAlgo === 'astar' &&
+            distances[node.id] !== undefined &&
+            distances[node.id] !== Infinity &&
+            selectedTargetNode !== null
+          "
+        >
+          <text
+            x="0"
+            y="-55"
+            text-anchor="middle"
+            class="pointer-events-none font-mono text-[10px] font-bold"
+            fill="#4f46e5"
+          >
+            g:{{ distances[node.id] }} h:{{
+              (
+                Math.sqrt(
+                  Math.pow(node.x - nodes[selectedTargetNode].x, 2) +
+                    Math.pow(node.y - nodes[selectedTargetNode].y, 2),
+                ) / 50
+              ).toFixed(1)
+            }}
+          </text>
+          <text
+            x="0"
+            y="-42"
+            text-anchor="middle"
+            class="pointer-events-none font-mono text-xs font-black"
+            fill="#7c3aed"
+          >
+            f:{{
+              (
+                distances[node.id] +
+                Math.sqrt(
+                  Math.pow(node.x - nodes[selectedTargetNode].x, 2) +
+                    Math.pow(node.y - nodes[selectedTargetNode].y, 2),
+                ) / 50
+              ).toFixed(1)
+            }}
+          </text>
+        </g>
       </g>
     </svg>
 
@@ -449,7 +493,9 @@ const handleNodeClick = (nodeId: number) => {
         >
           <span class="text-gray-500">TIME:</span>
           <span class="font-bold text-[#10b981]">
-            {{ currentGraphAlgo === 'dijkstra' ? 'O(V²)' : 'O(V+E)' }}
+            {{
+              currentGraphAlgo === 'dijkstra' ? 'O(V²)' : currentGraphAlgo === 'astar' ? 'O(bᵈ)' : 'O(V+E)'
+            }}
           </span>
         </div>
         <div class="flex justify-between">
@@ -485,7 +531,7 @@ const handleNodeClick = (nodeId: number) => {
           <div class="size-4 border border-black bg-[#10b981]"></div>
           <span class="text-xs text-gray-600 uppercase">Done</span>
         </div>
-        <div class="flex items-center gap-2" v-if="currentGraphAlgo === 'dijkstra'">
+        <div class="flex items-center gap-2" v-if="currentGraphAlgo === 'dijkstra' || currentGraphAlgo === 'astar'">
           <div class="size-4 border border-black bg-[#3b82f6]"></div>
           <span class="text-xs text-gray-600 uppercase">Shortest Path</span>
         </div>

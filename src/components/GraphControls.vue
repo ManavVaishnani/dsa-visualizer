@@ -10,11 +10,13 @@ import {
   prepareBFSSteps,
   prepareDFSSteps,
   prepareDijkstraSteps,
+  prepareAStarSteps,
   previousStep,
   resetGraph,
   runBFS,
   runDFS,
   runDijkstra,
+  runAStar,
   selectedStartNode,
   speed,
   stepIndex,
@@ -23,7 +25,7 @@ import {
 } from '@/composables/useGraphController'
 
 interface Props {
-  algorithm: 'bfs' | 'dfs' | 'dijkstra'
+  algorithm: 'bfs' | 'dfs' | 'dijkstra' | 'astar'
 }
 
 const props = defineProps<Props>()
@@ -33,15 +35,18 @@ const startTraversal = () => {
     runBFS()
   } else if (props.algorithm === 'dfs') {
     runDFS()
-  } else {
+  } else if (props.algorithm === 'dijkstra') {
     runDijkstra()
+  } else {
+    runAStar()
   }
 }
 
 const prepareSteps = () => {
   if (props.algorithm === 'bfs') prepareBFSSteps()
   else if (props.algorithm === 'dfs') prepareDFSSteps()
-  else prepareDijkstraSteps()
+  else if (props.algorithm === 'dijkstra') prepareDijkstraSteps()
+  else prepareAStarSteps()
 }
 
 const pause = () => {
@@ -51,7 +56,7 @@ const pause = () => {
 import { computed } from 'vue'
 
 const vizOptions = computed(() => {
-  if (props.algorithm === 'dijkstra') {
+  if (props.algorithm === 'dijkstra' || props.algorithm === 'astar') {
     return [{ label: 'Graph', value: 'graph' }]
   }
   return [

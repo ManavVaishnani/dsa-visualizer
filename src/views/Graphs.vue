@@ -37,6 +37,13 @@ const algorithms = [
     desc: 'Finds the shortest paths from a source node to all other nodes in a weighted graph.',
     complexity: 'O(V^2)',
   },
+  {
+    title: 'A* Search',
+    href: '/visualize/astar',
+    img: '/astar.svg',
+    desc: 'An informed search algorithm that uses heuristics to find the shortest path more efficiently.',
+    complexity: 'O(b^d)',
+  },
 ]
 </script>
 
