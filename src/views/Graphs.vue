@@ -44,6 +44,13 @@ const algorithms = [
     desc: 'An informed search algorithm that uses heuristics to find the shortest path more efficiently.',
     complexity: 'O(b^d)',
   },
+  {
+    title: "Prim's Algorithm",
+    href: '/visualize/prims',
+    img: '/prims.svg',
+    desc: 'A greedy algorithm that finds a minimum spanning tree for a weighted undirected graph.',
+    complexity: 'O(E log V)',
+  },
 ]
 </script>
 

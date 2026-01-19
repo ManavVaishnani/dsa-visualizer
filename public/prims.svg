@@ -1,0 +1,25 @@
+<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Graph Structure -->
+  <!-- Nodes -->
+  <circle cx="40" cy="60" r="10" fill="black" stroke="black" stroke-width="2"/>
+  <circle cx="100" cy="30" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <circle cx="100" cy="90" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <circle cx="160" cy="60" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <circle cx="100" cy="60" r="10" fill="none" stroke="black" stroke-width="2"/>
+
+  <!-- Edges (MST highlighted with thicker lines or specific style) -->
+  <!-- Non-MST edges -->
+  <line x1="48" y1="66" x2="92" y2="84" stroke="black" stroke-width="1" opacity="0.3"/>
+  <line x1="108" y1="36" x2="152" y2="54" stroke="black" stroke-width="1" opacity="0.3"/>
+  
+  <!-- MST Edges -->
+  <line x1="48" y1="54" x2="92" y2="36" stroke="black" stroke-width="2.5"/>
+  <line x1="40" y1="60" x2="90" y2="60" stroke="black" stroke-width="2.5"/>
+  <line x1="100" y1="40" x2="100" y2="50" stroke="black" stroke-width="2.5"/>
+  <line x1="108" y1="66" x2="152" y2="84" stroke="black" stroke-width="1" opacity="0.3"/>
+  <line x1="108" y1="84" x2="152" y2="66" stroke="black" stroke-width="2.5"/>
+  <line x1="100" y1="70" x2="100" y2="80" stroke="black" stroke-width="2.5"/>
+
+  <!-- Labels -->
+  <text x="100" y="115" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle" fill="black">PRIM_MST_FINDER</text>
+</svg>

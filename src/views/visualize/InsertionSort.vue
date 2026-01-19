@@ -1,4 +1,3 @@
-```
 <script setup lang="ts">
 import BarsVisualizer from '@/components/BarsVisualizer.vue'
 import SortingControls from '@/components/SortingControls.vue'

@@ -281,7 +281,7 @@ const handleNodeClick = (nodeId: number) => {
       <!-- Edge Weights -->
       <g v-for="(edge, index) in edges" :key="'weight-' + index">
         <rect
-          v-if="(currentGraphAlgo === 'dijkstra' || currentGraphAlgo === 'astar') && edge.weight !== undefined"
+          v-if="(currentGraphAlgo === 'dijkstra' || currentGraphAlgo === 'astar' || currentGraphAlgo === 'prims') && edge.weight !== undefined"
           :x="getEdgeMidpoint(edge.from, edge.to).x - 10"
           :y="getEdgeMidpoint(edge.from, edge.to).y - 10"
           width="20"
@@ -293,7 +293,7 @@ const handleNodeClick = (nodeId: number) => {
           :class="{ 'transition-all': draggedNodeId === null }"
         />
         <text
-          v-if="(currentGraphAlgo === 'dijkstra' || currentGraphAlgo === 'astar') && edge.weight !== undefined"
+          v-if="(currentGraphAlgo === 'dijkstra' || currentGraphAlgo === 'astar' || currentGraphAlgo === 'prims') && edge.weight !== undefined"
           :x="getEdgeMidpoint(edge.from, edge.to).x"
           :y="getEdgeMidpoint(edge.from, edge.to).y"
           text-anchor="middle"
@@ -346,7 +346,7 @@ const handleNodeClick = (nodeId: number) => {
         <!-- Node Distance (for Dijkstra) -->
         <text
           v-if="
-            currentGraphAlgo === 'dijkstra' &&
+            (currentGraphAlgo === 'dijkstra' || currentGraphAlgo === 'prims') &&
             distances[node.id] !== undefined &&
             distances[node.id] !== Infinity
           "
@@ -356,7 +356,7 @@ const handleNodeClick = (nodeId: number) => {
           class="pointer-events-none font-mono text-xs font-bold"
           fill="#4f46e5"
         >
-          dist: {{ distances[node.id] }}
+          {{ currentGraphAlgo === 'prims' ? 'weight' : 'dist' }}: {{ distances[node.id] }}
         </text>
 
         <!-- Node Metrics (for A*) -->
@@ -455,7 +455,7 @@ const handleNodeClick = (nodeId: number) => {
     <!-- Selection Overlay -->
     <div
       v-if="
-        !isTraversing && !targetFound && (selectedStartNode === null || selectedTargetNode === null)
+        !isTraversing && !targetFound && (selectedStartNode === null || (selectedTargetNode === null && currentGraphAlgo !== 'prims'))
       "
       class="absolute top-4 left-1/2 z-10 -translate-x-1/2 rounded-none border-2 border-black bg-white px-4 py-2 font-mono text-sm font-bold text-black shadow-[5px_5px_0px_0px_black]"
     >
@@ -494,7 +494,7 @@ const handleNodeClick = (nodeId: number) => {
           <span class="text-gray-500">TIME:</span>
           <span class="font-bold text-[#10b981]">
             {{
-              currentGraphAlgo === 'dijkstra' ? 'O(V²)' : currentGraphAlgo === 'astar' ? 'O(bᵈ)' : 'O(V+E)'
+              currentGraphAlgo === 'dijkstra' ? 'O(V²)' : currentGraphAlgo === 'astar' ? 'O(bᵈ)' : currentGraphAlgo === 'prims' ? 'O(E log V)' : 'O(V+E)'
             }}
           </span>
         </div>
@@ -531,9 +531,9 @@ const handleNodeClick = (nodeId: number) => {
           <div class="size-4 border border-black bg-[#10b981]"></div>
           <span class="text-xs text-gray-600 uppercase">Done</span>
         </div>
-        <div class="flex items-center gap-2" v-if="currentGraphAlgo === 'dijkstra' || currentGraphAlgo === 'astar'">
+        <div class="flex items-center gap-2" v-if="currentGraphAlgo === 'dijkstra' || currentGraphAlgo === 'astar' || currentGraphAlgo === 'prims'">
           <div class="size-4 border border-black bg-[#3b82f6]"></div>
-          <span class="text-xs text-gray-600 uppercase">Shortest Path</span>
+          <span class="text-xs text-gray-600 uppercase">{{ currentGraphAlgo === 'prims' ? 'MST Edge' : 'Shortest Path' }}</span>
         </div>
       </div>
     </div>
