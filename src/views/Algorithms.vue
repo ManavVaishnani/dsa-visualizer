@@ -80,6 +80,21 @@ const algorithms = [
     href: '/visualize/dijkstra',
     img: '/dijkstra.svg',
   },
+  {
+    title: "A* Algorithm",
+    href: '/visualize/astar',
+    img: '/astar.svg',
+  },
+  {
+    title: "Prims Algorithm",
+    href: '/visualize/prims',
+    img: '/prims.svg',
+  },
+  {
+    title: "Kruskals Algorithm",
+    href: '/visualize/kruskals',
+    img: '/kruskals.svg',
+  },
 ]
 </script>
 
