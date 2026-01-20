@@ -12,6 +12,7 @@ import {
   prepareDijkstraSteps,
   prepareAStarSteps,
   preparePrimsSteps,
+  prepareKruskalsSteps,
   previousStep,
   resetGraph,
   runBFS,
@@ -19,6 +20,7 @@ import {
   runDijkstra,
   runAStar,
   runPrims,
+  runKruskals,
   selectedStartNode,
   speed,
   stepIndex,
@@ -27,7 +29,7 @@ import {
 } from '@/composables/useGraphController'
 
 interface Props {
-  algorithm: 'bfs' | 'dfs' | 'dijkstra' | 'astar' | 'prims'
+  algorithm: 'bfs' | 'dfs' | 'dijkstra' | 'astar' | 'prims' | 'kruskals'
 }
 
 const props = defineProps<Props>()
@@ -41,8 +43,10 @@ const startTraversal = () => {
     runDijkstra()
   } else if (props.algorithm === 'astar') {
     runAStar()
-  } else {
+  } else if (props.algorithm === 'prims') {
     runPrims()
+  } else {
+    runKruskals()
   }
 }
 
@@ -51,7 +55,8 @@ const prepareSteps = () => {
   else if (props.algorithm === 'dfs') prepareDFSSteps()
   else if (props.algorithm === 'dijkstra') prepareDijkstraSteps()
   else if (props.algorithm === 'astar') prepareAStarSteps()
-  else preparePrimsSteps()
+  else if (props.algorithm === 'prims') preparePrimsSteps()
+  else prepareKruskalsSteps()
 }
 
 const pause = () => {
@@ -64,7 +69,8 @@ const vizOptions = computed(() => {
   if (
     props.algorithm === 'dijkstra' ||
     props.algorithm === 'astar' ||
-    props.algorithm === 'prims'
+    props.algorithm === 'prims' ||
+    props.algorithm === 'kruskals'
   ) {
     return [{ label: 'Graph', value: 'graph' }]
   }
@@ -117,7 +123,7 @@ const graphOptions = [
       <button
         class="rounded-none border-2 border-black bg-black px-3 py-1.5 font-mono text-xs font-bold text-white uppercase shadow-[3px_3px_0px_0px_black] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 disabled:cursor-not-allowed disabled:opacity-50"
         @click="startTraversal"
-        :disabled="isTraversing || nodes.length === 0 || selectedStartNode === null"
+        :disabled="isTraversing || nodes.length === 0 || (props.algorithm !== 'kruskals' && selectedStartNode === null)"
       >
         Start {{ props.algorithm.toUpperCase() }}
       </button>
@@ -141,7 +147,7 @@ const graphOptions = [
       <button
         class="rounded-none border-2 border-black bg-gray-100 px-3 py-1.5 font-mono text-xs font-bold text-black uppercase shadow-[3px_3px_0px_0px_black] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 disabled:cursor-not-allowed disabled:opacity-50"
         @click="prepareSteps"
-        :disabled="isTraversing || nodes.length === 0 || selectedStartNode === null"
+        :disabled="isTraversing || nodes.length === 0 || (props.algorithm !== 'kruskals' && selectedStartNode === null)"
       >
         Prepare Steps
       </button>

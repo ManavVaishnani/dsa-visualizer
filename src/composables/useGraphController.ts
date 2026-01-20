@@ -29,7 +29,7 @@ export const isPaused = ref(false)
 export const explanation = ref<string[]>([])
 export const shortestPathEdges = ref<{ from: number; to: number }[]>([])
 
-export type GraphAlgo = 'bfs' | 'dfs' | 'dijkstra' | 'astar' | 'prims'
+export type GraphAlgo = 'bfs' | 'dfs' | 'dijkstra' | 'astar' | 'prims' | 'kruskals'
 export const currentGraphAlgo = ref<GraphAlgo | null>(null)
 export const algoInfo = ref<string[]>([])
 
@@ -69,10 +69,16 @@ export const setInitialInfo = (algo: GraphAlgo) => {
       'WHY: Guaranteed to find a subset of edges that connects all vertices with the minimum total weight.',
       'WHERE: Network design, laying cables, building transportation networks.',
     ],
+    kruskals: [
+      'ALGO: Kruskal\'s Algorithm',
+      'WHAT: Finds the Minimum Spanning Tree (MST) by sorting edges and adding them if they don\'t form a cycle.',
+      'WHY: Efficient for sparse graphs; easy to implement with Union-Find.',
+      'WHERE: LAN network design, clustering, image segmentation.',
+    ],
   }
   algoInfo.value = info[algo]
   explanation.value = [...algoInfo.value]
-  if (algo === 'dijkstra' || algo === 'astar' || algo === 'prims') {
+  if (algo === 'dijkstra' || algo === 'astar' || algo === 'prims' || algo === 'kruskals') {
     visualizationType.value = 'graph'
     generateData()
   }
@@ -1565,6 +1571,164 @@ export const preparePrimsSteps = (start?: number, autoPlay = false) => {
   if (autoPlay) playSteps()
 }
 
+
+// Kruskal's Algorithm
+export const runKruskals = async () => {
+  if (isTraversing.value || nodes.value.length === 0) return
+
+  isTraversing.value = true
+  isPaused.value = false
+
+  visitedNodes.value = []
+  currentNode.value = null
+  queue.value = []
+  currentEdge.value = null
+  targetFound.value = false
+  distances.value = {}
+  predecessors.value = {}
+  shortestPathEdges.value = []
+
+  explanation.value = [...algoInfo.value]
+  explanation.value.push("Starting Kruskal's Algorithm...")
+
+  const sortedEdges = [...edges.value].sort((a, b) => (a.weight || 0) - (b.weight || 0))
+  const parent: Record<number, number> = {}
+  nodes.value.forEach((node) => (parent[node.id] = node.id))
+
+  const find = (i: number): number => {
+    if (parent[i] === i) return i
+    return find(parent[i])
+  }
+
+  const union = (i: number, j: number) => {
+    const rootI = find(i)
+    const rootJ = find(j)
+    if (rootI !== rootJ) {
+      parent[rootI] = rootJ
+      return true
+    }
+    return false
+  }
+
+  for (const edge of sortedEdges) {
+    while (isPaused.value) await sleep(100)
+
+    currentEdge.value = { from: edge.from, to: edge.to }
+    explanation.value.push(
+      `Checking edge ${nodes.value[edge.from]?.label} - ${nodes.value[edge.to]?.label} (weight: ${edge.weight}).`,
+    )
+    await sleep(1000 - speed.value * 9)
+
+    if (find(edge.from) !== find(edge.to)) {
+      union(edge.from, edge.to)
+      shortestPathEdges.value.push({ from: edge.from, to: edge.to })
+      explanation.value.push(
+        `Added edge ${nodes.value[edge.from]?.label} - ${nodes.value[edge.to]?.label} to MST.`,
+      )
+
+      if (!visitedNodes.value.includes(edge.from)) visitedNodes.value.push(edge.from)
+      if (!visitedNodes.value.includes(edge.to)) visitedNodes.value.push(edge.to)
+    } else {
+      explanation.value.push(
+        `Edge ${nodes.value[edge.from]?.label} - ${nodes.value[edge.to]?.label} forms a cycle. Skipping.`,
+      )
+    }
+
+    currentEdge.value = null
+  }
+
+  isTraversing.value = false
+  explanation.value.push("Kruskal's Algorithm completed! Minimum Spanning Tree found.")
+}
+
+export const generateKruskalsSteps = (): Step[] => {
+  if (nodes.value.length === 0) return []
+
+  const stepList: Step[] = []
+  const localVisited: number[] = []
+  const localMSTEdges: { from: number; to: number }[] = []
+  const parent: Record<number, number> = {}
+  nodes.value.forEach((node) => (parent[node.id] = node.id))
+
+  const find = (i: number): number => {
+    if (parent[i] === i) return i
+    return find(parent[i])
+  }
+
+  const union = (i: number, j: number) => {
+    const rootI = find(i)
+    const rootJ = find(j)
+    if (rootI !== rootJ) {
+      parent[rootI] = rootJ
+      return true
+    }
+    return false
+  }
+
+  const sortedEdges = [...edges.value].sort((a, b) => (a.weight || 0) - (b.weight || 0))
+
+  stepList.push(
+    snapshot({
+      description: 'Initialize: sort all edges by weight.',
+    }),
+  )
+
+  for (const edge of sortedEdges) {
+    stepList.push(
+      snapshot({
+        currentEdge: { from: edge.from, to: edge.to },
+        visitedNodes: [...localVisited],
+        shortestPathEdges: [...localMSTEdges],
+        description: `Checking edge ${nodes.value[edge.from]?.label} - ${nodes.value[edge.to]?.label} (weight: ${edge.weight})`,
+      }),
+    )
+
+    if (find(edge.from) !== find(edge.to)) {
+      union(edge.from, edge.to)
+      localMSTEdges.push({ from: edge.from, to: edge.to })
+      if (!localVisited.includes(edge.from)) localVisited.push(edge.from)
+      if (!localVisited.includes(edge.to)) localVisited.push(edge.to)
+
+      stepList.push(
+        snapshot({
+          currentEdge: { from: edge.from, to: edge.to },
+          visitedNodes: [...localVisited],
+          shortestPathEdges: [...localMSTEdges],
+          description: `Added edge ${nodes.value[edge.from]?.label} - ${nodes.value[edge.to]?.label} to MST (no cycle formed)`,
+        }),
+      )
+    } else {
+      stepList.push(
+        snapshot({
+          currentEdge: { from: edge.from, to: edge.to },
+          visitedNodes: [...localVisited],
+          shortestPathEdges: [...localMSTEdges],
+          description: `Skipped edge ${nodes.value[edge.from]?.label} - ${nodes.value[edge.to]?.label} (forms a cycle)`,
+        }),
+      )
+    }
+  }
+
+  stepList.push(
+    snapshot({
+      currentEdge: null,
+      visitedNodes: [...localVisited],
+      shortestPathEdges: [...localMSTEdges],
+      description: "Kruskal's Algorithm completed. MST found.",
+    }),
+  )
+
+  return stepList
+}
+
+export const prepareKruskalsSteps = (autoPlay = false) => {
+  stopPlaying()
+  explanation.value = [...algoInfo.value]
+  explanation.value.push("Prepared Kruskal's steps.")
+  steps.value = generateKruskalsSteps()
+  stepIndex.value = -1
+  if (autoPlay) playSteps()
+}
 
 export const resetGraph = () => {
   if (isTraversing.value) return

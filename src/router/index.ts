@@ -20,6 +20,7 @@ import InOrderTraversal from '../views/visualize/InOrderTraversal.vue'
 import PreOrderTraversal from '../views/visualize/PreOrderTraversal.vue'
 import PostOrderTraversal from '../views/visualize/PostOrderTraversal.vue'
 import Prims from '../views/visualize/Prims.vue'
+import Kruskals from '../views/visualize/Kruskals.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +58,7 @@ const router = createRouter({
       component: PostOrderTraversal,
     },
     { path: '/visualize/prims', name: 'prims', component: Prims },
+    { path: '/visualize/kruskals', name: 'kruskals', component: Kruskals },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

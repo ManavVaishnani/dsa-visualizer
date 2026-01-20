@@ -48,8 +48,15 @@ const algorithms = [
     title: "Prim's Algorithm",
     href: '/visualize/prims',
     img: '/prims.svg',
-    desc: 'A greedy algorithm that finds a minimum spanning tree for a weighted undirected graph.',
+    desc: 'A greedy algorithm that finds a minimum spanning tree for a weighted undirected graph from a starting node.',
     complexity: 'O(E log V)',
+  },
+  {
+    title: "Kruskal's Algorithm",
+    href: '/visualize/kruskals',
+    img: '/kruskals.svg',
+    desc: 'Finds a minimum spanning tree by sorting edges and joining components using union-find.',
+    complexity: 'O(E log E)',
   },
 ]
 </script>
