@@ -21,6 +21,7 @@ import PreOrderTraversal from '../views/visualize/PreOrderTraversal.vue'
 import PostOrderTraversal from '../views/visualize/PostOrderTraversal.vue'
 import Prims from '../views/visualize/Prims.vue'
 import Kruskals from '../views/visualize/Kruskals.vue'
+import BellmanFord from '../views/visualize/BellmanFord.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,6 +48,7 @@ const router = createRouter({
     { path: '/visualize/postorder-traversal', name: 'postorder-traversal', component: PostOrderTraversal },
     { path: '/visualize/prims', name: 'prims', component: Prims },
     { path: '/visualize/kruskals', name: 'kruskals', component: Kruskals },
+    { path: '/visualize/bellman-ford', name: 'bellman-ford', component: BellmanFord },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

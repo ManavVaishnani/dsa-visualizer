@@ -13,6 +13,7 @@ import {
   prepareAStarSteps,
   preparePrimsSteps,
   prepareKruskalsSteps,
+  prepareBellmanFordSteps,
   previousStep,
   resetGraph,
   runBFS,
@@ -21,6 +22,7 @@ import {
   runAStar,
   runPrims,
   runKruskals,
+  runBellmanFord,
   selectedStartNode,
   speed,
   stepIndex,
@@ -29,7 +31,7 @@ import {
 } from '@/composables/useGraphController'
 
 interface Props {
-  algorithm: 'bfs' | 'dfs' | 'dijkstra' | 'astar' | 'prims' | 'kruskals'
+  algorithm: 'bfs' | 'dfs' | 'dijkstra' | 'astar' | 'prims' | 'kruskals' | 'bellmanford'
 }
 
 const props = defineProps<Props>()
@@ -45,8 +47,10 @@ const startTraversal = () => {
     runAStar()
   } else if (props.algorithm === 'prims') {
     runPrims()
-  } else {
+  } else if (props.algorithm === 'kruskals') {
     runKruskals()
+  } else if (props.algorithm === 'bellmanford') {
+    runBellmanFord()
   }
 }
 
@@ -56,7 +60,8 @@ const prepareSteps = () => {
   else if (props.algorithm === 'dijkstra') prepareDijkstraSteps()
   else if (props.algorithm === 'astar') prepareAStarSteps()
   else if (props.algorithm === 'prims') preparePrimsSteps()
-  else prepareKruskalsSteps()
+  else if (props.algorithm === 'kruskals') prepareKruskalsSteps()
+  else if (props.algorithm === 'bellmanford') prepareBellmanFordSteps()
 }
 
 const pause = () => {
@@ -70,7 +75,8 @@ const vizOptions = computed(() => {
     props.algorithm === 'dijkstra' ||
     props.algorithm === 'astar' ||
     props.algorithm === 'prims' ||
-    props.algorithm === 'kruskals'
+    props.algorithm === 'kruskals' ||
+    props.algorithm === 'bellmanford'
   ) {
     return [{ label: 'Graph', value: 'graph' }]
   }

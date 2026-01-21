@@ -38,6 +38,13 @@ const algorithms = [
     complexity: 'O(V^2)',
   },
   {
+    title: 'Bellman-Ford',
+    href: '/visualize/bellman-ford',
+    img: '/bellman-ford.svg',
+    desc: 'Finds shortest paths with negative edge weights and detects negative cycles.',
+    complexity: 'O(V×E)',
+  },
+  {
     title: 'A* Search',
     href: '/visualize/astar',
     img: '/astar.svg',

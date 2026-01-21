@@ -1,0 +1,29 @@
+<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Graph Structure with Negative Edge Weights -->
+  <!-- Nodes -->
+  <circle cx="40" cy="60" r="10" fill="black" stroke="black" stroke-width="2"/>
+  <circle cx="100" cy="30" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <circle cx="100" cy="90" r="10" fill="none" stroke="black" stroke-width="2"/>
+  <circle cx="160" cy="60" r="10" fill="none" stroke="black" stroke-width="2"/>
+
+  <!-- Edges -->
+  <line x1="48" y1="54" x2="92" y2="36" stroke="black" stroke-width="2"/>
+  <line x1="48" y1="66" x2="92" y2="84" stroke="black" stroke-width="2"/>
+  <line x1="108" y1="36" x2="152" y2="54" stroke="black" stroke-width="2"/>
+  <line x1="108" y1="84" x2="152" y2="66" stroke="black" stroke-width="2"/>
+  <line x1="100" y1="42" x2="100" y2="78" stroke="black" stroke-width="2"/>
+
+  <!-- Weights (including negative) -->
+  <text x="62" y="38" font-family="monospace" font-size="8" font-weight="bold" fill="black">4</text>
+  <text x="62" y="88" font-family="monospace" font-size="8" font-weight="bold" fill="black">3</text>
+  <text x="130" y="38" font-family="monospace" font-size="8" font-weight="bold" fill="black">2</text>
+  <text x="125" y="88" font-family="monospace" font-size="8" font-weight="bold" fill="#dc2626">-2</text>
+  <text x="106" y="64" font-family="monospace" font-size="8" font-weight="bold" fill="black">1</text>
+
+  <!-- Edge Relaxation Arrows (showing V-1 iterations) -->
+  <path d="M40 60 L100 30 L160 60" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="3"/>
+
+  <!-- Labels -->
+  <text x="100" y="115" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle" fill="black">BELLMAN_FORD</text>
+  <text x="25" y="65" font-family="monospace" font-size="6" fill="white">S</text>
+</svg>
