@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+  <!-- Stack bottom plate -->
+  <rect x="20" y="80" width="60" height="8" fill="#1f2937" stroke="#000" stroke-width="2"/>
+  
+  <!-- Stack elements -->
+  <rect x="25" y="62" width="50" height="14" fill="#e5e7eb" stroke="#000" stroke-width="2"/>
+  <text x="50" y="73" font-family="monospace" font-size="8" fill="#374151" text-anchor="middle">42</text>
+  
+  <rect x="25" y="44" width="50" height="14" fill="#e5e7eb" stroke="#000" stroke-width="2"/>
+  <text x="50" y="55" font-family="monospace" font-size="8" fill="#374151" text-anchor="middle">15</text>
+  
+  <rect x="25" y="26" width="50" height="14" fill="#60a5fa" stroke="#000" stroke-width="2"/>
+  <text x="50" y="37" font-family="monospace" font-size="8" fill="#1e3a8a" text-anchor="middle">73</text>
+  
+  <!-- TOP indicator arrow -->
+  <path d="M82 33 L90 33 M86 29 L90 33 L86 37" stroke="#3b82f6" stroke-width="2" fill="none"/>
+  <text x="85" y="24" font-family="monospace" font-size="6" fill="#3b82f6" text-anchor="middle">TOP</text>
+  
+  <!-- Push arrow coming in -->
+  <path d="M50 8 L50 18" stroke="#22c55e" stroke-width="2" stroke-dasharray="2,2"/>
+  <polygon points="45,18 50,24 55,18" fill="#22c55e"/>
+  <text x="50" y="6" font-family="monospace" font-size="5" fill="#22c55e" text-anchor="middle">PUSH</text>
+</svg>

@@ -95,6 +95,11 @@ const algorithms = [
     href: '/visualize/kruskals',
     img: '/kruskals.svg',
   },
+  {
+    title: 'Stack',
+    href: '/visualize/stack',
+    img: '/stack.svg',
+  },
 ]
 </script>
 

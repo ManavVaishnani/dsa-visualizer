@@ -4,7 +4,7 @@ import AsciiMV from '@/components/home/AsciiMV.vue'
 import NerdyHero from '@/components/home/NerdyHero.vue'
 import RetroCard from '@/components/RetroCard.vue'
 import { useHead } from '@unhead/vue'
-import { ArrowRight, Binary, GitGraph, Search, TreePine, LayoutGrid } from 'lucide-vue-next'
+import { ArrowRight, Binary, GitGraph, Search, TreePine, LayoutGrid, Layers } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
 useHead({
@@ -138,6 +138,25 @@ const sortCode = `function bubbleSort(arr) {
 
         <div class="mt-2 font-mono text-xs text-gray-500">InOrder / PreOrder / PostOrder</div>
         <RouterLink to="/trees" class="absolute inset-0" aria-label="Go to trees"></RouterLink>
+      </RetroCard>
+
+      <!-- Cell: Data Structures (1x1) -->
+      <RetroCard class="bg-gray-50 md:col-span-1 md:row-span-1">
+        <div class="mb-2 flex items-center justify-between">
+          <h3 class="font-mono font-bold">DATA_STRUCT</h3>
+          <Layers class="h-5 w-5" />
+        </div>
+
+        <!-- Simple Stack SVG -->
+        <svg viewBox="0 0 100 50" class="h-auto w-full border border-gray-300 bg-white p-2">
+          <rect x="25" y="35" width="50" height="10" fill="#e5e7eb" stroke="black" stroke-width="2" />
+          <rect x="25" y="22" width="50" height="10" fill="#e5e7eb" stroke="black" stroke-width="2" />
+          <rect x="25" y="9" width="50" height="10" fill="#60a5fa" stroke="black" stroke-width="2" />
+          <text x="82" y="16" font-family="monospace" font-size="6" fill="#3b82f6">TOP</text>
+        </svg>
+
+        <div class="mt-2 font-mono text-xs text-gray-500">Stack / Queue / More</div>
+        <RouterLink to="/data-structures" class="absolute inset-0" aria-label="Go to data structures"></RouterLink>
       </RetroCard>
 
       <!-- Cell 6: CTA / Stats (1x1) -->
