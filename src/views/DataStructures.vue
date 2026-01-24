@@ -21,6 +21,12 @@ const dataStructures = [
     img: '/stack.svg',
     description: 'LIFO - Last In First Out',
   },
+  {
+    title: 'Queue',
+    href: '/visualize/queue',
+    img: '/queue.svg',
+    description: 'FIFO - First In First Out',
+  },
 ]
 </script>
 

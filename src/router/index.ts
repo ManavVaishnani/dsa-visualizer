@@ -24,6 +24,7 @@ import Kruskals from '../views/visualize/Kruskals.vue'
 import BellmanFord from '../views/visualize/BellmanFord.vue'
 import DataStructures from '../views/DataStructures.vue'
 import Stack from '../views/visualize/Stack.vue'
+import Queue from '../views/visualize/Queue.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +54,7 @@ const router = createRouter({
     { path: '/visualize/bellman-ford', name: 'bellman-ford', component: BellmanFord },
     { path: '/data-structures', name: 'data-structures', component: DataStructures },
     { path: '/visualize/stack', name: 'stack', component: Stack },
+    { path: '/visualize/queue', name: 'queue', component: Queue },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

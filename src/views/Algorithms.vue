@@ -100,6 +100,11 @@ const algorithms = [
     href: '/visualize/stack',
     img: '/stack.svg',
   },
+  {
+    title: 'Queue',
+    href: '/visualize/queue',
+    img: '/queue.svg',
+  },
 ]
 </script>
 
