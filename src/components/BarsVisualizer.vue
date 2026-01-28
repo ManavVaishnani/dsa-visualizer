@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { active, bars, explanation, sorted, swapping } from '@/composables/useSortingController'
+import { active, bars, explanation, sorted, swapping } from '@/composables/sorting'
 import AlgorithmExplanation from './AlgorithmExplanation.vue'
 
 const getColor = (index: number) => {

@@ -1,38 +1,45 @@
 <script setup lang="ts">
+/**
+ * SortingControls Component (SOLID Refactored)
+ *
+ * Open/Closed Principle: Uses algorithm registry instead of if/else chains.
+ * Adding a new algorithm now requires NO changes to this component.
+ */
 import {
   barCount,
-  bubbleSort,
   generateBars,
-  insertionSort,
   isPaused,
   isSorting,
-  mergeSort,
-  quickSort,
-  selectionSort,
   speed,
-} from '@/composables/useSortingController'
-
-const pause = () => {
-  isPaused.value = !isPaused.value
-}
-
+  togglePause,
+  runSortingAlgorithm,
+} from '@/composables/sorting'
 import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 
 const route = useRoute()
 
-const runSort = () => {
+/**
+ * Extract algorithm key from route path dynamically
+ * This replaces the if/else chain with a simple path extraction
+ */
+const algorithmKey = computed(() => {
   const path = route.path
-  if (path.includes('selection-sort')) {
-    selectionSort()
-  } else if (path.includes('insertion-sort')) {
-    insertionSort()
-  } else if (path.includes('merge-sort')) {
-    mergeSort()
-  } else if (path.includes('quick-sort')) {
-    quickSort()
-  } else {
-    bubbleSort()
-  }
+  // Extract the last segment of the path (e.g., '/visualize/bubble-sort' -> 'bubble-sort')
+  const segments = path.split('/')
+  return segments[segments.length - 1] || 'bubble-sort'
+})
+
+/**
+ * Run the current algorithm using the registry
+ * No if/else needed - the registry handles algorithm lookup
+ */
+const runSort = () => {
+  runSortingAlgorithm(algorithmKey.value)
+}
+
+const pause = () => {
+  togglePause()
 }
 </script>
 
