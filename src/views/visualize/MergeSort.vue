@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BarsVisualizer from '@/components/BarsVisualizer.vue'
 import SortingControls from '@/components/SortingControls.vue'
-import { generateBars, setInitialInfo } from '@/composables/useSortingController'
+import { generateBars, setInitialInfo } from '@/composables/sorting'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
