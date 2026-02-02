@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import GraphControls from '@/components/GraphControls.vue'
 import GraphVisualizer from '@/components/GraphVisualizer.vue'
-import { generateData, setInitialInfo } from '@/composables/useGraphController'
+import { generateData, initDijkstra } from '@/composables/graph'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
@@ -25,7 +25,7 @@ useHead({
 
 onMounted(() => {
   generateData()
-  setInitialInfo('dijkstra')
+  initDijkstra()
 })
 </script>
 

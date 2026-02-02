@@ -10,7 +10,7 @@ import {
   treeVisitedCount,
   visitedTreeNodes,
   traversalResult,
-} from '@/composables/useTreeController'
+} from '@/composables/tree'
 import AlgorithmExplanation from './AlgorithmExplanation.vue'
 
 const getNodeColor = (nodeId: number) => {

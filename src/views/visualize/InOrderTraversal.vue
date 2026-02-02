@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TreeControls from '@/components/TreeControls.vue'
 import TreeTraversalVisualizer from '@/components/TreeTraversalVisualizer.vue'
-import { generateBinaryTree, setTreeInitialInfo } from '@/composables/useTreeController'
+import { generateBinaryTree, initInOrder } from '@/composables/tree'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
@@ -25,7 +25,7 @@ useHead({
 
 onMounted(() => {
   generateBinaryTree()
-  setTreeInitialInfo('inorder')
+  initInOrder()
 })
 </script>
 

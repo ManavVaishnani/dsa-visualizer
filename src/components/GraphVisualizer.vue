@@ -19,7 +19,7 @@ import {
   distances,
   currentGraphAlgo,
   shortestPathEdges,
-} from '@/composables/useGraphController'
+} from '@/composables/graph'
 import AlgorithmExplanation from './AlgorithmExplanation.vue'
 
 const getNodeColor = (nodeId: number) => {

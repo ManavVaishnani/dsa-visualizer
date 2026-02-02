@@ -17,7 +17,7 @@ import {
   treeStepIndex,
   treeSteps,
   pauseTreeTraversal,
-} from '@/composables/useTreeController'
+} from '@/composables/tree'
 
 interface Props {
   algorithm: 'inorder' | 'preorder' | 'postorder'

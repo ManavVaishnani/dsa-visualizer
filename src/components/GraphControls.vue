@@ -28,7 +28,7 @@ import {
   stepIndex,
   steps,
   visualizationType,
-} from '@/composables/useGraphController'
+} from '@/composables/graph'
 
 interface Props {
   algorithm: 'bfs' | 'dfs' | 'dijkstra' | 'astar' | 'prims' | 'kruskals' | 'bellmanford'
