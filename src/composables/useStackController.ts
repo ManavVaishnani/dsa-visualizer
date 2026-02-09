@@ -30,13 +30,9 @@ export function setInitialInfo(): void {
     description:
       'A Stack is a linear data structure following LIFO (Last In First Out) principle. Elements are added and removed from the same end called the "top".',
   }
-  explanation.value = [
-    'Stack Operations:',
-    '• Push: Add element to top',
-    '• Pop: Remove element from top',
-    '• Peek: View top element',
-    '',
-    'Use the controls above to interact with the stack.',
+    explanation.value = [
+    'Stack Initialized',
+    'Ready for operations (Push, Pop, Peek)',
   ]
 }
 
@@ -60,7 +56,7 @@ export function clearStack(): void {
   animationType.value = null
   isAnimating.value = false
   isPaused.value = false
-  explanation.value = ['Stack cleared.', '', 'The stack is now empty.']
+  explanation.value = ['Stack cleared.']
 }
 
 // Generate a random stack with some elements
@@ -77,9 +73,8 @@ export function generateRandomStack(): void {
   topIndex.value = randomValues.length - 1
   explanation.value = [
     'Generated random stack.',
-    '',
-    `Stack contains ${count} elements.`,
-    `Top element: ${randomValues[randomValues.length - 1]}`,
+    `Size: ${count} elements.`,
+    `Top: ${randomValues[randomValues.length - 1]}`,
   ]
 }
 
@@ -89,24 +84,16 @@ export async function push(value: number): Promise<void> {
 
   // Check for overflow
   if (stack.value.length >= maxSize.value) {
-    explanation.value = [
-      '⚠️ Stack Overflow!',
-      '',
-      `Cannot push ${value}.`,
-      `Stack has reached maximum size of ${maxSize.value}.`,
-    ]
+    explanation.value.push(`Operation: Push(${value})`)
+    explanation.value.push('⚠️ Stack Overflow! Cannot push.')
     return
   }
 
   isAnimating.value = true
   animationType.value = 'push'
 
-  explanation.value = [
-    `Pushing ${value} onto the stack...`,
-    '',
-    'Step 1: Check if stack is full',
-    `Current size: ${stack.value.length}/${maxSize.value}`,
-  ]
+  explanation.value.push(`Operation: Push(${value})`)
+  explanation.value.push(`Checking capacity... (${stack.value.length}/${maxSize.value})`)
 
   await sleep(200)
   await waitWhilePaused()
@@ -116,13 +103,7 @@ export async function push(value: number): Promise<void> {
   topIndex.value = stack.value.length - 1
   animatingIndex.value = topIndex.value
 
-  explanation.value = [
-    `Pushing ${value} onto the stack...`,
-    '',
-    'Step 2: Add element to top',
-    `New top index: ${topIndex.value}`,
-    `Stack size: ${stack.value.length}`,
-  ]
+  explanation.value.push('Capacity OK. Incrementing top...')
 
   await sleep(300)
   await waitWhilePaused()
@@ -132,14 +113,7 @@ export async function push(value: number): Promise<void> {
   animationType.value = null
   isAnimating.value = false
 
-  explanation.value = [
-    `✓ Pushed ${value} successfully!`,
-    '',
-    `Top element: ${value}`,
-    `Stack size: ${stack.value.length}/${maxSize.value}`,
-    '',
-    'Time complexity: O(1)',
-  ]
+  explanation.value.push(`✓ Pushed ${value} at index ${stack.value.length - 1}`)
 }
 
 // Pop operation
@@ -148,12 +122,8 @@ export async function pop(): Promise<number | undefined> {
 
   // Check for underflow
   if (stack.value.length === 0) {
-    explanation.value = [
-      '⚠️ Stack Underflow!',
-      '',
-      'Cannot pop from empty stack.',
-      'Add elements using Push first.',
-    ]
+    explanation.value.push('Operation: Pop()')
+    explanation.value.push('⚠️ Stack Underflow! Cannot pop.')
     return undefined
   }
 
@@ -163,22 +133,13 @@ export async function pop(): Promise<number | undefined> {
 
   const poppedValue = stack.value[topIndex.value]
 
-  explanation.value = [
-    `Popping ${poppedValue} from the stack...`,
-    '',
-    'Step 1: Get top element',
-    `Top element at index ${topIndex.value}: ${poppedValue}`,
-  ]
+  explanation.value.push('Operation: Pop()')
+  explanation.value.push(`Top element is ${poppedValue}. Removing...`)
 
   await sleep(300)
   await waitWhilePaused()
 
-  explanation.value = [
-    `Popping ${poppedValue} from the stack...`,
-    '',
-    'Step 2: Remove top element',
-    'Updating top pointer...',
-  ]
+  explanation.value.push('Decrementing top pointer...')
 
   await sleep(200)
   await waitWhilePaused()
@@ -190,16 +151,9 @@ export async function pop(): Promise<number | undefined> {
   animationType.value = null
   isAnimating.value = false
 
-  const topDisplay = topIndex.value >= 0 ? stack.value[topIndex.value] : 'empty'
 
-  explanation.value = [
-    `✓ Popped ${poppedValue} successfully!`,
-    '',
-    `New top: ${topDisplay}`,
-    `Stack size: ${stack.value.length}/${maxSize.value}`,
-    '',
-    'Time complexity: O(1)',
-  ]
+
+  explanation.value.push(`✓ Popped ${poppedValue}. New size: ${stack.value.length}`)
 
   return poppedValue
 }
@@ -210,12 +164,8 @@ export async function peek(): Promise<number | undefined> {
 
   // Check for empty stack
   if (stack.value.length === 0) {
-    explanation.value = [
-      '⚠️ Stack is empty!',
-      '',
-      'Cannot peek at empty stack.',
-      'Add elements using Push first.',
-    ]
+    explanation.value.push('Operation: Peek()')
+    explanation.value.push('⚠️ Stack is empty!')
     return undefined
   }
 
@@ -225,12 +175,8 @@ export async function peek(): Promise<number | undefined> {
 
   const topValue = stack.value[topIndex.value]
 
-  explanation.value = [
-    `Peeking at top element...`,
-    '',
-    'Accessing top without removing.',
-    `Top element: ${topValue}`,
-  ]
+  explanation.value.push('Operation: Peek()')
+  explanation.value.push(`Peeking top element: ${topValue}`)
 
   await sleep(500)
   await waitWhilePaused()
@@ -239,15 +185,7 @@ export async function peek(): Promise<number | undefined> {
   animationType.value = null
   isAnimating.value = false
 
-  explanation.value = [
-    `✓ Peek: ${topValue}`,
-    '',
-    `Top element is ${topValue}`,
-    'Element remains in stack.',
-    `Stack size unchanged: ${stack.value.length}/${maxSize.value}`,
-    '',
-    'Time complexity: O(1)',
-  ]
+  explanation.value.push(`✓ Top element is ${topValue}`)
 
   return topValue
 }

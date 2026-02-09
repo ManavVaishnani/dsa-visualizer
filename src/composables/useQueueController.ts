@@ -31,13 +31,9 @@ export function setInitialInfo(): void {
     description:
       'A Queue is a linear data structure following FIFO (First In First Out) principle. Elements are added at the rear and removed from the front.',
   }
-  explanation.value = [
-    'Queue Operations:',
-    '• Enqueue: Add element to rear',
-    '• Dequeue: Remove element from front',
-    '• Peek: View front element',
-    '',
-    'Use the controls above to interact with the queue.',
+    explanation.value = [
+    'Queue Initialized',
+    'Ready for operations (Enqueue, Dequeue, Peek)',
   ]
 }
 
@@ -62,7 +58,7 @@ export function clearQueue(): void {
   animationType.value = null
   isAnimating.value = false
   isPaused.value = false
-  explanation.value = ['Queue cleared.', '', 'The queue is now empty.']
+  explanation.value = ['Queue cleared.']
 }
 
 // Generate a random queue
@@ -80,10 +76,9 @@ export function generateRandomQueue(): void {
   rearIndex.value = randomValues.length - 1
   explanation.value = [
     'Generated random queue.',
-    '',
-    `Queue contains ${count} elements.`,
-    `Front element: ${randomValues[0]}`,
-    `Rear element: ${randomValues[randomValues.length - 1]}`,
+    `Size: ${count} elements.`,
+    `Front: ${randomValues[0]}`,
+    `Rear: ${randomValues[randomValues.length - 1]}`,
   ]
 }
 
@@ -93,24 +88,16 @@ export async function enqueue(value: number): Promise<void> {
 
   // Check for overflow
   if (queue.value.length >= maxSize.value) {
-    explanation.value = [
-      '⚠️ Queue Overflow!',
-      '',
-      `Cannot enqueue ${value}.`,
-      `Queue has reached maximum size of ${maxSize.value}.`,
-    ]
+    explanation.value.push(`Operation: Enqueue(${value})`)
+    explanation.value.push('⚠️ Queue Overflow! Cannot enqueue.')
     return
   }
 
   isAnimating.value = true
   animationType.value = 'enqueue'
 
-  explanation.value = [
-    `Enqueueing ${value}...`,
-    '',
-    'Step 1: Check if queue is full',
-    `Current size: ${queue.value.length}/${maxSize.value}`,
-  ]
+  explanation.value.push(`Operation: Enqueue(${value})`)
+  explanation.value.push(`Checking capacity... (${queue.value.length}/${maxSize.value})`)
 
   await sleep(200)
   await waitWhilePaused()
@@ -121,12 +108,7 @@ export async function enqueue(value: number): Promise<void> {
   rearIndex.value = queue.value.length - 1
   animatingIndex.value = rearIndex.value
 
-  explanation.value = [
-    `Enqueueing ${value}...`,
-    '',
-    'Step 2: Add element to rear',
-    `New rear index: ${rearIndex.value}`,
-  ]
+  explanation.value.push('Capacity OK. Adding to rear...')
 
   await sleep(300)
   await waitWhilePaused()
@@ -136,13 +118,7 @@ export async function enqueue(value: number): Promise<void> {
   animationType.value = null
   isAnimating.value = false
 
-  explanation.value = [
-    `✓ Enqueued ${value} successfully!`,
-    '',
-    `Queue size: ${queue.value.length}/${maxSize.value}`,
-    '',
-    'Time complexity: O(1)',
-  ]
+  explanation.value.push(`✓ Enqueued ${value}. New size: ${queue.value.length}`)
 }
 
 // Dequeue operation
@@ -151,12 +127,8 @@ export async function dequeue(): Promise<number | undefined> {
 
   // Check for underflow
   if (queue.value.length === 0) {
-    explanation.value = [
-      '⚠️ Queue Underflow!',
-      '',
-      'Cannot dequeue from empty queue.',
-      'Add elements using Enqueue first.',
-    ]
+    explanation.value.push('Operation: Dequeue()')
+    explanation.value.push('⚠️ Queue Underflow! Cannot dequeue.')
     return undefined
   }
 
@@ -166,22 +138,13 @@ export async function dequeue(): Promise<number | undefined> {
 
   const dequeuedValue = queue.value[0]
 
-  explanation.value = [
-    `Dequeueing ${dequeuedValue}...`,
-    '',
-    'Step 1: Get front element',
-    `Front element: ${dequeuedValue}`,
-  ]
+  explanation.value.push('Operation: Dequeue()')
+  explanation.value.push(`Front element is ${dequeuedValue}. Removing...`)
 
   await sleep(300)
   await waitWhilePaused()
 
-  explanation.value = [
-    `Dequeueing ${dequeuedValue}...`,
-    '',
-    'Step 2: Remove front element',
-    'Shifting remaining elements...',
-  ]
+  explanation.value.push('Shifting remaining elements...')
 
   // Animate removal
   await sleep(200)
@@ -201,14 +164,7 @@ export async function dequeue(): Promise<number | undefined> {
   animationType.value = null
   isAnimating.value = false
 
-  explanation.value = [
-    `✓ Dequeued ${dequeuedValue} successfully!`,
-    '',
-    `New front: ${queue.value.length > 0 ? queue.value[0] : 'None'}`,
-    `Queue size: ${queue.value.length}/${maxSize.value}`,
-    '',
-    'Time complexity: O(1)',
-  ]
+  explanation.value.push(`✓ Dequeued ${dequeuedValue}. New size: ${queue.value.length}`)
 
   return dequeuedValue
 }
@@ -219,12 +175,8 @@ export async function peek(): Promise<number | undefined> {
 
   // Check for empty queue
   if (queue.value.length === 0) {
-    explanation.value = [
-      '⚠️ Queue is empty!',
-      '',
-      'Cannot peek at empty queue.',
-      'Add elements using Enqueue first.',
-    ]
+    explanation.value.push('Operation: Peek()')
+    explanation.value.push('⚠️ Queue is empty!')
     return undefined
   }
 
@@ -234,12 +186,8 @@ export async function peek(): Promise<number | undefined> {
 
   const frontValue = queue.value[0]
 
-  explanation.value = [
-    `Peeking at front element...`,
-    '',
-    'Accessing front without removing.',
-    `Front element: ${frontValue}`,
-  ]
+  explanation.value.push('Operation: Peek()')
+  explanation.value.push(`Peeking front element: ${frontValue}`)
 
   await sleep(500)
   await waitWhilePaused()
@@ -248,14 +196,7 @@ export async function peek(): Promise<number | undefined> {
   animationType.value = null
   isAnimating.value = false
 
-  explanation.value = [
-    `✓ Peek: ${frontValue}`,
-    '',
-    `Front element is ${frontValue}`,
-    'Element remains in queue.',
-    '',
-    'Time complexity: O(1)',
-  ]
+  explanation.value.push(`✓ Front element is ${frontValue}`)
 
   return frontValue
 }
