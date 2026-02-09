@@ -189,14 +189,7 @@ const sortCode = `function bubbleSort(arr) {
         ></RouterLink>
       </RetroCard>
 
-      <!-- Cell 7: Extra Info (1x1) -->
-      <RetroCard
-        class="flex flex-col items-center justify-center text-center md:col-span-1 md:row-span-1"
-      >
-        <AsciiMV />
-      </RetroCard>
-
-      <!-- Cell 8: GitHub (1x1) -->
+      <!-- Cell 7: GitHub (1x1) -->
       <RetroCard
         class="group flex flex-col items-center justify-center text-center md:col-span-1 md:row-span-1"
       >
