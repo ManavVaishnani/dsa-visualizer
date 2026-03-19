@@ -17,6 +17,9 @@ import {
   finishSorting,
   appendExplanation,
   setAlgorithmInfo,
+  setPseudoCode,
+  clearPseudoState,
+  type PseudoCodeLine,
 } from '../useSortingState'
 
 // ============================================
@@ -30,6 +33,18 @@ export const selectionSortInfo: AlgorithmInfo = {
   description:
     'Repeatedly finds the minimum element and puts it at the beginning. Performs few swaps, useful when memory write is expensive.',
 }
+
+export const selectionSortPseudoCode: PseudoCodeLine[] = [
+  { id: 'selection.start', text: 'function selectionSort(arr):' },
+  { id: 'selection.outer', text: 'for i from 0 to n - 2:', indent: 1 },
+  { id: 'selection.init-min', text: 'minIndex = i', indent: 2 },
+  { id: 'selection.inner', text: 'for j from i + 1 to n - 1:', indent: 2 },
+  { id: 'selection.compare', text: 'if arr[j] < arr[minIndex]:', indent: 3 },
+  { id: 'selection.update-min', text: 'minIndex = j', indent: 4 },
+  { id: 'selection.swap-check', text: 'if minIndex != i:', indent: 2 },
+  { id: 'selection.swap', text: 'swap(arr[i], arr[minIndex])', indent: 3 },
+  { id: 'selection.done', text: 'return arr', indent: 1 },
+]
 
 // ============================================
 // Algorithm Implementation
@@ -112,6 +127,8 @@ export function useSelectionSort(): SortingAlgorithm {
  */
 export function initSelectionSort(): void {
   setAlgorithmInfo(selectionSortInfo)
+  setPseudoCode(selectionSortPseudoCode)
+  clearPseudoState()
 }
 
 export default useSelectionSort

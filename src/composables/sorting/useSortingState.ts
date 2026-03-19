@@ -8,6 +8,14 @@
 import { ref, computed } from 'vue'
 import type { AlgorithmInfo } from '@/types/algorithm'
 
+export interface PseudoCodeLine {
+  id: string
+  text: string
+  indent?: number
+}
+
+export type PseudoVariableValue = string | number | boolean | null
+
 // ============================================
 // Reactive State (shared across all sorting algorithms)
 // ============================================
@@ -23,6 +31,10 @@ export const speed = ref(50)
 export const isSorting = ref(false)
 export const isPaused = ref(false)
 export const explanation = ref<string[]>([])
+
+export const pseudoCodeLines = ref<PseudoCodeLine[]>([])
+export const activePseudoLineId = ref<string | null>(null)
+export const pseudoVariables = ref<Record<string, PseudoVariableValue>>({})
 
 export const currentAlgorithmInfo = ref<AlgorithmInfo | null>(null)
 
@@ -54,6 +66,8 @@ export function clearState(): void {
   bars.value = []
   resetVisualState()
   explanation.value = []
+  clearPseudoState()
+  pseudoCodeLines.value = []
   isSorting.value = false
   isPaused.value = false
   currentAlgorithmInfo.value = null
@@ -70,6 +84,7 @@ export function generateBars(): void {
   )
 
   resetVisualState()
+  clearPseudoState()
 
   if (currentAlgorithmInfo.value) {
     setExplanation([
@@ -100,12 +115,40 @@ export function appendExplanation(line: string): void {
  */
 export function setAlgorithmInfo(info: AlgorithmInfo): void {
   currentAlgorithmInfo.value = info
+  clearPseudoState()
   explanation.value = [
     `ALGO: ${info.name}`,
     `WHAT: ${info.description}`,
     `TIME: ${info.timeComplexity}`,
     `SPACE: ${info.spaceComplexity}`,
   ]
+}
+
+/**
+ * Set pseudo code lines for current algorithm
+ */
+export function setPseudoCode(lines: PseudoCodeLine[]): void {
+  pseudoCodeLines.value = lines
+  clearPseudoState()
+}
+
+/**
+ * Update current pseudo code execution state
+ */
+export function setPseudoState(
+  lineId: string | null,
+  vars: Record<string, PseudoVariableValue> = {}
+): void {
+  activePseudoLineId.value = lineId
+  pseudoVariables.value = vars
+}
+
+/**
+ * Reset pseudo code execution state
+ */
+export function clearPseudoState(): void {
+  activePseudoLineId.value = null
+  pseudoVariables.value = {}
 }
 
 /**
@@ -146,6 +189,7 @@ export function startSorting(): boolean {
  */
 export function finishSorting(): void {
   active.value = []
+  activePseudoLineId.value = null
   isSorting.value = false
 }
 

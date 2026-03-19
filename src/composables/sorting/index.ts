@@ -15,6 +15,9 @@
 // ============================================
 
 export {
+  // Types
+  type PseudoCodeLine,
+  type PseudoVariableValue,
   // Reactive state
   bars,
   active,
@@ -25,6 +28,9 @@ export {
   isSorting,
   isPaused,
   explanation,
+  pseudoCodeLines,
+  activePseudoLineId,
+  pseudoVariables,
   currentAlgorithmInfo,
   // Computed
   canStart,
@@ -37,6 +43,9 @@ export {
   togglePause,
   setExplanation,
   appendExplanation,
+  setPseudoCode,
+  setPseudoState,
+  clearPseudoState,
   markSorted,
   markAllSorted,
 } from './useSortingState'
@@ -63,11 +72,41 @@ export {
 // Individual Algorithms (for direct access if needed)
 // ============================================
 
-export { bubbleSort, bubbleSortInfo, useBubbleSort, initBubbleSort } from './algorithms/useBubbleSort'
-export { selectionSort, selectionSortInfo, useSelectionSort, initSelectionSort } from './algorithms/useSelectionSort'
-export { insertionSort, insertionSortInfo, useInsertionSort, initInsertionSort } from './algorithms/useInsertionSort'
-export { mergeSort, mergeSortInfo, useMergeSort, initMergeSort } from './algorithms/useMergeSort'
-export { quickSort, quickSortInfo, useQuickSort, initQuickSort } from './algorithms/useQuickSort'
+export {
+  bubbleSort,
+  bubbleSortInfo,
+  bubbleSortPseudoCode,
+  useBubbleSort,
+  initBubbleSort,
+} from './algorithms/useBubbleSort'
+export {
+  selectionSort,
+  selectionSortInfo,
+  selectionSortPseudoCode,
+  useSelectionSort,
+  initSelectionSort,
+} from './algorithms/useSelectionSort'
+export {
+  insertionSort,
+  insertionSortInfo,
+  insertionSortPseudoCode,
+  useInsertionSort,
+  initInsertionSort,
+} from './algorithms/useInsertionSort'
+export {
+  mergeSort,
+  mergeSortInfo,
+  mergeSortPseudoCode,
+  useMergeSort,
+  initMergeSort,
+} from './algorithms/useMergeSort'
+export {
+  quickSort,
+  quickSortInfo,
+  quickSortPseudoCode,
+  useQuickSort,
+  initQuickSort,
+} from './algorithms/useQuickSort'
 
 // ============================================
 // Backward Compatibility Exports

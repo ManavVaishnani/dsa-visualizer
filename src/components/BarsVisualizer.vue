@@ -1,6 +1,16 @@
 <script setup lang="ts">
-import { active, bars, explanation, sorted, swapping } from '@/composables/sorting'
+import { computed } from 'vue'
+import {
+  active,
+  bars,
+  currentAlgorithmInfo,
+  explanation,
+  pseudoCodeLines,
+  sorted,
+  swapping,
+} from '@/composables/sorting'
 import AlgorithmExplanation from './AlgorithmExplanation.vue'
+import PseudoCodePanel from './PseudoCodePanel.vue'
 
 const getColor = (index: number) => {
   // Nerdy Color Scheme
@@ -16,11 +26,16 @@ const getColor = (index: number) => {
   // Default: Light Grey with Black Border
   return 'bg-gray-200 border-black'
 }
+
+const algorithmSubtitle = computed(() =>
+  currentAlgorithmInfo.value?.name.toLowerCase() || 'sorting'
+)
 </script>
 
 <template>
   <div class="relative flex h-full w-full items-center justify-center overflow-hidden px-2 md:px-4">
     <AlgorithmExplanation :explanation="explanation" />
+    <PseudoCodePanel :lines="pseudoCodeLines" :subtitle="algorithmSubtitle" />
     <!-- Main Sorting Container -->
     <div
       class="flex h-[80%] w-full max-w-5xl items-end justify-center gap-px border-b-2 border-black pb-px md:gap-1"

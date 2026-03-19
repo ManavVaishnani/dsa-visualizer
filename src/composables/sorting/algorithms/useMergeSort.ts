@@ -18,6 +18,9 @@ import {
   appendExplanation,
   setAlgorithmInfo,
   markAllSorted,
+  setPseudoCode,
+  clearPseudoState,
+  type PseudoCodeLine,
 } from '../useSortingState'
 
 // ============================================
@@ -31,6 +34,19 @@ export const mergeSortInfo: AlgorithmInfo = {
   description:
     'A divide-and-conquer algorithm that divides the array in half, sorts them, and merges them back. Guaranteed O(n log n) performance.',
 }
+
+export const mergeSortPseudoCode: PseudoCodeLine[] = [
+  { id: 'merge.start', text: 'function mergeSort(arr, left, right):' },
+  { id: 'merge.base', text: 'if left >= right: return', indent: 1 },
+  { id: 'merge.mid', text: 'mid = floor((left + right) / 2)', indent: 1 },
+  { id: 'merge.left', text: 'mergeSort(arr, left, mid)', indent: 1 },
+  { id: 'merge.right', text: 'mergeSort(arr, mid + 1, right)', indent: 1 },
+  { id: 'merge.call', text: 'merge(arr, left, mid, right)', indent: 1 },
+  { id: 'merge.merge-start', text: 'function merge(leftArr, rightArr):' },
+  { id: 'merge.compare', text: 'compare front elements and place smaller', indent: 1 },
+  { id: 'merge.copy-left', text: 'copy remaining left elements', indent: 1 },
+  { id: 'merge.copy-right', text: 'copy remaining right elements', indent: 1 },
+]
 
 // ============================================
 // Algorithm Implementation
@@ -153,6 +169,8 @@ export function useMergeSort(): SortingAlgorithm {
  */
 export function initMergeSort(): void {
   setAlgorithmInfo(mergeSortInfo)
+  setPseudoCode(mergeSortPseudoCode)
+  clearPseudoState()
 }
 
 export default useMergeSort

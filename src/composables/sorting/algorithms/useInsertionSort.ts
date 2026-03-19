@@ -17,6 +17,9 @@ import {
   finishSorting,
   appendExplanation,
   setAlgorithmInfo,
+  setPseudoCode,
+  clearPseudoState,
+  type PseudoCodeLine,
 } from '../useSortingState'
 
 // ============================================
@@ -30,6 +33,18 @@ export const insertionSortInfo: AlgorithmInfo = {
   description:
     'Builds the final sorted array one item at a time. Very efficient for small or nearly sorted datasets.',
 }
+
+export const insertionSortPseudoCode: PseudoCodeLine[] = [
+  { id: 'insertion.start', text: 'function insertionSort(arr):' },
+  { id: 'insertion.outer', text: 'for i from 1 to n - 1:', indent: 1 },
+  { id: 'insertion.key', text: 'key = arr[i]', indent: 2 },
+  { id: 'insertion.j', text: 'j = i - 1', indent: 2 },
+  { id: 'insertion.while', text: 'while j >= 0 and arr[j] > key:', indent: 2 },
+  { id: 'insertion.shift', text: 'arr[j + 1] = arr[j]', indent: 3 },
+  { id: 'insertion.decrement', text: 'j = j - 1', indent: 3 },
+  { id: 'insertion.insert', text: 'arr[j + 1] = key', indent: 2 },
+  { id: 'insertion.done', text: 'return arr', indent: 1 },
+]
 
 // ============================================
 // Algorithm Implementation
@@ -110,6 +125,8 @@ export function useInsertionSort(): SortingAlgorithm {
  */
 export function initInsertionSort(): void {
   setAlgorithmInfo(insertionSortInfo)
+  setPseudoCode(insertionSortPseudoCode)
+  clearPseudoState()
 }
 
 export default useInsertionSort

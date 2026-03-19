@@ -17,6 +17,9 @@ import {
   finishSorting,
   appendExplanation,
   setAlgorithmInfo,
+  setPseudoCode,
+  clearPseudoState,
+  type PseudoCodeLine,
 } from '../useSortingState'
 
 // ============================================
@@ -30,6 +33,21 @@ export const quickSortInfo: AlgorithmInfo = {
   description:
     'Picks a pivot and partitions the array around it. Fastest average-case performance for general sorting.',
 }
+
+export const quickSortPseudoCode: PseudoCodeLine[] = [
+  { id: 'quick.start', text: 'function quickSort(arr, low, high):' },
+  { id: 'quick.base', text: 'if low >= high: return', indent: 1 },
+  { id: 'quick.partition', text: 'pivotIndex = partition(arr, low, high)', indent: 1 },
+  { id: 'quick.left', text: 'quickSort(arr, low, pivotIndex - 1)', indent: 1 },
+  { id: 'quick.right', text: 'quickSort(arr, pivotIndex + 1, high)', indent: 1 },
+  { id: 'quick.partition-start', text: 'function partition(arr, low, high):' },
+  { id: 'quick.pivot', text: 'pivot = arr[high]', indent: 1 },
+  { id: 'quick.loop', text: 'for j from low to high - 1:', indent: 1 },
+  { id: 'quick.compare', text: 'if arr[j] < pivot:', indent: 2 },
+  { id: 'quick.swap', text: 'swap(arr[i], arr[j])', indent: 3 },
+  { id: 'quick.pivot-swap', text: 'swap(arr[i + 1], arr[high])', indent: 1 },
+  { id: 'quick.return', text: 'return i + 1', indent: 1 },
+]
 
 // ============================================
 // Algorithm Implementation
@@ -127,6 +145,8 @@ export function useQuickSort(): SortingAlgorithm {
  */
 export function initQuickSort(): void {
   setAlgorithmInfo(quickSortInfo)
+  setPseudoCode(quickSortPseudoCode)
+  clearPseudoState()
 }
 
 export default useQuickSort
