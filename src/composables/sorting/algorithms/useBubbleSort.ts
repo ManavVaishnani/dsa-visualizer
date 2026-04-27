@@ -20,8 +20,9 @@ import {
   setPseudoCode,
   setPseudoState,
   clearPseudoState,
-  type PseudoCodeLine,
 } from '../useSortingState'
+import type { PseudoCodeLine } from '@/types/algorithm'
+
 
 // ============================================
 // Algorithm Metadata

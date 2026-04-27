@@ -15,9 +15,6 @@
 // ============================================
 
 export {
-  // Types
-  type PseudoCodeLine,
-  type PseudoVariableValue,
   // Reactive state
   bars,
   active,
@@ -49,6 +46,9 @@ export {
   markSorted,
   markAllSorted,
 } from './useSortingState'
+
+export type { PseudoCodeLine, PseudoVariableValue } from '@/types/algorithm'
+
 
 // ============================================
 // Algorithm Registry (OCP Implementation)
