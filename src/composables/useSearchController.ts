@@ -1,4 +1,6 @@
 import { ref } from 'vue'
+import type { PseudoCodeLine } from '@/types/algorithm'
+
 
 export type SearchAlgo = 'linear' | 'binary'
 export type DataStructure = 'array' | 'linkedlist'
@@ -19,6 +21,9 @@ export const isSearching = ref(false)
 export const isPaused = ref(false)
 export const explanation = ref<string[]>([])
 
+export const pseudoCodeLines = ref<PseudoCodeLine[]>([])
+export const activePseudoLineId = ref<string | null>(null)
+
 export const comparisonsCount = ref(0)
 export const arraySize = ref(10)
 export const speed = ref(50)
@@ -34,6 +39,27 @@ const waitIfPaused = async () => {
 export const currentAlgo = ref<SearchAlgo | null>(null)
 export const searchInfo = ref<string[]>([])
 
+export const linearSearchPseudoCode: PseudoCodeLine[] = [
+  { id: 'linear.start', text: 'function linearSearch(arr, target):' },
+  { id: 'linear.loop', text: 'for each element in arr:', indent: 1 },
+  { id: 'linear.compare', text: 'if element == target:', indent: 2 },
+  { id: 'linear.found', text: 'return current index', indent: 3 },
+  { id: 'linear.not_found', text: 'return -1', indent: 1 },
+]
+
+export const binarySearchPseudoCode: PseudoCodeLine[] = [
+  { id: 'binary.start', text: 'function binarySearch(arr, target):' },
+  { id: 'binary.init', text: 'low = 0, high = arr.length - 1', indent: 1 },
+  { id: 'binary.loop', text: 'while low <= high:', indent: 1 },
+  { id: 'binary.mid', text: 'mid = floor((low + high) / 2)', indent: 2 },
+  { id: 'binary.compare', text: 'if arr[mid] == target:', indent: 2 },
+  { id: 'binary.found', text: 'return mid', indent: 3 },
+  { id: 'binary.check_greater', text: 'else if arr[mid] < target:', indent: 2 },
+  { id: 'binary.adjust_low', text: 'low = mid + 1', indent: 3 },
+  { id: 'binary.adjust_high', text: 'else high = mid - 1', indent: 2 },
+  { id: 'binary.not_found', text: 'return -1', indent: 1 },
+]
+
 export const setInitialInfo = (algo: SearchAlgo) => {
   currentAlgo.value = algo
   if (algo === 'linear') {
@@ -43,6 +69,7 @@ export const setInitialInfo = (algo: SearchAlgo) => {
       'WHY: Works on unsorted data and is easy to implement.',
       'WHERE: Small datasets or unsorted lists.',
     ]
+    pseudoCodeLines.value = linearSearchPseudoCode
   } else {
     searchInfo.value = [
       'ALGO: Binary Search',
@@ -50,8 +77,10 @@ export const setInitialInfo = (algo: SearchAlgo) => {
       'WHY: Extremely efficient for large datasets (O(log n)).',
       'WHERE: Sorted arrays, database indexing.',
     ]
+    pseudoCodeLines.value = binarySearchPseudoCode
   }
   explanation.value = [...searchInfo.value]
+  activePseudoLineId.value = null
 }
 
 export const resetState = () => {
@@ -64,6 +93,7 @@ export const resetState = () => {
   comparisonsCount.value = 0
   isSearching.value = false
   isPaused.value = false
+  activePseudoLineId.value = null
   if (currentAlgo.value) {
     setInitialInfo(currentAlgo.value)
   } else {
@@ -97,17 +127,24 @@ export const runLinearSearch = async () => {
   resetState()
   isSearching.value = true
   explanation.value.push(`Starting Linear Search for target ${target.value}...`)
+  activePseudoLineId.value = 'linear.start'
+  await sleep((100 - speed.value) * 15 + 50)
 
   for (let i = 0; i < numbers.value.length; i++) {
     await waitIfPaused()
 
+    activePseudoLineId.value = 'linear.loop'
     currentIndex.value = i
     comparisonsCount.value++
     explanation.value.push(`Checking index ${i}: Is ${numbers.value[i]} equal to ${target.value}?`)
 
     await sleep((100 - speed.value) * 15 + 50)
 
+    activePseudoLineId.value = 'linear.compare'
+    await sleep((100 - speed.value) * 10 + 25)
+
     if (numbers.value[i] === target.value) {
+      activePseudoLineId.value = 'linear.found'
       explanation.value.push(`Target ${target.value} found at index ${i}!`)
       foundIndex.value = i
       isSearching.value = false
@@ -115,6 +152,7 @@ export const runLinearSearch = async () => {
     }
   }
 
+  activePseudoLineId.value = 'linear.not_found'
   explanation.value.push(`Target ${target.value} not found in the array.`)
   notFound.value = true
   isSearching.value = false
@@ -127,12 +165,21 @@ export const runBinarySearch = async () => {
   isSearching.value = true
   explanation.value.push(`Starting Binary Search for target ${target.value}...`)
 
+  activePseudoLineId.value = 'binary.start'
+  await sleep((100 - speed.value) * 15 + 50)
+
+  activePseudoLineId.value = 'binary.init'
   low.value = 0
   high.value = numbers.value.length - 1
+  await sleep((100 - speed.value) * 15 + 50)
 
   while (low.value !== null && high.value !== null && low.value <= high.value) {
     await waitIfPaused()
 
+    activePseudoLineId.value = 'binary.loop'
+    await sleep((100 - speed.value) * 5 + 25)
+
+    activePseudoLineId.value = 'binary.mid'
     mid.value = Math.floor((low.value + high.value) / 2)
     comparisonsCount.value++
     explanation.value.push(
@@ -141,26 +188,37 @@ export const runBinarySearch = async () => {
 
     await sleep((100 - speed.value) * 15 + 50)
 
+    activePseudoLineId.value = 'binary.compare'
+    await sleep((100 - speed.value) * 10 + 25)
+
     if (numbers.value[mid.value] === target.value) {
+      activePseudoLineId.value = 'binary.found'
       explanation.value.push(`Target ${target.value} found at index ${mid.value}!`)
       foundIndex.value = mid.value
       isSearching.value = false
       return
     }
 
+    activePseudoLineId.value = 'binary.check_greater'
+    await sleep((100 - speed.value) * 10 + 25)
+
     if (numbers.value[mid.value] < target.value) {
+      activePseudoLineId.value = 'binary.adjust_low'
       explanation.value.push(
         `${numbers.value[mid.value]} < ${target.value}, ignoring the left half. New low: ${mid.value + 1}.`,
       )
       low.value = mid.value + 1
     } else {
+      activePseudoLineId.value = 'binary.adjust_high'
       explanation.value.push(
         `${numbers.value[mid.value]} > ${target.value}, ignoring the right half. New high: ${mid.value - 1}.`,
       )
       high.value = mid.value - 1
     }
+    await sleep((100 - speed.value) * 15 + 50)
   }
 
+  activePseudoLineId.value = 'binary.not_found'
   explanation.value.push(`Target ${target.value} not found in the array.`)
   notFound.value = true
   isSearching.value = false

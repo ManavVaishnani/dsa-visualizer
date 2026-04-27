@@ -6,15 +6,12 @@
  */
 
 import { ref, computed } from 'vue'
-import type { AlgorithmInfo } from '@/types/algorithm'
+import type {
+  AlgorithmInfo,
+  PseudoCodeLine,
+  PseudoVariableValue,
+} from '@/types/algorithm'
 
-export interface PseudoCodeLine {
-  id: string
-  text: string
-  indent?: number
-}
-
-export type PseudoVariableValue = string | number | boolean | null
 
 // ============================================
 // Reactive State (shared across all sorting algorithms)

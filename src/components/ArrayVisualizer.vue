@@ -1,8 +1,14 @@
 <script setup lang="ts">
-// import { computed } from 'vue'
+import { computed } from 'vue'
 
-import { explanation } from '@/composables/useSearchController'
+import {
+  activePseudoLineId,
+  currentAlgo,
+  explanation,
+  pseudoCodeLines,
+} from '@/composables/useSearchController'
 import AlgorithmExplanation from './AlgorithmExplanation.vue'
+import PseudoCodePanel from './PseudoCodePanel.vue'
 
 interface Props {
   numbers: number[]
@@ -38,11 +44,19 @@ const boxClass = (index: number) => {
 
   return 'bg-gray-200 text-black'
 }
+
+const algorithmSubtitle = computed(() => currentAlgo.value?.toLowerCase() || 'searching')
 </script>
 
 <template>
   <div class="relative h-full w-full overflow-y-auto px-4 py-8">
     <AlgorithmExplanation :explanation="explanation" />
+    <PseudoCodePanel
+      :lines="pseudoCodeLines"
+      :activeLineId="activePseudoLineId"
+      :subtitle="algorithmSubtitle"
+    />
+
     <!-- Target Selection Message -->
     <div
       v-if="target === null"
@@ -84,3 +98,4 @@ const boxClass = (index: number) => {
     </div>
   </div>
 </template>
+

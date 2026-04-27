@@ -21,6 +21,19 @@ export interface AlgorithmInfo {
 }
 
 // ============================================
+// Pseudo Code Interfaces
+// ============================================
+
+export interface PseudoCodeLine {
+  id: string
+  text: string
+  indent?: number
+}
+
+export type PseudoVariableValue = string | number | boolean | null
+
+
+// ============================================
 // Base Step Interface (shared by all algorithms)
 // ============================================
 

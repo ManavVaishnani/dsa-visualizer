@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { PseudoCodeLine } from '@/composables/sorting'
+import type { PseudoCodeLine } from '@/types/algorithm'
+
 
 defineProps<{
   lines: PseudoCodeLine[]
+  activeLineId?: string | null
   subtitle?: string
 }>()
 
@@ -36,7 +38,9 @@ const isHidden = ref(false)
           </span>
           <span class="font-mono text-[10px] text-gray-400">{{ subtitle || 'sorting' }}</span>
         </div>
-        <div class="font-mono text-[10px] font-bold text-gray-500">static-view</div>
+        <div class="font-mono text-[10px] font-bold text-gray-500">
+          {{ activeLineId ? 'LIVE_EXECUTION' : 'STATIC_VIEW' }}
+        </div>
       </div>
 
       <div class="flex-1 overflow-y-auto bg-white p-3 font-mono text-xs">
@@ -44,15 +48,27 @@ const isHidden = ref(false)
           <div
             v-for="line in lines"
             :key="line.id"
-            class="flex items-start gap-2 border border-transparent px-2 py-1"
+            class="flex items-start gap-2 border px-2 py-1 transition-colors duration-200"
+            :class="
+              line.id === activeLineId
+                ? 'border-black bg-blue-50 font-bold'
+                : 'border-transparent'
+            "
           >
-            <span class="min-w-16 text-[10px] text-gray-500">{{ line.id }}</span>
-            <span :style="{ marginLeft: `${(line.indent || 0) * 10}px` }" class="text-black">{{
-              line.text
-            }}</span>
+            <span
+              class="min-w-16 text-[10px]"
+              :class="line.id === activeLineId ? 'text-blue-600' : 'text-gray-500'"
+              >{{ line.id.split('.').pop() }}</span
+            >
+            <span
+              :style="{ marginLeft: `${(line.indent || 0) * 10}px` }"
+              :class="line.id === activeLineId ? 'text-blue-700' : 'text-black'"
+              >{{ line.text }}</span
+            >
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
